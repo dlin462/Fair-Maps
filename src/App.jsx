@@ -11,7 +11,7 @@ function App() {
         <Route path="/map/:state" element={<MapComponent />} />
       </Routes>
 
-      <p>hello world (test push)</p>
+      <p>hello world</p>
     </Router>
   );
 }
