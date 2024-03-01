@@ -1,6 +1,7 @@
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Container, Typography, Box, Divider } from '@mui/material';
 import ThunderLogo from '../../thunderlogo.png';
 import { useNavigate } from 'react-router-dom';
+import ChartSpace from './ChartSpace'
 
 function HomePage() {
     const navigate = useNavigate();
@@ -20,6 +21,15 @@ function HomePage() {
                 onClick={() => navigate('/map/california')}>
                 California
             </Button>
+            <Box display="flex" p={1} style={{ height:'100vh' }}>
+                <Box flex={1}>
+                  <ChartSpace/>
+                </Box>
+                <Divider orientation="vertical" flexItem/>
+                <Box flex={1}>
+                  <ChartSpace/>
+                </Box>
+            </Box>
         </Container>
     );
 }
