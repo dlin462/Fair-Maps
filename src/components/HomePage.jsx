@@ -1,9 +1,9 @@
 import { Button, Container, Typography, Box, Divider } from '@mui/material';
 import ThunderLogo from '../../thunderlogo.png';
 import { useNavigate } from 'react-router-dom';
-import ChartSpace from './ChartSpace'
-import cali_races from  '../../public/analysis/california_races.png';
-import tx_races from  '../../public/analysis/texas_races.png';
+// import ChartSpace from './ChartSpace'
+// import cali_races from  '../../public/analysis/california_races.png';
+// import tx_races from  '../../public/analysis/texas_races.png';
 
 function HomePage() {
     const navigate = useNavigate();
@@ -26,15 +26,15 @@ function HomePage() {
             <Box display="flex" p={1} style={{ height:'100vh' }}>
                 <Box flex={1}>
                 <div>
-                <img src={cali_races} alt="Description of your image" />
+                {/* <img src={cali_races} alt="Description of your image" /> */}
                 </div>
                 </Box>
                 <Divider orientation="vertical" flexItem/>
                 <Box flex={1}>
-                  <ChartSpace/>
-                  <div>
-                    <img src={tx_races} alt="Description of your image" />
-                  </div>
+                  {/* <ChartSpace/> */}
+                  {/* <div> */}
+                    {/* <img src={tx_races} alt="Description of your image" /> */}
+                  {/* </div> */}
                 </Box>
             </Box>
         </Container>
