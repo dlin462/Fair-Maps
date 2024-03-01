@@ -23,11 +23,11 @@ function HomePage() {
             </Button>
             <Box display="flex" p={1} style={{ height:'100vh' }}>
                 <Box flex={1}>
-                  <ChartSpace/>
+                  {/* <ChartSpace/>
                 </Box>
                 <Divider orientation="vertical" flexItem/>
                 <Box flex={1}>
-                  <ChartSpace/>
+                  <ChartSpace/> */}
                 </Box>
             </Box>
         </Container>
