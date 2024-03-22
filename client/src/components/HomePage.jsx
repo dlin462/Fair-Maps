@@ -23,7 +23,7 @@ function HomePage() {
                 onClick={() => navigate('/map/california')}>
                 California
             </Button>
-            <Box display="flex" p={1} style={{ height:'100vh' }}>
+            {/* <Box display="flex" p={1} style={{ height:'100vh' }}>
                 <Box flex={1}>
                 <div>
                 <img src={cali_races} alt="Description of your image" />
@@ -36,7 +36,7 @@ function HomePage() {
                     <img src={tx_races} alt="Description of your image" />
                   </div>
                 </Box>
-            </Box>
+            </Box> */}
         </Container>
     );
 }
