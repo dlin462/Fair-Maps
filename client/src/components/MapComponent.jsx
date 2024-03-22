@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Chart from 'chart.js/auto';
 // import Plot from 'react-plotly.js';
+import axios from 'axios'
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -27,6 +28,16 @@ function MapComponent() {
     const [showLineGraph, setShowLineGraph] = useState(false);
     const [showMap, setShowMap] = useState(true);
     const [showBarGraph, setShowBarGraph] = useState(false);
+
+    useEffect(() => {
+        axios.get(`http://localhost:8080/map/${state}`)
+            .then(response => {
+                console.log("Server returned: ", response.data);
+            })
+            .catch(error => {
+                console.log("error retreiving data from server: ", error)
+            });
+    }, [state])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
