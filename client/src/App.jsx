@@ -11,8 +11,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/map/:state" element={<MapComponent />} />
       </Routes>
-
-      <p>hello world</p>
     </Router>
   );
 }

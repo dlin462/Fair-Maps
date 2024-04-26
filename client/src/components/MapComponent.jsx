@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Chart from 'chart.js/auto';
 // import Plot from 'react-plotly.js';
-import axios from 'axios'
+// import axios from 'axios'
+import chroma from 'chroma-js';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -17,6 +18,7 @@ function MapComponent() {
 
     const { state } = useParams(); // Get the state parameter from the URL
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorE1Heatmap, setAnchorElHeatmap] = React.useState(null);
 
     const chartContainerRefAssembly = useRef(null);
     const chartContainerRefPopulation = useRef(null);
@@ -29,8 +31,12 @@ function MapComponent() {
     const [showMap, setShowMap] = useState(true);
     const [showBarGraph, setShowBarGraph] = useState(false);
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
-    const [showEthnicity, setShowEthnicity] = useState(false);
-    const [count, setCount] = useState(0);
+    const [ethnicity, setEthnicity] = useState(null);
+    const [legend, setLegend] = useState(null);
+    const coordinates = {
+        nevada: [39.876019, -117.224121],
+        mississippi: [32.3547, -89.3985],
+    };
 
     // useEffect(() => {
     //     axios.get(`http://localhost:8080/map/${state}`)
@@ -46,6 +52,17 @@ function MapComponent() {
         setAnchorEl(event.currentTarget);
     };
 
+    const handleClickHeatMap = (event) => {
+        event.preventDefault();
+        setAnchorElHeatmap(event.currentTarget);
+        if(anchorE1Heatmap){
+            setAnchorElHeatmap(null);
+        }
+    };
+
+    const handleCloseHeatMap = () => {
+        setAnchorElHeatmap(null);
+    };
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -53,15 +70,8 @@ function MapComponent() {
 
     const handleStateTable = () => {
         setShowStateAssemblyTable(!showStateAssemblyTable);
+        handleClose();
     };
-
-    const handleEthnicity = () => {
-        setCount(count + 1);
-        console.log(count);
-        setShowEthnicity(!showEthnicity);
-    };
-
-    const ethnicities = ['WHITE', 'BLACK', 'ASIAN', 'HISPANIC'];
 
     const handleNavigate = (path) => {
         handleClose();
@@ -71,14 +81,7 @@ function MapComponent() {
         setShowLineGraph(false);
         setShowBarGraph(false);
         setShowMap(true);
-
-        
     };
-    
-    const [coordinates, setCoordinates] = useState({
-        nevada: [39.876019, -117.224121],
-        mississippi: [32.3547, -89.3985],
-    });
 
     const handleStateChange = () => {
         if (state === 'nevada') {
@@ -89,49 +92,44 @@ function MapComponent() {
         }
     }
 
+    const handleChartDisplay = (showPieChartAssembly, showPieChartPopulation, showLineGraph, showBarGraph) => {
+        setShowPieChartAssembly(showPieChartAssembly);
+        setShowPieChartPopulation(showPieChartPopulation);
+        setShowLineGraph(showLineGraph);
+        setShowBarGraph(showBarGraph);
+        setShowMap(!(showPieChartAssembly || showPieChartPopulation || showLineGraph || showBarGraph));
+        setAnchorEl(false);
+        setAnchorElHeatmap(false);
+    }
+    
     const handleGoBack = () => {
-        setShowPieChartAssembly(false);
-        setShowLineGraph(false);
-        setShowMap(true);
-        setShowPieChartPopulation(false);
-        setShowBarGraph(false);
+        handleChartDisplay(false, false, false, false);
+        setEthnicity(null);
     }
-
+    
     const handleClickPieChartAssembly = () => {
-        setShowLineGraph(false);
-        setShowPieChartPopulation(false);
-        setShowPieChartAssembly(true);
-        setShowMap(false);
-        setShowBarGraph(false);
+        setLegend(null);
+        handleChartDisplay(true, false, false, false);
     };
-
+    
     const handleClickPieChartPopulation = () =>{
-        setShowLineGraph(false);
-        setShowPieChartAssembly(false);
-        setShowPieChartPopulation(true);
-        setShowMap(false);
-        setShowBarGraph(false);
+        setLegend(null);
+        handleChartDisplay(false, true, false, false);
     }
-
+    
     const handleClickLineGraph = () =>{
-        setShowPieChartAssembly(false);
-        setShowPieChartPopulation(false);
-        setShowLineGraph(true);
-        setShowMap(false);
-        setShowBarGraph(false);
+        setLegend(null);
+        handleChartDisplay(false, false, true, false);
     }
-
+    
     const handleClickBarGraph = () =>{
-        setShowPieChartAssembly(false);
-        setShowPieChartPopulation(false);
-        setShowLineGraph(false);
-        setShowMap(false);
-        setShowBarGraph(true);
+        setLegend(null);
+        handleChartDisplay(false, false, false, true);
     }
 
     const handleEthnicityOptionClick = (ethnicity) => {
-        setShowEthnicity(false);
-        createHeatmap(ethnicity);
+        setAnchorEl(false);
+        setEthnicity(ethnicity);
     };
 
     const stateDistricts = {
@@ -141,7 +139,7 @@ function MapComponent() {
 
     const statePrecincts = {
         nevada: '/nv_precinct_demographic.geojson',
-        mississippi: '/ms_prec_demographic_data.geojson'
+        mississippi: '/ms_prec_demographic.geojson'
     };
 
     useEffect(() => {
@@ -155,7 +153,7 @@ function MapComponent() {
     
             if (showPieChartAssembly) {
                 let data;
-                if(state === "nevada"){
+                if (state === "nevada") {
                     data = {
                         labels: ['WHITE', 'HISPANIC', 'BLACK', 'ASIAN', 'OTHER'],
                         datasets: [{
@@ -171,9 +169,7 @@ function MapComponent() {
                             hoverOffset: 4
                         }]
                     };
-                }
-
-                else{
+                } else {
                     data = {
                         labels: ['WHITE', 'LATINO', 'ASIAN', 'BLACK', 'NATIVE AMERICAN'],
                         datasets: [{
@@ -190,7 +186,7 @@ function MapComponent() {
                         }]
                     };
                 }
-    
+
                 const options = {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -212,7 +208,6 @@ function MapComponent() {
                     data: data,
                     options: options,
                 });
-                
             }
         }
     }, [showPieChartAssembly]);
@@ -228,7 +223,7 @@ function MapComponent() {
     
             if (showPieChartPopulation) {
                 let data;
-                if(state === "nevada"){
+                if (state === "nevada") {
                     data = {
                         labels: ['WHITE', 'HISPANIC', 'BLACK', 'ASIAN', 'OTHER'],
                         datasets: [{
@@ -244,9 +239,7 @@ function MapComponent() {
                             hoverOffset: 4
                         }]
                     };
-                }
-                
-                else{
+                } else {
                     data = {
                         labels: ['WHITE', 'LATINO', 'ASIAN', 'BLACK', 'NATIVE AMERICAN'],
                         datasets: [{
@@ -284,8 +277,7 @@ function MapComponent() {
                     type: 'doughnut',
                     data: data,
                     options: options,
-                });
-                
+                }); 
             }
         }
     }, [showPieChartPopulation]);
@@ -305,48 +297,43 @@ function MapComponent() {
                 const startYear = 1990;
                 const endYear = 2018;
                 const interval = 4;
-
                 const labels = Array.from(
                     { length: Math.floor((endYear - startYear) / interval) + 1 },
                     (_, index) => startYear + index * interval
                 );
-                if(state === "nevada"){
+                if (state === "nevada") {
                     data = {
-                    labels: labels,
-                    datasets: [{
-                        label: 'WHITE',
-                        data: [51.3, 51, 48, 50, 52, 47, 45.8, 57.5],
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    },
-                    {
-                        label: 'BLACK',
-                        data: [42.5, 40, 41.8, 43, 42.5, 42.7, 40.6, 51.4],
-                        fill: false,
-                        borderColor: 'rgb(54, 162, 235)',
-                        tension: 0.1
-                    },
-                    {
-                        label: 'ASIAN',
-                        data: [40.2, 40, 34.5, 33.5, 34, 33.5, 26.9, 40.2],
-                        fill: false,
-                        borderColor: 'rgb(255, 205, 86)',
-                        tension: 0.1
-                    },
-                    {
-                        label: 'HISPANIC',
-                        data: [36.0, 34.5, 33.8, 33.5, 34.2, 33.5, 27, 40.4],
-                        fill: false,
-                        borderColor: 'rgb(128, 128, 128)',
-                        tension: 0.1
-                    }
-                ]
+                        labels: labels,
+                        datasets: [{
+                            label: 'WHITE',
+                            data: [51.3, 51, 48, 50, 52, 47, 45.8, 57.5],
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'BLACK',
+                            data: [42.5, 40, 41.8, 43, 42.5, 42.7, 40.6, 51.4],
+                            fill: false,
+                            borderColor: 'rgb(54, 162, 235)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'ASIAN',
+                            data: [40.2, 40, 34.5, 33.5, 34, 33.5, 26.9, 40.2],
+                            fill: false,
+                            borderColor: 'rgb(255, 205, 86)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'HISPANIC',
+                            data: [36.0, 34.5, 33.8, 33.5, 34.2, 33.5, 27, 40.4],
+                            fill: false,
+                            borderColor: 'rgb(128, 128, 128)',
+                            tension: 0.1
+                        }]
                     };
-                }
-                
-
-                else{
+                } else {
                     data = {
                         labels: labels,
                         datasets: [{
@@ -376,12 +363,9 @@ function MapComponent() {
                             fill: false,
                             borderColor: 'rgb(128, 128, 128)',
                             tension: 0.1
-                        }
-                    ]
-                        };
-                    
+                        }]
+                    };
                 }
-    
                 const options = {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -395,15 +379,12 @@ function MapComponent() {
                             color: '#333333'
                         }
                     }
-
                 };
-
                 chartRef.current = new Chart(ctx, {
                     type: 'line',
                     data: data,
                     options: options
                 });
-                
             }
         }
     }, [showLineGraph]);
@@ -420,8 +401,8 @@ function MapComponent() {
     
             if (showBarGraph) {
                 let data;
-
                 const labels = ["WHITE", "BLACK", "ASIAN", "HISPANIC", "OTHER"]
+
                 if(state === "nevada"){
                     data = {
                     labels: labels,
@@ -442,10 +423,7 @@ function MapComponent() {
                         },
                 ]
                     };
-                }
-                
-
-                else{
+                } else{
                     data = {
                         labels: labels,
                         datasets: [
@@ -467,7 +445,6 @@ function MapComponent() {
                         };
                     
                 }
-    
                 const options = {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -483,7 +460,6 @@ function MapComponent() {
                     }
 
                 };
-
                 chartRef.current = new Chart(ctx, {
                     type: 'bar',
                     data: data,
@@ -524,7 +500,7 @@ function MapComponent() {
             return color;
         }
 
-        if (stateDistricts[state]) {
+        if (stateDistricts[state] && (statePrecincts[state] && !ethnicity) ) {
             fetch(stateDistricts[state])
                 .then(response => response.json())
                 .then(geojson => {
@@ -535,27 +511,13 @@ function MapComponent() {
                             fillColor: getNextColor(), 
                             fillOpacity: 1,
                         }),
-
                         onEachFeature: (feature, layer) => {
-                            // Access properties of each feature
                             const properties = feature.properties;
-                            console.log(properties.ID);
-
-                            const customIcon = L.divIcon({
-                                className: 'custom-icon',
-                                html: `<div>${properties.ID}</div>`,
-                            });
-                            
-                            L.marker(layer.getBounds().getCenter(), {
-                                icon: customIcon,
-                            }).addTo(map);
+                            // console.log(properties.ID);
                         }
-                        
                     }).addTo(map);
                 });
-        }
-
-        if (statePrecincts[state]) {
+                setLegend(null);
             fetch(statePrecincts[state])
                 .then(response => response.json())
                 .then(geojson => {
@@ -566,164 +528,124 @@ function MapComponent() {
                             fillOpacity: 0,
 
                         },
+                    }).addTo(map);
+                });
+        }
+
+        if (statePrecincts[state] && ethnicity) {
+            fetch(statePrecincts[state])
+                .then(response => response.json())
+                .then(geojson => {
+
+                    const maxEthnicityValue = Math.max(
+                        ...geojson.features.map(feature => feature.properties[ethnicity.toUpperCase()])
+                    );
+
+                    const colorScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, maxEthnicityValue]);
+                    const legendScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, 1]);
+                    const legendItems = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]; 
+                    const legendColorScales = legendItems.map(value => legendScale(value).hex());
+
+                    const legendContent = (
+                        <div className="legend-container" style={{ display: 'flex', alignItems: 'center' }}>
+                            {legendItems.map((item, index) => (
+                                <div key={index} className="legend-item" style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
+                                    <span className="legend-color-box" style={{ backgroundColor: legendColorScales[index], width: '20px', height: '20px', display: 'inline-block', marginRight: '5px' }}></span>
+                                    <span className="legend-label" style={{ fontSize: "1.2em" }}>{Math.round(item * 100)}%</span>
+                                </div>
+                            ))}
+                        </div>
+                    );
+
+                    setLegend(legendContent);
+
+                    L.geoJSON(geojson, {
+                        style: feature => ({
+                            color: 'black',
+                            weight: 0.5, 
+                            fillOpacity: 0.7,
+                            fillColor: colorScale(feature.properties[ethnicity.toUpperCase()]).hex(),
+
+                        }),
+                        //set ethnicity value back to null
                         onEachFeature: (feature, layer) => {
-                            const white = feature.properties.WHITE;
-                            const black = feature.properties.BLACK;
-                            const asian = feature.properties.ASIAN;
-                            const hisp = feature.properties.HISP;
-                            
+                            const properties = feature.properties;
+                            const ethnicityValue = properties[ethnicity.toUpperCase()];
+                            const totalPopulation = properties.TOTPOP;
                         }
 
-                    }).addTo(map);
+                        }
+                    ).addTo(map);
                 });
         }
     
         return () => map.remove();
-    }, [state, showMap, coordinates]);
-
-    const createHeatmap = (ethnicity) => {
-
-       
-        
-        // const color = [
-        //     '#3c8fc6'
-        // ];
-
-        // if (stateDistricts[state]) {
-        //     fetch(stateDistricts[state])
-        //         .then(response => response.json())
-        //         .then(geojson => {
-        //             L.geoJSON(geojson, {
-        //                 style: feature => ({
-        //                     color: 'black', 
-        //                     weight: 1,
-        //                     fillOpacity: 0,
-        //                 }),           
-        //             }).addTo(map);
-        //         });
-        // }
-
-        // if (statePrecincts[state]) {
-        //     fetch(statePrecincts[state])
-        //         .then(response => response.json())
-        //         .then(geojson => {
-        //             L.geoJSON(geojson, {
-        //                 style: {
-        //                     color: 'white',
-        //                     weight: 0.5, 
-        //                     fillOpacity: 0,
-
-        //                 },
-
-        //             }).addTo(map);
-        //         });
-        // }
-    }
+    }, [state, showMap, ethnicity, showStateAssemblyTable]);
 
     return (
         <div>
-            <div ref={mapContainerRef} className="fullscreen-map" />
-            <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
-                <div style={{margin: "50px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Button variant="contained" color="primary" onClick={handleClick} >
+            
+            <div style={{ height: '50px', backgroundColor: 'lightgray', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div style={{ marginLeft: '20px', fontSize: '24px', fontWeight: 'bold' }}>{state === 'nevada' ? 'NEVADA' : 'MISSISSIPPI'}</div>
+                <div className="legend">
+                        {legend}
+                    </div>
+                <div style = {{marginRight: '10px'}}>
+                    <Button variant="contained" color="primary" onClick={handleClick}>
                         Open Menu
                     </Button>
-                    <div style={{fontSize: '40px', fontWeight:'bold'}}>{state === 'nevada' ? 'NEVADA' : 'MISSISSIPPI'}</div>
-                    <Button variant="contained" color="primary" onClick={handleStateChange} >
-                        Go To
-                        {state === 'nevada' ? ' Mississippi' : ' Nevada'}
-                    </Button>
                 </div>
-                <div className="content-container">
-                    <div style={{ margin: "50px", display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                        <Button variant="contained" color="primary" onClick={handleStateTable}>
-                            State Information
-                        </Button>
+            </div>
+            
+            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex' }}>            
+                <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
+
+                    <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
-                    
-                    {showStateAssemblyTable && (
-                        <div className='table-container'>
-                            <table>
-                                <tbody>
-                                    {Array.from({ length: 6 }, (_, rowIndex) => (
-                                        <tr key={`row-${rowIndex}`}>
-                                            {Array.from({ length: 2 }, (_, colIndex) => (
-                                                <td key={`cell-${rowIndex}-${colIndex}`}>
-                                                    Row {rowIndex + 1}, Column {colIndex + 1}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </div>
-
-               <div style={{ margin: "50px", display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <Button variant="contained" color="primary" onClick={handleEthnicity}>
-                        Heat Map
-                    </Button>
-                    {showEthnicity && (
-                        <div style={{ backgroundColor: 'white', border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}>
-                            <div>
-                                <button onClick={() => handleEthnicityOptionClick('WHITE')}>White</button>
-                            </div>
-                            <div>
-                                <button onClick={() => handleEthnicityOptionClick('BLACK')}>Black</button>
-                            </div>
-                            <div>
-                                <button onClick={() => handleEthnicityOptionClick('ASIAN')}>Asian</button>
-                            </div>
-                            <div>
-                                <button onClick={() => handleEthnicityOptionClick('HISPANIC')}>Hispanic</button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-
-
-                <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
-
-                </div>
                     <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                    {state === 'nevada' && [
                         <MenuItem key="california" onClick={handleGoBack}>
                             Go Back to Map
-                        </MenuItem>,
+                        </MenuItem>
+                        <MenuItem key="" onClick={handleStateChange}>
+                            Go To
+                            {state === 'nevada' ? ' Mississippi' : ' Nevada'}
+                        </MenuItem>
+                        <MenuItem key="stateInformation" onClick={() => handleStateTable()}>
+                            State Information
+                        </MenuItem>
+                        <MenuItem key="heatMap" onClick={handleClickHeatMap}>
+                            Heat Map
+                            <Menu anchorEl={anchorE1Heatmap} open={Boolean(anchorE1Heatmap)} onClose={handleCloseHeatMap} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}>
+                            <MenuItem onClick={() => handleEthnicityOptionClick('WHITE')}>White</MenuItem>
+                            <MenuItem onClick={() => handleEthnicityOptionClick('BLACK')}>Black</MenuItem>
+                            <MenuItem onClick={() => handleEthnicityOptionClick('ASIAN')}>Asian</MenuItem>
+                            <MenuItem onClick={() => handleEthnicityOptionClick('HISP')}>Hispanic</MenuItem>
+                            </Menu>
+                        </MenuItem>
+                        
                         <MenuItem key="racialDistributionAssembly" onClick={() => handleClickPieChartAssembly()}>
                             Racial Distribution Of Current State Assembly
-                        </MenuItem>,
+                        </MenuItem>
                         <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
                             Racial Distribution Of Current State Population
-                        </MenuItem>,
-                        <MenuItem key="Voter Turnout" onClick={() => handleClickLineGraph()}>
+                        </MenuItem>
+                        <MenuItem key="voterTurnout" onClick={() => handleClickLineGraph()}>
                             Voter Turnout
-                        </MenuItem>,
-                        <MenuItem key="Racial Gap" onClick={() => handleClickBarGraph()}>
+                        </MenuItem>
+                        <MenuItem key="racialGap" onClick={() => handleClickBarGraph()}>
                             Racial Gap Assessment
-                        </MenuItem>,
-                    ]}
-                    {state === 'mississippi' && [
-                        <MenuItem key="nevada" onClick={handleGoBack}>
-                            Go Back to Map
-                        </MenuItem>,
-                        <MenuItem key="racialDistributionAssembly" onClick={() => handleClickPieChartAssembly()}>
-                            Racial Distribution Of Current State Assembly
-                        </MenuItem>,
-                            <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
-                            Racial Distribution Of Current State Population
-                        </MenuItem>,
-                        <MenuItem key="Voter Turnout" onClick={() => handleClickLineGraph()}>
-                            Voter Turnout
-                        </MenuItem>,
-                        <MenuItem key="Racial Gap" onClick={() => handleClickBarGraph()}>
-                            Racial Gap Assessment
-                        </MenuItem>,
-                    ]}
+                        </MenuItem>
                     </Menu>
-
+                    
+                    
                     {showPieChartAssembly && (
                         <div>
                             <canvas ref={chartContainerRefAssembly} width={600} height={600}/>
@@ -744,9 +666,30 @@ function MapComponent() {
                             <canvas ref={chartContainerRefBarGraph} width={600} height={600}/>
                         </div>
                     )}
+                </div>
             </div>
+            {showStateAssemblyTable && (
+                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>
+                    <div className='table-container'>
+                        <table>
+                            <tbody>
+                                {Array.from({ length: 6 }, (_, rowIndex) => (
+                                    <tr key={`row-${rowIndex}`}>
+                                        {Array.from({ length: 2 }, (_, colIndex) => (
+                                            <td key={`cell-${rowIndex}-${colIndex}`}>
+                                                Row {rowIndex + 1}, Column {colIndex + 1}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </div>
-     );
+    );
+    
 }
 
 export default MapComponent;

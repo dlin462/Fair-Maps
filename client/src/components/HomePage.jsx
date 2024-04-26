@@ -16,12 +16,12 @@ function HomePage() {
                 Choose Your State
             </Typography>
             <Button variant="contained" color="primary" style={{ margin: '10px' }}
-                onClick={() => navigate('/map/texas')}>
-                Texas
+                onClick={() => navigate('/map/mississippi')}>
+                Mississippi
             </Button>
             <Button variant="contained" color="secondary" style={{ margin: '10px' }}
-                onClick={() => navigate('/map/california')}>
-                California
+                onClick={() => navigate('/map/nevada')}>
+                Nevada
             </Button>
             {/* <Box display="flex" p={1} style={{ height:'100vh' }}>
                 <Box flex={1}>

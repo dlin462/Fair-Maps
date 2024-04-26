@@ -2,11 +2,29 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 100%;
+  width: 90%;
   height: 100%;
-  margin: 0;
+  margin-top: 60px;
   right: 0;
   left: 0;
+}
+
+.entire-page{
+  width: 100%;
+}
+
+.split-screen-container {
+  display: flex;
+}
+
+.left-section {
+  flex: 1;
+}
+
+.right-section {
+  flex: 1;
+  border-left: 1px solid #ccc;
+  padding-left: 20px;
 }
 
 
