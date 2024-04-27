@@ -1,4 +1,15 @@
 package com.states.cse416.Service;
 
-public class DistrictService {
-}
+import com.states.cse416.Models.District;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
+
+//@RestController
+//@NoArgsConstructor
+//@AllArgsConstructor
+//public class DistrictService {
+//    public District getDistrict() {
+//
+//    }
+//}
