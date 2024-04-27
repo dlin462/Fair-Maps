@@ -3,13 +3,12 @@ import L from 'leaflet';
 import { useParams } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import '../App.css';
-import { Button, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import Chart from 'chart.js/auto';
-// import Plot from 'react-plotly.js';
 import axios from 'axios'
-// import chroma from 'chroma-js';
+import chroma from 'chroma-js';
+import Header from './Header';
+import MapMenu from './Menu';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -19,12 +18,6 @@ function MapComponent() {
     const { state } = useParams(); // Get the state parameter from the URL
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorE1Heatmap, setAnchorElHeatmap] = React.useState(null);
-
-    const chartContainerRefAssembly = useRef(null);
-    const chartContainerRefPopulation = useRef(null);
-    const chartContainerRefMinority = useRef(null);
-    const chartContainerRefBarGraph = useRef(null);
-    const chartRef = useRef(null);
     const [showPieChartAssembly, setShowPieChartAssembly] = useState(false);
     const [showPieChartPopulation, setShowPieChartPopulation] = useState(false);
     const [showLineGraph, setShowLineGraph] = useState(false);
@@ -143,334 +136,6 @@ function MapComponent() {
     };
 
     useEffect(() => {
-        const ctx = chartContainerRefAssembly.current && chartContainerRefAssembly.current.getContext('2d');
-    
-        if (ctx) {
-            // Destroy existing chart instance
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
-    
-            if (showPieChartAssembly) {
-                let data;
-                if (state === "nevada") {
-                    data = {
-                        labels: ['WHITE', 'HISPANIC', 'BLACK', 'ASIAN', 'OTHER'],
-                        datasets: [{
-                            label: 'RACIAL DEMOGRAPHICS',
-                            data: [62, 24, 9, 3, 2],
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(128, 128, 128)'
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-                } else {
-                    data = {
-                        labels: ['WHITE', 'LATINO', 'ASIAN', 'BLACK', 'NATIVE AMERICAN'],
-                        datasets: [{
-                            label: 'RACIAL DEMOGRAPHICS',
-                            data: [49, 25, 15, 10, 1],
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(128, 128, 128)'
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-                }
-
-                const options = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `RACIAL DEMOGRAPHICS OF STATE ASSEMBLY OF ${state.toUpperCase()}`,
-                            font: {
-                                size: 24
-                            },
-                            color: '#333333'
-                        }
-                    }
-
-                };
-    
-                chartRef.current = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: data,
-                    options: options,
-                });
-            }
-        }
-    }, [showPieChartAssembly]);
-
-    useEffect(() => {
-        const ctx = chartContainerRefPopulation.current && chartContainerRefPopulation.current.getContext('2d');
-    
-        if (ctx) {
-            // Destroy existing chart instance
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
-    
-            if (showPieChartPopulation) {
-                let data;
-                if (state === "nevada") {
-                    data = {
-                        labels: ['WHITE', 'HISPANIC', 'BLACK', 'ASIAN', 'OTHER'],
-                        datasets: [{
-                            label: 'RACIAL DEMOGRAPHICS',
-                            data: [40, 40, 13, 6, 1],
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(128, 128, 128)'
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-                } else {
-                    data = {
-                        labels: ['WHITE', 'LATINO', 'ASIAN', 'BLACK', 'NATIVE AMERICAN'],
-                        datasets: [{
-                            label: 'RACIAL DEMOGRAPHICS',
-                            data: [37, 39, 15, 5, 4],
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(128, 128, 128)'
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-                }
-    
-                const options = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `${state.toUpperCase()} POPULATION RACIAL DEMOGRAPHICS`,
-                            font: {
-                                size: 24
-                            },
-                            color: '#333333'
-                        }
-                    }
-
-                };
-    
-                chartRef.current = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: data,
-                    options: options,
-                }); 
-            }
-        }
-    }, [showPieChartPopulation]);
-
-    //line graph
-    useEffect(() => {
-        const ctx = chartContainerRefMinority.current && chartContainerRefMinority.current.getContext('2d');
-    
-        if (ctx) {
-            // Destroy existing chart instance
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
-    
-            if (showLineGraph) {
-                let data;
-                const startYear = 1990;
-                const endYear = 2018;
-                const interval = 4;
-                const labels = Array.from(
-                    { length: Math.floor((endYear - startYear) / interval) + 1 },
-                    (_, index) => startYear + index * interval
-                );
-                if (state === "nevada") {
-                    data = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'WHITE',
-                            data: [51.3, 51, 48, 50, 52, 47, 45.8, 57.5],
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'BLACK',
-                            data: [42.5, 40, 41.8, 43, 42.5, 42.7, 40.6, 51.4],
-                            fill: false,
-                            borderColor: 'rgb(54, 162, 235)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'ASIAN',
-                            data: [40.2, 40, 34.5, 33.5, 34, 33.5, 26.9, 40.2],
-                            fill: false,
-                            borderColor: 'rgb(255, 205, 86)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'HISPANIC',
-                            data: [36.0, 34.5, 33.8, 33.5, 34.2, 33.5, 27, 40.4],
-                            fill: false,
-                            borderColor: 'rgb(128, 128, 128)',
-                            tension: 0.1
-                        }]
-                    };
-                } else {
-                    data = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'WHITE',
-                            data: [48, 52, 41, 52, 54, 49, 44, 51.5],
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'BLACK',
-                            data: [42.0, 41, 41.2, 49, 42.0, 42.1, 42.6, 53.4],
-                            fill: false,
-                            borderColor: 'rgb(54, 162, 235)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'ASIAN',
-                            data: [41.2, 40, 36.5, 33.5, 33, 33.5, 28.9, 45.2],
-                            fill: false,
-                            borderColor: 'rgb(255, 205, 86)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'HISPANIC',
-                            data: [31.0, 37.5, 33.9, 43.5, 44.2, 43.5, 37, 41.4],
-                            fill: false,
-                            borderColor: 'rgb(128, 128, 128)',
-                            tension: 0.1
-                        }]
-                    };
-                }
-                const options = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `VOTER TURNOUT FOR ${state.toUpperCase()}`,
-                            font: {
-                                size: 24
-                            },
-                            color: '#333333'
-                        }
-                    }
-                };
-                chartRef.current = new Chart(ctx, {
-                    type: 'line',
-                    data: data,
-                    options: options
-                });
-            }
-        }
-    }, [showLineGraph]);
-
-    //bar graph
-    useEffect(() => {
-        const ctx = chartContainerRefBarGraph.current && chartContainerRefBarGraph.current.getContext('2d');
-    
-        if (ctx) {
-            // Destroy existing chart instance
-            if (chartRef.current) {
-                chartRef.current.destroy();
-            }
-    
-            if (showBarGraph) {
-                let data;
-                const labels = ["WHITE", "BLACK", "ASIAN", "HISPANIC", "OTHER"]
-
-                if(state === "nevada"){
-                    data = {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Assembly',
-                            data: [62, 9, 3, 24, 2],
-                            backgroundColor: 'rgba(255, 205, 86, 0.6)',
-                            borderColor: 'rgba(255, 205, 86, 1)',
-                            borderWidth: 1,
-                        },
-                        {
-                            label: 'Population',
-                            data: [40, 13, 6, 40, 1],
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1,
-                        },
-                ]
-                    };
-                } else{
-                    data = {
-                        labels: labels,
-                        datasets: [
-                        {
-                            label: 'Assembly',
-                            data: [49, 10, 15, 25, 1],
-                            backgroundColor: 'rgba(255, 205, 86, 0.6)',
-                            borderColor: 'rgba(255, 205, 86, 1)',
-                            borderWidth: 1,
-                        },
-                        {
-                            label: 'Voter Population',
-                            data: [37, 5, 15, 39, 4],
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1,
-                        },
-                    ]
-                        };
-                    
-                }
-                const options = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `RACIAL GAP ASSESSMENT FOR ${state.toUpperCase()}`,
-                            font: {
-                                size: 24
-                            },
-                            color: '#333333'
-                        }
-                    }
-
-                };
-                chartRef.current = new Chart(ctx, {
-                    type: 'bar',
-                    data: data,
-                    options: options
-                });
-                
-            }
-        }
-    }, [showBarGraph]);
-
-    useEffect(() => {
         if (!showMap) {
             return;
         }
@@ -585,87 +250,32 @@ function MapComponent() {
     return (
         <div>
             
-            <div style={{ height: '50px', backgroundColor: 'lightgray', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <div style={{ marginLeft: '20px', fontSize: '24px', fontWeight: 'bold' }}>{state === 'nevada' ? 'NEVADA' : 'MISSISSIPPI'}</div>
-                <div className="legend">
-                        {legend}
-                    </div>
-                <div style = {{marginRight: '10px'}}>
-                    <Button variant="contained" color="primary" onClick={handleClick}>
-                        Open Menu
-                    </Button>
-                </div>
-            </div>
-            
+            <Header state={state} legend={legend} handleClick={handleClick} />
             <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex' }}>            
                 <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
-
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
-                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                        <MenuItem key="california" onClick={handleGoBack}>
-                            Go Back to Map
-                        </MenuItem>
-                        <MenuItem key="" onClick={handleStateChange}>
-                            Go To
-                            {state === 'nevada' ? ' Mississippi' : ' Nevada'}
-                        </MenuItem>
-                        <MenuItem key="stateInformation" onClick={() => handleStateTable()}>
-                            State Information
-                        </MenuItem>
-                        <MenuItem key="heatMap" onClick={handleClickHeatMap}>
-                            Heat Map
-                            <Menu anchorEl={anchorE1Heatmap} open={Boolean(anchorE1Heatmap)} onClose={handleCloseHeatMap} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}>
-                            <MenuItem onClick={() => handleEthnicityOptionClick('WHITE')}>White</MenuItem>
-                            <MenuItem onClick={() => handleEthnicityOptionClick('BLACK')}>Black</MenuItem>
-                            <MenuItem onClick={() => handleEthnicityOptionClick('ASIAN')}>Asian</MenuItem>
-                            <MenuItem onClick={() => handleEthnicityOptionClick('HISP')}>Hispanic</MenuItem>
-                            </Menu>
-                        </MenuItem>
-                        
-                        <MenuItem key="racialDistributionAssembly" onClick={() => handleClickPieChartAssembly()}>
-                            Racial Distribution Of Current State Assembly
-                        </MenuItem>
-                        <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
-                            Racial Distribution Of Current State Population
-                        </MenuItem>
-                        <MenuItem key="voterTurnout" onClick={() => handleClickLineGraph()}>
-                            Voter Turnout
-                        </MenuItem>
-                        <MenuItem key="racialGap" onClick={() => handleClickBarGraph()}>
-                            Racial Gap Assessment
-                        </MenuItem>
-                    </Menu>
+                    <MapMenu
+                        anchorEl={anchorEl}
+                        anchorE1Heatmap={anchorE1Heatmap}
+                        handleClose={handleClose}
+                        handleCloseHeatMap={handleCloseHeatMap}
+                        handleGoBack={handleGoBack}
+                        handleStateChange={handleStateChange}
+                        handleStateTable={handleStateTable}
+                        handleClickHeatMap={handleClickHeatMap}
+                        handleEthnicityOptionClick={handleEthnicityOptionClick}
+                        handleClickPieChartAssembly={handleClickPieChartAssembly}
+                        handleClickPieChartPopulation={handleClickPieChartPopulation}
+                        handleClickLineGraph={handleClickLineGraph}
+                        handleClickBarGraph={handleClickBarGraph}
+                        showPieChartAssembly={showPieChartAssembly}
+                        showLineGraph={showLineGraph}
+                        showBarGraph={showBarGraph}
+                        showPieChartPopulation={showPieChartPopulation}
+                        state={state}
+                    />
                     
-                    
-                    {showPieChartAssembly && (
-                        <div>
-                            <canvas ref={chartContainerRefAssembly} width={600} height={600}/>
-                        </div>
-                    )}
-                    {showPieChartPopulation && (
-                        <div>
-                            <canvas ref={chartContainerRefPopulation} width={600} height={600}/>
-                        </div>
-                    )}
-                    {showLineGraph && (
-                        <div>
-                            <canvas ref={chartContainerRefMinority} width={600} height={600}/>
-                        </div>
-                    )}
-                    {showBarGraph && (
-                        <div>
-                            <canvas ref={chartContainerRefBarGraph} width={600} height={600}/>
-                        </div>
-                    )}
                 </div>
             </div>
             {showStateAssemblyTable && (
