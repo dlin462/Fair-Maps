@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Chart from 'chart.js/auto';
 // import Plot from 'react-plotly.js';
-// import axios from 'axios'
-import chroma from 'chroma-js';
+import axios from 'axios'
+// import chroma from 'chroma-js';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -38,15 +38,15 @@ function MapComponent() {
         mississippi: [32.3547, -89.3985],
     };
 
-    // useEffect(() => {
-    //     axios.get(`http://localhost:8080/map/${state}`)
-    //         .then(response => {
-    //             console.log("Server returned: ", response.data);
-    //         })
-    //         .catch(error => {
-    //             console.log("error retreiving data from server: ", error)
-    //         });
-    // }, [state])
+    useEffect(() => {
+        axios.get(`http://localhost:8080/map/${state}`)
+            .then(response => {
+                console.log("Server returned: ", response.data);
+            })
+            .catch(error => {
+                console.log("error retreiving data from server: ", error)
+            });
+    }, [state])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
