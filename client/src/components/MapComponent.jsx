@@ -10,6 +10,7 @@ import chroma from 'chroma-js';
 import Header from './Header';
 import MapMenu from './Menu';
 import StateTable from './StateTable';
+import StateAssemblyTable from './StateAssemblyTable';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -281,7 +282,8 @@ function MapComponent() {
             </div>
             {showStateAssemblyTable && (
                 <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>                  
-                    <StateTable />   
+                    <StateTable /> 
+                    <StateAssemblyTable />  
                 </div>
             )}
         </div>

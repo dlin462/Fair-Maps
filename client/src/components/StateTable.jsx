@@ -16,23 +16,24 @@ function StateTable() {
     }, []);
 
     return (
-        <div className="state-table">
+        <div className="table">
             <div className='table-container'>
                 <table>
                     <thead>
                         <tr>
                             <th>State</th>
-                            <th>Total Population</th>
-                            <th>White Population</th>
-                            <th>Black Population</th>
-                            <th>Asian Population</th>
-                            <th>Hispanic Population</th>
+                            <th>TotalP</th>
+                            <th>WhiteP</th>
+                            <th>BlackP</th>
+                            <th>AsianP</th>
+                            <th>HispP</th>
+                            <th>Party Control</th>
                         </tr>
                     </thead>
                     <tbody>
                         {stateData.map(stateInfo => (
                             <tr key={stateInfo.id.timestamp}>
-                                <td>{stateInfo.name}</td>
+                                <td>{stateInfo.stateName}</td>
                                 <td>{stateInfo.tot_POP22}</td>
                                 <td>{stateInfo.wht_NHSP22}</td>
                                 <td>{stateInfo.blk_NHSP22}</td>

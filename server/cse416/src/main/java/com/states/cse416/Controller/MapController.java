@@ -3,8 +3,10 @@ package com.states.cse416.Controller;
 import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
 import com.states.cse416.Models.State;
+import com.states.cse416.Models.StateAssembly;
 import com.states.cse416.Service.PrecinctService;
 import com.states.cse416.Service.StateWideDataService;
+import com.states.cse416.Service.StateAssemblyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ public class MapController {
 
     @Autowired
     private StateWideDataService stateWideDataService;
+
+    @Autowired
+    private StateAssemblyService stateAssemblyService;
 
 
     @GetMapping("/map/{state}")
@@ -52,6 +57,12 @@ public class MapController {
     public ResponseEntity<List<State>> getStateTable() {
         return new ResponseEntity<>(stateWideDataService.getTable(), HttpStatus.OK);
     }
+
+    @GetMapping("/stateAssemblyTable")
+    public ResponseEntity<List<StateAssembly>> getAssemblyStateTable() {
+        return new ResponseEntity<>(stateAssemblyService.getTable(), HttpStatus.OK);
+    }
+
 
     @GetMapping("/helloWorld")
     public String getHello() {
