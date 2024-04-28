@@ -9,6 +9,7 @@ import axios from 'axios'
 import chroma from 'chroma-js';
 import Header from './Header';
 import MapMenu from './Menu';
+import StateTable from './StateTable';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -279,22 +280,8 @@ function MapComponent() {
                 </div>
             </div>
             {showStateAssemblyTable && (
-                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>
-                    <div className='table-container'>
-                        <table>
-                            <tbody>
-                                {Array.from({ length: 6 }, (_, rowIndex) => (
-                                    <tr key={`row-${rowIndex}`}>
-                                        {Array.from({ length: 2 }, (_, colIndex) => (
-                                            <td key={`cell-${rowIndex}-${colIndex}`}>
-                                                Row {rowIndex + 1}, Column {colIndex + 1}
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>                  
+                    <StateTable />   
                 </div>
             )}
         </div>

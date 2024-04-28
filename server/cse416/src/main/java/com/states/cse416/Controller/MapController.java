@@ -2,7 +2,9 @@ package com.states.cse416.Controller;
 
 import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
+import com.states.cse416.Models.State;
 import com.states.cse416.Service.PrecinctService;
+import com.states.cse416.Service.StateWideDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +23,18 @@ public class MapController {
     @Autowired
     private PrecinctService precinctService;
 
+    @Autowired
+    private StateWideDataService stateWideDataService;
 
-    @GetMapping("/mapData/{state}")
+
+    @GetMapping("/map/{state}")
     public String fetchStateJson(@PathVariable String state) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "";
-        if (state.equals("MS")) {
+        if (state.equals("mississippi")) {
             url = "https://redistricting.lls.edu/wp-content/uploads/ms_2020_congress_2022-01-24.json";
 
-        } else if (state.equals("NV")) {
+        } else if (state.equals("nevada")) {
             url = "https://redistricting.lls.edu/wp-content/uploads/nv_2020_congress_2021-11-16.json";
         } else {
             return "Invalid";
@@ -43,6 +48,10 @@ public class MapController {
         return new ResponseEntity<>(precinctService.getAllPrecincts(), HttpStatus.OK);
     }
 
+    @GetMapping("/stateTable")
+    public ResponseEntity<List<State>> getStateTable() {
+        return new ResponseEntity<>(stateWideDataService.getTable(), HttpStatus.OK);
+    }
 
     @GetMapping("/helloWorld")
     public String getHello() {
