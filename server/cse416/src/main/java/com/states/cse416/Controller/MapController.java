@@ -7,6 +7,9 @@ import com.states.cse416.Models.StateAssembly;
 import com.states.cse416.Service.PrecinctService;
 import com.states.cse416.Service.StateWideDataService;
 import com.states.cse416.Service.StateAssemblyService;
+import com.states.cse416.Models.*;
+import com.states.cse416.Service.PrecinctService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -49,7 +53,12 @@ public class MapController {
     }
 
     @GetMapping("/allPrecincts")
-    public ResponseEntity<List<Precinct>> getPrecincts() {
+    public ResponseEntity<List<PrecinctDTO>> getPrecincts() {
+        return new ResponseEntity<>(precinctService.getAllPrecinctDTOs(), HttpStatus.OK);
+    }
+
+    @GetMapping("/precincts")
+    public ResponseEntity<List<Precinct>> getNevadaPrecincts() {
         return new ResponseEntity<>(precinctService.getAllPrecincts(), HttpStatus.OK);
     }
 
@@ -63,6 +72,16 @@ public class MapController {
         return new ResponseEntity<>(stateAssemblyService.getTable(), HttpStatus.OK);
     }
 
+    @GetMapping("/nevadaBoundaries")
+    public List<PrecinctBoundary> getStuff() {
+        return precinctService.getPrecinctBoundaries();
+//        return new ResponseEntity<>(precinctService.getPrecinctBoundaries(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<PrecinctBoundaryDTO>> getPrecinctBoundaryById(@PathVariable ObjectId id) {
+        return new ResponseEntity<>(precinctService.getPrecinctBoundaryById(id), HttpStatus.OK);
+    }
 
     @GetMapping("/helloWorld")
     public String getHello() {
