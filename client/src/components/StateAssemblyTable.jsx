@@ -17,7 +17,7 @@ function StateAssemblyTable() {
 
     return (
         <div className="table">
-            <div className='table-container' style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <div className='table-container' style={{ maxHeight: '800px', overflowY: 'auto' }}>
                 <table>
                     <thead>
                         <tr>
@@ -26,22 +26,26 @@ function StateAssemblyTable() {
                             <th>Party</th>
                             <th>Race/Ethnicity</th>
                             <th>Vote Margin</th>
+                            <th>Date Assumed Office</th>
                             <th>Photo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {stateAssemblyData.map(stateInfo => (
+                    {stateAssemblyData.map(stateInfo => (
+                        stateInfo.state === "Mississippi" && (
                             <tr key={stateInfo.id.timestamp}>
-                                <td>{stateInfo.district}</td>
+                                <td>{stateInfo.office}</td>
                                 <td>{stateInfo.name}</td>
                                 <td>{stateInfo.party}</td>
-                                <td>{stateInfo.race_ethnicity}</td>
-                                <td>{stateInfo.vote_Margin}</td>
+                                <td>{stateInfo.ethnicity}</td>
+                                <td>{stateInfo.vote_Margin}%</td>
+                                <td>{stateInfo.date_assumed_office}</td>
                                 <td>
-                                    <img src={stateInfo.photo} alt="District Representative" style={{ width: '150px', height: '150px' }} />
+                                    <img src={stateInfo.image} alt="District Representative" style={{ width: '150px', height: '150px' }} />
                                 </td>
                             </tr>
-                        ))}
+                        )
+                    ))}
                     </tbody>
                 </table>
             </div>
