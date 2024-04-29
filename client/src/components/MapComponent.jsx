@@ -12,6 +12,9 @@ import MapMenu from './Menu';
 import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 
+// const parse = require('wellknown');
+import { parse } from 'wellknown';
+
 function MapComponent() {
     const mapContainerRef = useRef(null);
 
@@ -41,6 +44,19 @@ function MapComponent() {
             .catch(error => {
                 console.log("error retreiving data from server: ", error)
             });
+        axios.get('http://localhost:8080/nevadaBoundaries', )
+            .then(response => {
+            // Handle successful response
+            // console.log('Response:', parse(response.data));
+            response.data.forEach(feature => {
+                console.log('Feature:', parse(feature.coordinates));
+            });
+            console.log('Response:', response.data);
+            })
+            .catch(error => {
+            // Handle error
+            console.log('Error:', error);
+        });
     }, [state])
 
     const handleClick = (event) => {
