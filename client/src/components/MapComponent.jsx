@@ -118,15 +118,15 @@ function MapComponent() {
         setEthnicity(ethnicity);
     };
 
-    useEffect(() => {
-        axios.get('http://localhost:8080/nevadaDistricts')
-            .then(response => {
-                console.log('Response from server:', response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching stateAssembly data:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios.get('http://localhost:8080/nevadaDistricts')
+    //         .then(response => {
+    //             console.log('Response from server:', response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching stateAssembly data:', error);
+    //         });
+    // }, []);
 
     const mergeData = (geometries, demographics) => {
         const mergedData = [];
@@ -177,7 +177,6 @@ function MapComponent() {
                       coordinates: item.coordinates, 
                     }));
                 };
-
                 const extractEthnicity = (mergedData) => {
                     return mergedData.map(item => ({
                         type: item.type,
@@ -185,7 +184,6 @@ function MapComponent() {
                         value: item[ethnicity]
                     }));
                 };
-                
                 let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
                     style: {
                         color: 'red',
@@ -193,7 +191,6 @@ function MapComponent() {
                         fillOpacity: 0,
                     }
                 });
-
                 if(ethnicity != null){
                     const EthnicityValues = extractEthnicity(mergedData);
                     const maxValue = Math.max(...EthnicityValues.map(item => item.value));
