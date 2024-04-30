@@ -4,9 +4,7 @@ import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
 import com.states.cse416.Models.State;
 import com.states.cse416.Models.StateAssembly;
-import com.states.cse416.Service.PrecinctService;
-import com.states.cse416.Service.StateWideDataService;
-import com.states.cse416.Service.StateAssemblyService;
+import com.states.cse416.Service.*;
 import com.states.cse416.Models.*;
 import com.states.cse416.Service.PrecinctService;
 import org.bson.types.ObjectId;
@@ -35,6 +33,9 @@ public class MapController {
     @Autowired
     private StateAssemblyService stateAssemblyService;
 
+    @Autowired
+    private DistrictService districtService;
+
 
     @GetMapping("/map/{state}")
     public String fetchStateJson(@PathVariable String state) {
@@ -52,10 +53,6 @@ public class MapController {
         return restTemplate.getForObject(url, String.class);
     }
 
-    @GetMapping("/allPrecincts")
-    public ResponseEntity<List<PrecinctDTO>> getPrecincts() {
-        return new ResponseEntity<>(precinctService.getAllPrecinctDTOs(), HttpStatus.OK);
-    }
 
     @GetMapping("/precincts")
     public ResponseEntity<List<Precinct>> getNevadaPrecincts() {
@@ -78,9 +75,9 @@ public class MapController {
 //        return new ResponseEntity<>(precinctService.getPrecinctBoundaries(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<PrecinctBoundaryDTO>> getPrecinctBoundaryById(@PathVariable ObjectId id) {
-        return new ResponseEntity<>(precinctService.getPrecinctBoundaryById(id), HttpStatus.OK);
+    @GetMapping("/nevadaDistricts")
+    public ResponseEntity<List<District>> getDistricts() {
+        return new ResponseEntity<>(districtService.getAllDistricts(), HttpStatus.OK);
     }
 
     @GetMapping("/helloWorld")

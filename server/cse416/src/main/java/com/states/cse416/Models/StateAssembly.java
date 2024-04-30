@@ -22,8 +22,9 @@ public class StateAssembly {
     private String Name;
     private String Party;
     private String Race_ethnicity;
-    private String Vote_Margin;
+    private double voteMargin;
     private String Photo;
+    private StateName stateName;
 
     @DocumentReference
     private List<District> districtsList;
