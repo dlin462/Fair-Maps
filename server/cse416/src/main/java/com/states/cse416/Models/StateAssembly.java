@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -18,12 +19,16 @@ import java.util.List;
 public class StateAssembly {
     @Id
     private ObjectId id;
-    private int District;
+    private String Office;
     private String Name;
     private String Party;
-    private String Race_ethnicity;
+    @Field("Date assumed office")
+    private String date_assumed_office;
+    private String Ethnicity;
+    @Field("Vote Margin")
     private String Vote_Margin;
-    private String Photo;
+    private String Image;
+    private String State;
 
     @DocumentReference
     private List<District> districtsList;

@@ -18,7 +18,7 @@ import java.util.List;
 public class State {
     @Id
     private ObjectId id;
-    private StateName name;
+    private String StateName;
     private int TOT_POP22;
     private int WHT_NHSP22;
     private int BLK_NHSP22;

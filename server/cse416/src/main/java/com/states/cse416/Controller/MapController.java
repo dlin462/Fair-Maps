@@ -4,11 +4,13 @@ import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
 import com.states.cse416.Models.State;
 import com.states.cse416.Models.StateAssembly;
+import com.states.cse416.Models.DemographicData;
 import com.states.cse416.Service.PrecinctService;
 import com.states.cse416.Service.StateWideDataService;
 import com.states.cse416.Service.StateAssemblyService;
+import com.states.cse416.Service.DemographicService;
+import com.states.cse416.Service.DistrictService;
 import com.states.cse416.Models.*;
-import com.states.cse416.Service.PrecinctService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,12 @@ public class MapController {
 
     @Autowired
     private StateAssemblyService stateAssemblyService;
+
+    @Autowired
+    private DemographicService DemographicDataService;
+
+    @Autowired
+    private DistrictService districtService;
 
 
     @GetMapping("/map/{state}")
@@ -72,10 +80,20 @@ public class MapController {
         return new ResponseEntity<>(stateAssemblyService.getTable(), HttpStatus.OK);
     }
 
+    @GetMapping("/demographicDataNevada")
+    public ResponseEntity<List<DemographicData>> getDemographicData() {
+        return new ResponseEntity<>(DemographicDataService.getDemographicData(), HttpStatus.OK);
+    }
+
     @GetMapping("/nevadaBoundaries")
     public List<PrecinctBoundary> getStuff() {
         return precinctService.getPrecinctBoundaries();
 //        return new ResponseEntity<>(precinctService.getPrecinctBoundaries(), HttpStatus.OK);
+    }
+
+    @GetMapping("/nevadaDistricts")
+    public ResponseEntity<List<District>> getDistricts() {
+        return new ResponseEntity<>(districtService.getAllDistricts(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
