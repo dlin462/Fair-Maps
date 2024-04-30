@@ -12,7 +12,6 @@ import MapMenu from './Menu';
 import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
-import NevadaDistrictsMap from './LoadDistricts';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
