@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Document(collection = "districts")
 public class District {
     @Id

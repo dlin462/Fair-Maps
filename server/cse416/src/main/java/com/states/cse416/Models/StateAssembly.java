@@ -22,6 +22,7 @@ public class StateAssembly {
     private String Office;
     private String Name;
     private String Party;
+<<<<<<< HEAD
     @Field("Date assumed office")
     private String date_assumed_office;
     private String Ethnicity;
@@ -29,6 +30,12 @@ public class StateAssembly {
     private String Vote_Margin;
     private String Image;
     private String State;
+=======
+    private String Race_ethnicity;
+    private double voteMargin;
+    private String Photo;
+    private StateName stateName;
+>>>>>>> fa7bda440345be9cbfa062292597e406b29406b7
 
     @DocumentReference
     private List<District> districtsList;
