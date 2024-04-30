@@ -12,6 +12,7 @@ import MapMenu from './Menu';
 import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
+import NevadaDistrictsMap from './LoadDistricts';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -117,6 +118,16 @@ function MapComponent() {
         setEthnicity(ethnicity);
     };
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/nevadaDistricts')
+            .then(response => {
+                console.log('Response from server:', response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching stateAssembly data:', error);
+            });
+    }, []);
+
     const mergeData = (geometries, demographics) => {
         const mergedData = [];
         const minLength = Math.min(geometries.length, demographics.length);
@@ -129,7 +140,6 @@ function MapComponent() {
 
     useEffect(() => {
         const map = L.map(mapContainerRef.current).setView(coordinates[state] || [40, -74.5], 6);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -137,6 +147,22 @@ function MapComponent() {
 
         const fetchData = async () => {
             try {
+                const response = await axios.get('http://localhost:8080/nevadaDistricts');
+                const nevadaDistrictsData = response.data;
+                const districtData = {
+                    type: "FeatureCollection",
+                    features: nevadaDistrictsData.map(district => ({
+                        type: "Feature",
+                        geometry: wellknown.parse(district.coordinates)
+                    }))
+                };
+                L.geoJSON(districtData, {
+                    style: {
+                        color: 'blue', 
+                        weight: 1,
+                        fillOpacity: 0.1
+                    }
+                }).addTo(map);
                 const response1 = await axios.get('http://localhost:8080/nevadaBoundaries');
                 const raw_geometries = response1.data;
                 //convert to geojson 
@@ -162,9 +188,9 @@ function MapComponent() {
                 
                 let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
                     style: {
-                        color: 'black',
+                        color: 'red',
                         weight: 0.5,
-                        fillOpacity: 0.1,
+                        fillOpacity: 0,
                     }
                 });
 
@@ -190,7 +216,6 @@ function MapComponent() {
                     geojsonLayer = L.geoJSON(geojsonData, {
                         style: feature => {
                             const value = feature.properties.value;
-                            const percentage = value / maxValue;
                             const color = colorScale(value).hex();
                             return {
                                 fillColor: color,
@@ -212,10 +237,8 @@ function MapComponent() {
                             });
                         }
                     });
-                    
+                    geojsonLayer.addTo(map);
                 }
-                geojsonLayer.addTo(map);
-
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -223,18 +246,6 @@ function MapComponent() {
         fetchData();
         return () => map.remove();
     }, [state, showMap, ethnicity, showStateAssemblyTable]);
-
-
-    useEffect(() => {
-        axios.get('http://localhost:8080/stateAssemblyTable')
-            .then(response => {
-                console.log('Response from server:', response.data);
-                setStateAssemblyData(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching stateAssembly data:', error);
-            });
-    }, []);
 
     return (
         <div>

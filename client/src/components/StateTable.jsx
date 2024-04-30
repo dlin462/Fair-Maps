@@ -33,7 +33,8 @@ function StateTable() {
                     <tbody>
                         {stateData.map(stateInfo => (
                             <tr key={stateInfo.id.timestamp}>
-                                <td>{stateInfo.stateName}</td>
+                                <td>Nevada</td>
+                                {/* <td>{stateInfo.stateName}</td> */}
                                 <td>{stateInfo.tot_POP22}</td>
                                 <td>{stateInfo.wht_NHSP22}</td>
                                 <td>{stateInfo.blk_NHSP22}</td>
