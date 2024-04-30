@@ -4,16 +4,12 @@ import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
 import com.states.cse416.Models.State;
 import com.states.cse416.Models.StateAssembly;
-<<<<<<< HEAD
 import com.states.cse416.Models.DemographicData;
 import com.states.cse416.Service.PrecinctService;
 import com.states.cse416.Service.StateWideDataService;
 import com.states.cse416.Service.StateAssemblyService;
 import com.states.cse416.Service.DemographicService;
 import com.states.cse416.Service.DistrictService;
-=======
-import com.states.cse416.Service.*;
->>>>>>> fa7bda440345be9cbfa062292597e406b29406b7
 import com.states.cse416.Models.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +38,9 @@ public class MapController {
     private StateAssemblyService stateAssemblyService;
 
     @Autowired
-<<<<<<< HEAD
     private DemographicService DemographicDataService;
 
     @Autowired
-=======
->>>>>>> fa7bda440345be9cbfa062292597e406b29406b7
     private DistrictService districtService;
 
 
@@ -97,11 +90,6 @@ public class MapController {
     @GetMapping("/nevadaDistricts")
     public ResponseEntity<List<District>> getDistricts() {
         return new ResponseEntity<>(districtService.getAllDistricts(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<PrecinctBoundaryDTO>> getPrecinctBoundaryById(@PathVariable ObjectId id) {
-        return new ResponseEntity<>(precinctService.getPrecinctBoundaryById(id), HttpStatus.OK);
     }
 
     @GetMapping("/helloWorld")
