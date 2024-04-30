@@ -13,14 +13,9 @@ import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
 
-// const parse = require('wellknown');
-import { parse } from 'wellknown';
-
 function MapComponent() {
     const mapContainerRef = useRef(null);
-
     const navigate = useNavigate();
-
     const { state } = useParams(); // Get the state parameter from the URL
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorE1Heatmap, setAnchorElHeatmap] = React.useState(null);
@@ -122,289 +117,128 @@ function MapComponent() {
         setEthnicity(ethnicity);
     };
 
-    const stateDistricts = {
-        nevada: '/nv_state_district_2022.geojson',
-        mississippi: '/ms_State_Assembly_2022.geojson'
-    };
-
-    const statePrecincts = {
-        nevada: 'null',
-        mississippi: '/ms_prec_demographic.geojson'
-    };
-
-    const mergeData = (data1, data2) => {
+    const mergeData = (geometries, demographics) => {
         const mergedData = [];
-
-        data1.forEach(item => {
-        const matchingItem = data2.find(d => d.OID === item.OID);
-        if (matchingItem) {
-            mergedData.push({ ...item, ...matchingItem });
-        } else {
-            mergedData.push(item);
+        const minLength = Math.min(geometries.length, demographics.length);
+        for (let i = 0; i < minLength; i++) {
+            const mergedObject = { ...geometries[i], ...demographics[i] };
+            mergedData.push(mergedObject);
         }
-        });
-
-        data2.forEach(item => {
-        const existingItem = mergedData.find(d => d.OID === item.OID);
-        if (!existingItem) {
-            mergedData.push(item);
-        }
-        });
-
         return mergedData;
     };
 
     useEffect(() => {
-        const map = L.map(mapContainerRef.current).setView(
-            coordinates[state] || [40, -74.5],
-            6
-        );
+        const map = L.map(mapContainerRef.current).setView(coordinates[state] || [40, -74.5], 6);
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        
         const fetchData = async () => {
             try {
                 const response1 = await axios.get('http://localhost:8080/nevadaBoundaries');
                 const raw_geometries = response1.data;
+                //convert to geojson 
                 const wktGeometries = raw_geometries.map(feature => wellknown.parse(feature.coordinates));
                 const response2 = await axios.get('http://localhost:8080/demographicDataNevada');
                 const demographic = response2.data;
                 const mergedData = mergeData(wktGeometries, demographic);
-              
+                   
                 const extractCoords = (mergedData) => {
                     return mergedData.map(item => ({
                       type: item.type,
                       coordinates: item.coordinates, 
                     }));
-                  };
-                  
-                const geojsonLayer = L.geoJSON(extractCoords(mergedData), {
+                };
+
+                const extractEthnicity = (mergedData) => {
+                    return mergedData.map(item => ({
+                        type: item.type,
+                        coordinates: item.coordinates, 
+                        value: item[ethnicity]
+                    }));
+                };
+                
+                let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
                     style: {
-                        color: 'red',
+                        color: 'black',
                         weight: 0.5,
-                        fillOpacity: 0,
+                        fillOpacity: 0.1,
                     }
                 });
+
+                if(ethnicity != null){
+                    const EthnicityValues = extractEthnicity(mergedData);
+                    const maxValue = Math.max(...EthnicityValues.map(item => item.value));
+                    const colorScale = chroma.scale(['white', 'red']).domain([0, maxValue]);
+                    console.log(extractEthnicity(mergedData));
+                    console.log(maxValue); 
+                    const geojsonData = {
+                        type: "FeatureCollection",
+                        features: EthnicityValues.map(item => ({
+                            type: "Feature",
+                            properties: {
+                                value: item.value
+                            },
+                            geometry: {
+                                type: item.type,
+                                coordinates: item.coordinates
+                            }
+                        }))
+                    };
+                    geojsonLayer = L.geoJSON(geojsonData, {
+                        style: feature => {
+                            const value = feature.properties.value;
+                            const percentage = value / maxValue;
+                            const color = colorScale(value).hex();
+                            return {
+                                fillColor: color,
+                                color: 'black',
+                                weight: 1,
+                                fillOpacity: 0.7
+                            };
+                        },
+                        onEachFeature: (feature, layer) => {
+                            const value = feature.properties.value;
+                            layer.bindPopup(`Value: ${value}`);
+                            layer.on({
+                                mouseover: (e) => {
+                                    layer.openPopup();
+                                },
+                                mouseout: (e) => {
+                                    layer.closePopup();
+                                }
+                            });
+                        }
+                    });
+                    
+                }
                 geojsonLayer.addTo(map);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
         fetchData();
-
-        //if (statePrecincts[state] && ethnicity) {
-            //         fetch(statePrecincts[state])
-            //             .then(response => response.json())
-            //             .then(geojson => {
-        
-            //                 const maxEthnicityValue = Math.max(
-            //                     ...geojson.features.map(feature => feature.properties[ethnicity.toUpperCase()])
-            //                 );
-        
-            //                 const colorScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, maxEthnicityValue]);
-            //                 const legendScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, 1]);
-            //                 const legendItems = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]; 
-            //                 const legendColorScales = legendItems.map(value => legendScale(value).hex());
-        
-            //                 const legendContent = (
-            //                     <div className="legend-container" style={{ display: 'flex', alignItems: 'center' }}>
-            //                         {legendItems.map((item, index) => (
-            //                             <div key={index} className="legend-item" style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-            //                                 <span className="legend-color-box" style={{ backgroundColor: legendColorScales[index], width: '20px', height: '20px', display: 'inline-block', marginRight: '5px' }}></span>
-            //                                 <span className="legend-label" style={{ fontSize: "1.2em" }}>{Math.round(item * 100)}%</span>
-            //                             </div>
-            //                         ))}
-            //                     </div>
-            //                 );
-        
-            //                 setLegend(legendContent);
-        
-            //                 L.geoJSON(geojson, {
-            //                     style: feature => ({
-            //                         color: 'black',
-            //                         weight: 0.5, 
-            //                         fillOpacity: 0.7,
-            //                         fillColor: colorScale(feature.properties[ethnicity.toUpperCase()]).hex(),
-        
-            //                     }),
-            //                     //set ethnicity value back to null
-            //                     onEachFeature: (feature, layer) => {
-            //                         const properties = feature.properties;
-            //                         const ethnicityValue = properties[ethnicity.toUpperCase()];
-            //                         const totalPopulation = properties.TOTPOP;
-            //                     }
-        
-            //                     }
-            //                 ).addTo(map);
-            //             });
-            //     }
-
-
         return () => map.remove();
     }, [state, showMap, ethnicity, showStateAssemblyTable]);
-    
-        // axios.get('http://localhost:8080/nevadaBoundaries')
-        // .then(geometriesResponse => {   
-        //     async function demographicData() {
-        //         const response = await axios.get('http://localhost:8080/demographicDataNevada')
-        //             .then(demographicResponse => {
-        //                 const demographicData = demographicResponse.data;
-        //                 console.log(demographicData);
-        //                 const mergedData = demographicData.map(demographic => {
-        //                     const matchingGeometry = geometriesResponse.data.find(geometry => geometry.OID_ === demographic.OID_);
-        //                     if (matchingGeometry) {
-        //                         const index = geometriesResponse.data.findIndex(geometry => geometry.OID_ === demographic.OID_);
-        //                         return {
-        //                             ...demographic,
-        //                             geometry: wktGeometries[index]
-        //                         };
-        //                     }
-        //                 })
-        //             })
-        //             .catch(error => {
-        //                 console.log('Error fetching demographic data:', error);
-        //             });
-        //         console.log(response.data)
-        //     }
-        //     demographicData()
-        //         .then(data => {
-        //             console.log('Displaying....\n ',data)
-        //         })
-        //         // const geojsonLayer = L.geoJSON(mergedData.map(geometries => geometries.geometry), {
-        //         //     style: {
-        //         //         color: 'red',
-        //         //         weight: 0.5,
-        //         //         fillOpacity: 0,
-        //         //     }
-        //         // });
-        //         // geojsonLayer.addTo(map);
-        // })
-        // .catch(error => {
-        //     console.log('Error fetching geometries:', error);
-        // });
 
 
-    // useEffect(() => {
-    //     if (!showMap) {
-    //         return;
-    //     }
-
-    //     const map = L.map(mapContainerRef.current).setView(
-    //         coordinates[state] || [40, -74.5],
-    //         6 
-    //     );
-
-    //     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //         maxZoom: 19,
-    //         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    //     }).addTo(map);
-
-    //     let colorIndex = 0;
-    //     const districtColors = [
-    //         '#3c8fc6', '#92d68f', '#459d3a', '#e37d7d', '#e35c5c',
-    //         '#e1c150', '#e1a83e', '#b9b0e4', '#9487cb', '#e6e6b3',
-    //         '#a6d2ff', '#3c8fc6', '#92d68f', '#459d3a', '#e37d7d',
-    //         '#e35c5c', '#e1c150', '#e1a83e', '#b9b0e4', '#9487cb',
-    //         '#e6e6b3', '#ffbb4c', '#9487cb', '#a6d2ff', '#3c8fc6'
-    //     ];
-
-    //     function getNextColor() {
-    //         const color = districtColors[colorIndex];
-    //         colorIndex = (colorIndex + 1) % districtColors.length;
-    //         return color;
-    //     }
-
-    //     //(statePrecincts[state] &&
-    //     if (stateDistricts[state] &&  !ethnicity) {
-    //         fetch(stateDistricts[state])
-    //             .then(response => response.json())
-    //             .then(geojson => {
-    //                 L.geoJSON(geojson, {
-    //                     style: feature => ({
-    //                         color: 'white', 
-    //                         weight: 1,
-    //                         fillColor: getNextColor(), 
-    //                         fillOpacity: 1,
-    //                     }),
-    //                     onEachFeature: (feature, layer) => {
-    //                         const properties = feature.properties;
-    //                         // console.log(properties.ID);
-    //                     }
-    //                 }).addTo(map);
-    //             });
-    //             setLegend(null);
-    //         fetch(statePrecincts[state])
-    //             .then(response => response.json())
-    //             .then(geojson => {
-    //                 L.geoJSON(geojson, {
-    //                     style: {
-    //                         color: 'white',
-    //                         weight: 0.5, 
-    //                         fillOpacity: 0,
-
-    //                     },
-    //                 }).addTo(map);
-    //             });
-    //     }
-
-    //     if (statePrecincts[state] && ethnicity) {
-    //         fetch(statePrecincts[state])
-    //             .then(response => response.json())
-    //             .then(geojson => {
-
-    //                 const maxEthnicityValue = Math.max(
-    //                     ...geojson.features.map(feature => feature.properties[ethnicity.toUpperCase()])
-    //                 );
-
-    //                 const colorScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, maxEthnicityValue]);
-    //                 const legendScale = chroma.scale(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']).domain([0, 1]);
-    //                 const legendItems = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]; 
-    //                 const legendColorScales = legendItems.map(value => legendScale(value).hex());
-
-    //                 const legendContent = (
-    //                     <div className="legend-container" style={{ display: 'flex', alignItems: 'center' }}>
-    //                         {legendItems.map((item, index) => (
-    //                             <div key={index} className="legend-item" style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-    //                                 <span className="legend-color-box" style={{ backgroundColor: legendColorScales[index], width: '20px', height: '20px', display: 'inline-block', marginRight: '5px' }}></span>
-    //                                 <span className="legend-label" style={{ fontSize: "1.2em" }}>{Math.round(item * 100)}%</span>
-    //                             </div>
-    //                         ))}
-    //                     </div>
-    //                 );
-
-    //                 setLegend(legendContent);
-
-    //                 L.geoJSON(geojson, {
-    //                     style: feature => ({
-    //                         color: 'black',
-    //                         weight: 0.5, 
-    //                         fillOpacity: 0.7,
-    //                         fillColor: colorScale(feature.properties[ethnicity.toUpperCase()]).hex(),
-
-    //                     }),
-    //                     //set ethnicity value back to null
-    //                     onEachFeature: (feature, layer) => {
-    //                         const properties = feature.properties;
-    //                         const ethnicityValue = properties[ethnicity.toUpperCase()];
-    //                         const totalPopulation = properties.TOTPOP;
-    //                     }
-
-    //                     }
-    //                 ).addTo(map);
-    //             });
-    //     }
-
-    //     return () => map.remove();
-    // }, [state, showMap, ethnicity, showStateAssemblyTable]);
+    useEffect(() => {
+        axios.get('http://localhost:8080/stateAssemblyTable')
+            .then(response => {
+                console.log('Response from server:', response.data);
+                setStateAssemblyData(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching stateAssembly data:', error);
+            });
+    }, []);
 
     return (
         <div>
-
-            <Header state={state} legend={legend} handleClick={handleClick} />
+            <Header state={state} ethnicity={ethnicity} handleClick={handleClick} />
             <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex' }}>
                 <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>

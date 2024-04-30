@@ -1,15 +1,19 @@
 package com.states.cse416.Service;
 
 import com.states.cse416.Models.District;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
+import com.states.cse416.Repository.DistrictRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
-//@RestController
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class DistrictService {
-//    public District getDistrict() {
-//
-//    }
-//}
+
+@Service
+public class DistrictService {
+    
+    @Autowired
+    private DistrictRepository districtRepository;
+
+    public List<District> getAllDistricts() {
+        return districtRepository.findAll();
+    }
+}

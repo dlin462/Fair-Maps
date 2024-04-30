@@ -1,4 +1,9 @@
 package com.states.cse416.Repository;
 
-public interface DistrictRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.states.cse416.Models.District;
+
+public interface DistrictRepository extends MongoRepository<District, Object> {
+
 }

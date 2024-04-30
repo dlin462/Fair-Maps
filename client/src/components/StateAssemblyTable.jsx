@@ -32,7 +32,7 @@ function StateAssemblyTable() {
                     </thead>
                     <tbody>
                     {stateAssemblyData.map(stateInfo => (
-                        stateInfo.state === "Mississippi" && (
+                        stateInfo.state === "Nevada" && (
                             <tr key={stateInfo.id.timestamp}>
                                 <td>{stateInfo.office}</td>
                                 <td>{stateInfo.name}</td>
