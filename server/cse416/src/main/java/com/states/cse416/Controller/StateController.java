@@ -3,9 +3,9 @@ package com.states.cse416.Controller;
 import com.states.cse416.Models.State;
 import com.states.cse416.Models.StateAssembly;
 import com.states.cse416.Models.enums.StateName;
-import com.states.cse416.Service.StateAssemblyService;
-import com.states.cse416.Service.StateWideDataService;
+import com.states.cse416.Service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,18 +19,16 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class StateController {
     @Autowired
-    private StateWideDataService stateWideDataService;
+    private StateService stateService;
 
-    @Autowired
-    private StateAssemblyService stateAssemblyService;
-
-    @GetMapping("/stateTable")
-    public ResponseEntity<List<State>> getStateTable() {
-        return new ResponseEntity<>(stateWideDataService.getTable(), HttpStatus.OK);
+    @GetMapping("/stateTable/{state}")
+    public ResponseEntity<List<State>> getStateData(@PathVariable StateName state) {
+        return new ResponseEntity<>(stateService.getStateWideData(state), HttpStatus.OK);
     }
 
     @GetMapping("/stateAssemblyTable/{stateName}")
-    public ResponseEntity<List<StateAssembly>> getAssemblyStateTable(@PathVariable String stateName) {
-        return new ResponseEntity<>(stateAssemblyService.getTableByState(stateName), HttpStatus.OK);
+    public ResponseEntity<List<StateAssembly>> getAssemblyStateTable(@PathVariable StateName stateName) {
+        return new ResponseEntity<>(stateService.getTableByState(stateName), HttpStatus.OK);
     }
 }
+
