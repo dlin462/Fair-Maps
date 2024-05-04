@@ -1,6 +1,7 @@
 package com.states.cse416.Models;
 
 import com.states.cse416.Models.enums.Party;
+import com.states.cse416.Models.enums.StateName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,11 +17,18 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "precincts")
+// Precincts contain geometry, demographic, vote distribution
+// Also used for MGGG, neighbors must be found
+// Districts contain representatives
 public class Precinct {
     @Id
     private ObjectId id;
     @DocumentReference
-    private DemographicData demographicData;
     private Party winningParty;
+    private StateName state;
+    private Election pres20;
+    private Election guber22;
+    private Election atg22;
+    private DemographicData demographicData;
     private String geometry;
 }

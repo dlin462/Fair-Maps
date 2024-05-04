@@ -12,11 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-@Document(collection = "demographics")
+//@Document(collection = "demographics")
 public class DemographicData {
-    @Id
-    private ObjectId id;
+//    @Id
+//    private ObjectId id;
     @Field("TOT_POP22")
     private double totalPopulation;
     @Field("PCT_WHT")

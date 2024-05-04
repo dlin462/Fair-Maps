@@ -7,13 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Representative {
-    @Id
-    private ObjectId id;
+//    @Id
+//    private ObjectId id;
     private Race race;
     private Party party;
 }

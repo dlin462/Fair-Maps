@@ -1,5 +1,6 @@
 package com.states.cse416.Models;
 
+import com.states.cse416.Models.enums.Party;
 import com.states.cse416.Models.enums.StateName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,13 +19,10 @@ import java.util.List;
 public class State {
     @Id
     private ObjectId id;
-    private String StateName;
-    private int TOT_POP22;
-    private int WHT_NHSP22;
-    private int BLK_NHSP22;
-    private int ASN_NHSP22;
-    private int HSP_POP22;
-
-    @DocumentReference
-    private List<District> districtsList;
+    private StateName state;
+    private Party redistrictControl;
+    private Election presResults;
+    private Election guberResults;
+    private Election atgResults;
+    private DemographicData demographicData;
 }

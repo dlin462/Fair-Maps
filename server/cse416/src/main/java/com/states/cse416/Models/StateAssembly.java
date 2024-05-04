@@ -1,5 +1,7 @@
 package com.states.cse416.Models;
 
+import com.states.cse416.Models.enums.Party;
+import com.states.cse416.Models.enums.Race;
 import com.states.cse416.Models.enums.StateName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,22 +21,21 @@ import java.util.List;
 public class StateAssembly {
     @Id
     private ObjectId id;
-    private String Office;
-    private String Name;
-    private String Party;
+    @Field("Office")
+    private String office;
+    @Field("Name")
+    private String name;
+    @Field("Party")
+    private Party party;
     @Field("Date assumed office")
-    private String date_assumed_office;
-    private String Ethnicity;
+    private String dateAssumedOffice;
+    @Field("Ethnicity")
+    private Race ethnicity;
     @Field("Vote Margin")
-    private String Vote_Margin;
+    private String voteMargin;
     private String Image;
     @Field("State")
-    private String State;
-    private String Race_ethnicity;
-    private double voteMargin;
+    private StateName state;
+    @Field("Image")
     private String Photo;
-    private StateName stateName;
-
-    @DocumentReference
-    private List<District> districtsList;
 }

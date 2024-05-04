@@ -19,9 +19,9 @@ public class District {
     private ObjectId id;
     @Field("DISTRICTNO")
     private int districtNum;
-    private StateName stateName;
+    private StateName state;
     @DocumentReference
     private Representative representative;
-    private String coordinates;
-
+    private DemographicData demographicData;
+    private String geometry;
 }
