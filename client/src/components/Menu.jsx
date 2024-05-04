@@ -49,10 +49,10 @@ function MapMenu({
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <MenuItem onClick={() => handleEthnicityOptionClick('wht_NHSP22')}>White</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('blk_NHSP22')}>Black</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('asn_NHSP22')}>Asian</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('hsp_POP22')}>Hispanic</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClick('whitePop')}>White</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClick('blackPop')}>Black</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClick('asianPop')}>Asian</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClick('hispanicPop')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
             
