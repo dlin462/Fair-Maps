@@ -28,6 +28,7 @@ public class StateAssembly {
     @Field("Vote Margin")
     private String Vote_Margin;
     private String Image;
+    @Field("State")
     private String State;
     private String Race_ethnicity;
     private double voteMargin;

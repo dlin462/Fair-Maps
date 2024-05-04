@@ -2,16 +2,10 @@ package com.states.cse416.Controller;
 
 import com.states.cse416.Models.District;
 import com.states.cse416.Models.Precinct;
-import com.states.cse416.Models.State;
-import com.states.cse416.Models.StateAssembly;
-import com.states.cse416.Models.DemographicData;
+import com.states.cse416.Models.enums.StateName;
 import com.states.cse416.Service.PrecinctService;
-import com.states.cse416.Service.StateWideDataService;
-import com.states.cse416.Service.StateAssemblyService;
-import com.states.cse416.Service.DemographicService;
 import com.states.cse416.Service.DistrictService;
 import com.states.cse416.Models.*;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -32,17 +25,7 @@ public class MapController {
     private PrecinctService precinctService;
 
     @Autowired
-    private StateWideDataService stateWideDataService;
-
-    @Autowired
-    private StateAssemblyService stateAssemblyService;
-
-    @Autowired
-    private DemographicService DemographicDataService;
-
-    @Autowired
     private DistrictService districtService;
-
 
     @GetMapping("/map/{state}")
     public String fetchStateJson(@PathVariable String state) {
@@ -60,36 +43,19 @@ public class MapController {
         return restTemplate.getForObject(url, String.class);
     }
 
-
-    @GetMapping("/precincts")
-    public ResponseEntity<List<Precinct>> getNevadaPrecincts() {
-        return new ResponseEntity<>(precinctService.getAllPrecincts(), HttpStatus.OK);
+    @GetMapping("/precincts/{state}")
+    public ResponseEntity<List<Precinct>> getPrecinctsByState(@PathVariable StateName state) {
+        return ResponseEntity.ok(precinctService.getAllPrecinctsByState(state));
     }
 
-    @GetMapping("/stateTable")
-    public ResponseEntity<List<State>> getStateTable() {
-        return new ResponseEntity<>(stateWideDataService.getTable(), HttpStatus.OK);
+    @GetMapping("/districts/{state}")
+    public ResponseEntity<List<District>> getCurrentDistrictsByState(@PathVariable StateName state) {
+        return ResponseEntity.ok(districtService.getAllDistrictsByState(state));
     }
 
-    @GetMapping("/stateAssemblyTable")
-    public ResponseEntity<List<StateAssembly>> getAssemblyStateTable() {
-        return new ResponseEntity<>(stateAssemblyService.getTable(), HttpStatus.OK);
-    }
-
-    @GetMapping("/demographicDataNevada")
-    public ResponseEntity<List<DemographicData>> getDemographicData() {
-        return new ResponseEntity<>(DemographicDataService.getDemographicData(), HttpStatus.OK);
-    }
-
-    @GetMapping("/nevadaBoundaries")
-    public List<PrecinctBoundary> getStuff() {
-        return precinctService.getPrecinctBoundaries();
-//        return new ResponseEntity<>(precinctService.getPrecinctBoundaries(), HttpStatus.OK);
-    }
-
-    @GetMapping("/nevadaDistricts")
-    public ResponseEntity<List<District>> getDistricts() {
-        return new ResponseEntity<>(districtService.getAllDistricts(), HttpStatus.OK);
+    @GetMapping("/district/{state}/{districtNum}")
+    public ResponseEntity<District> getDistrictByIdAndState(@PathVariable StateName state, @PathVariable int districtNum) {
+        return ResponseEntity.ok(districtService.getDistrictByStateAndDistrictNum(state, districtNum));
     }
 
     @GetMapping("/helloWorld")

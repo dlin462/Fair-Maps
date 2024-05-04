@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @AllArgsConstructor
@@ -16,17 +17,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DemographicData {
     @Id
     private ObjectId id;
-    private double TOT_POP22;
-    private double WHT_NHSP22;
-    private double BLK_NHSP22;
-    private double ASN_NHSP22;
-    private double HSP_POP22;
-    // private double pctWhite;
-    // private double pctAsian;
-    // private double pctBlack;
-    // private double pctHispanic;
-    // private Race white;
-    // private Race asian;
-    // private Race black;
-    // private Race hispanic;
+    @Field("TOT_POP22")
+    private double totalPopulation;
+    @Field("PCT_WHT")
+    private double pctWhite;
+    @Field("PCT_ASN")
+    private double pctAsian;
+    @Field("PCT_BLK")
+    private double pctBlack;
+    @Field("PCT_HSP")
+    private double pctHispanic;
+    @Field("WHT_NHSP22")
+    private int whitePop;
+    @Field("ASN_NHSP22")
+    private int asianPop;
+    @Field("BLK_NHSP22")
+    private int blackPop;
+    @Field("HSP_POP22")
+    private int hispanicPop;
 }

@@ -114,6 +114,7 @@ function MapComponent() {
 
     const handleEthnicityOptionClick = (ethnicity) => {
         setAnchorEl(false);
+        console.log(ethnicity)
         setEthnicity(ethnicity);
     };
 
