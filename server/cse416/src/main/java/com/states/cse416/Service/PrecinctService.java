@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@EnableCaching
+//@EnableCaching
 @Service
 public class PrecinctService {
     @Autowired
     private PrecinctRepository precinctRepository;
 
-    @Cacheable("PrecinctCache")
+//    @Cacheable("PrecinctCache")
     public List<Precinct> getAllPrecinctsByState(StateName stateName) {
         return precinctRepository.findByState(stateName);
     }

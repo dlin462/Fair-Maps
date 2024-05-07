@@ -33,9 +33,8 @@ public class StateAssembly {
     private Race ethnicity;
     @Field("Vote Margin")
     private String voteMargin;
-    private String Image;
     @Field("State")
     private StateName state;
     @Field("Image")
-    private String Photo;
+    private String photo;
 }

@@ -58,7 +58,7 @@ public class MapController {
         return ResponseEntity.ok(districtService.getDistrictByStateAndDistrictNum(state, districtNum));
     }
 
-    @GetMapping("/helloWorld")
+    @GetMapping("/")
     public String getHello() {
         return "Hello World";
     }
