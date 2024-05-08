@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -23,12 +24,14 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 public class Precinct {
     @Id
     private ObjectId id;
-    @DocumentReference
-    private Party winningParty;
+    private String uniqueId;
+//    private Party winningParty;
     private StateName state;
-    private Election pres20;
-    private Election guber22;
-    private Election atg22;
+    @DBRef
+    private Election presElection;
+    @DBRef
+    private Election ussElection;
+    @DBRef
     private DemographicData demographicData;
     private String geometry;
 }

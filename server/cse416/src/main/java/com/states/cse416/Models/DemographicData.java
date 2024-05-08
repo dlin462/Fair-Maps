@@ -12,26 +12,24 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@Document(collection = "demographics")
 public class DemographicData {
 //    @Id
 //    private ObjectId id;
-    @Field("TOT_POP22")
-    private double totalPopulation;
-    @Field("PCT_WHT")
+    private double vap;
+    @Field("pct_wvap")
     private double pctWhite;
-    @Field("PCT_ASN")
+    @Field("pct_asianvap")
     private double pctAsian;
-    @Field("PCT_BLK")
+    @Field("pct_bvap")
     private double pctBlack;
-    @Field("PCT_HSP")
+    @Field("pct_hvap")
     private double pctHispanic;
-    @Field("WHT_NHSP22")
-    private int whitePop;
-    @Field("ASN_NHSP22")
-    private int asianPop;
-    @Field("BLK_NHSP22")
-    private int blackPop;
-    @Field("HSP_POP22")
-    private int hispanicPop;
+    @Field("wvap")
+    private int whiteVAP;
+    @Field("asianvap")
+    private int asianVAP;
+    @Field("bvap")
+    private int blackVAP;
+    @Field("hvap")
+    private int hispanicVAP;
 }

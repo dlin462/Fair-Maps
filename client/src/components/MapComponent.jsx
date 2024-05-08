@@ -70,10 +70,10 @@ function MapComponent() {
 
     const handleStateChange = () => {
         if (state === 'nevada') {
-            handleNavigate('/map/mississippi');
+            handleNavigate('/map/Mississippi');
         }
         else {
-            handleNavigate('/map/nevada');
+            handleNavigate('/map/Nevada');
         }
     }
 
@@ -144,16 +144,16 @@ function MapComponent() {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-
+        console.log(state);
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/nevadaDistricts');
+                const response = await axios.get(`http://localhost:8080/districts/${state}`);
                 const nevadaDistrictsData = response.data;
                 const districtData = {
                     type: "FeatureCollection",
                     features: nevadaDistrictsData.map(district => ({
                         type: "Feature",
-                        geometry: wellknown.parse(district.coordinates)
+                        geometry: wellknown.parse(district.geometry)
                     }))
                 };
                 L.geoJSON(districtData, {
@@ -163,13 +163,13 @@ function MapComponent() {
                         fillOpacity: 0.1
                     }
                 }).addTo(map);
-                const response1 = await axios.get('http://localhost:8080/nevadaBoundaries');
-                const raw_geometries = response1.data;
-                //convert to geojson 
-                const wktGeometries = raw_geometries.map(feature => wellknown.parse(feature.coordinates));
-                const response2 = await axios.get('http://localhost:8080/demographicDataNevada');
-                const demographic = response2.data;
-                const mergedData = mergeData(wktGeometries, demographic);
+                // const response1 = await axios.get(`http://localhost:8080/districts/${StateName.state}`);
+                // const raw_geometries = response1.data;
+                // convert to geojson 
+                // const wktGeometries = raw_geometries.map(feature => wellknown.parse(feature.coordinates));
+                // const response2 = await axios.get('http://localhost:8080/demographicDataNevada');
+                // const demographic = response2.data;
+                // const mergedData = mergeData(wktGeometries, demographic);
                    
                 const extractCoords = (mergedData) => {
                     return mergedData.map(item => ({
@@ -184,19 +184,19 @@ function MapComponent() {
                         value: item[ethnicity]
                     }));
                 };
-                let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
-                    style: {
-                        color: 'red',
-                        weight: 0.5,
-                        fillOpacity: 0,
-                    }
-                });
+                // let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
+                //     style: {
+                //         color: 'red',
+                //         weight: 0.5,
+                //         fillOpacity: 0,
+                //     }
+                // });
                 if(ethnicity != null){
-                    const EthnicityValues = extractEthnicity(mergedData);
+                    const EthnicityValues = extractEthnicity(districtData);
                     const maxValue = Math.max(...EthnicityValues.map(item => item.value));
                     const colorScale = chroma.scale(['white', 'red']).domain([0, maxValue]);
-                    console.log(extractEthnicity(mergedData));
-                    console.log(maxValue); 
+                    // console.log(extractEthnicity(districtData));
+                    // console.log(maxValue); 
                     const geojsonData = {
                         type: "FeatureCollection",
                         features: EthnicityValues.map(item => ({

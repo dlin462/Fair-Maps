@@ -12,8 +12,8 @@ public class DistrictService {
     @Autowired
     private DistrictRepository districtRepository;
 
-    public List<District> getAllDistrictsByState(StateName stateName) {
-        return districtRepository.findByState(stateName);
+    public List<District> getAllDistrictsByState(StateName state) {
+        return districtRepository.findByState(state);
     }
 
     public District getDistrictByStateAndDistrictNum(StateName state, int districtNum) {

@@ -2,8 +2,6 @@ import { Button, Container, Typography, Box, Divider } from '@mui/material';
 import ThunderLogo from '../../thunderlogo.png';
 import { useNavigate } from 'react-router-dom';
 import ChartSpace from './ChartSpace'
-import cali_races from  '../../public/analysis/california_races.png';
-import tx_races from  '../../public/analysis/texas_races.png';
 
 function HomePage() {
     const navigate = useNavigate();
@@ -16,11 +14,11 @@ function HomePage() {
                 Choose Your State
             </Typography>
             <Button variant="contained" color="primary" style={{ margin: '10px' }}
-                onClick={() => navigate('/map/mississippi')}>
+                onClick={() => navigate('/map/Mississippi')}>
                 Mississippi
             </Button>
             <Button variant="contained" color="secondary" style={{ margin: '10px' }}
-                onClick={() => navigate('/map/nevada')}>
+                onClick={() => navigate('/map/Nevada')}>
                 Nevada
             </Button>
             {/* <Box display="flex" p={1} style={{ height:'100vh' }}>
