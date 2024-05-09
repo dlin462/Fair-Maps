@@ -567,10 +567,10 @@ function MapComponent() {
 
                         },
                         onEachFeature: (feature, layer) => {
-                            const white = feature.properties.WHITE;
-                            const black = feature.properties.BLACK;
-                            const asian = feature.properties.ASIAN;
-                            const hisp = feature.properties.HISP;
+                            const white = feature.properties.whitePop;
+                            const black = feature.properties.blackPop;
+                            const asian = feature.properties.asianPop;
+                            const hisp = feature.properties.hispanicPop;
                             
                         }
 
