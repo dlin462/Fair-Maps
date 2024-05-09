@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from pymongo import MongoClient
 from shapely.wkt import dumps
 from data_processing import *
-from gingles_test import *
+from gingles_regression import *
 import multiprocessing as mp
 from pprint import pprint
 import geopandas as gpd

@@ -101,7 +101,7 @@ def fit_nonlinear_model(data, elections) -> pd.DataFrame:
             if race_vap == 'hvap':
                 fit_lines_df.loc[row_counter, ['race']] = 'Hispanic'
             if race_vap == 'asianvap':
-                fit_lines_df.loc[row_counter, ['race']] = 'White'
+                fit_lines_df.loc[row_counter, ['race']] = 'Asian'
 
             row_counter += 1
         election_counter += 1
