@@ -21,14 +21,14 @@ public class StateController {
     @Autowired
     private StateService stateService;
 
-    @GetMapping("/stateTable/{state}")
-    public ResponseEntity<List<State>> getStateData(@PathVariable StateName state) {
-        return new ResponseEntity<>(stateService.getStateWideData(state), HttpStatus.OK);
-    }
-
     @GetMapping("/stateAssemblyTable/{stateName}")
     public ResponseEntity<List<StateAssembly>> getAssemblyStateTable(@PathVariable StateName stateName) {
         return new ResponseEntity<>(stateService.getTableByState(stateName), HttpStatus.OK);
+    }
+
+    @GetMapping("/state-measures/{state}")
+    public ResponseEntity<State> getStateMeasures(@PathVariable StateName state) {
+        return new ResponseEntity<>(stateService.getStatewideMeasures(state), HttpStatus.OK);
     }
 }
 

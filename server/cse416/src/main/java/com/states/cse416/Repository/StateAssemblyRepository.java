@@ -11,6 +11,5 @@ import java.util.List;
 
 @Repository
 public interface StateAssemblyRepository extends MongoRepository<StateAssembly, ObjectId> {
-
     List<StateAssembly> findByState(StateName state);
 }

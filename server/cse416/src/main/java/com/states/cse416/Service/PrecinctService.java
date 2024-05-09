@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@EnableCaching
 @Service
 public class PrecinctService {
     @Autowired
@@ -20,7 +19,4 @@ public class PrecinctService {
     public List<Precinct> getAllPrecinctsByState(StateName stateName) {
         return precinctRepository.findByState(stateName);
     }
-
-
-
 }
