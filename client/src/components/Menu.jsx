@@ -4,6 +4,7 @@ import PieChartComponent from './PieChart';
 import LineGraphComponent from './LineGraph';
 import BarGraphComponent from './BarGraph';
 import PopulationPieChartComponent from './PopulationPieChart';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function MapMenu({
     anchorEl,
@@ -28,10 +29,18 @@ function MapMenu({
     showPieChartPopulation,
     state,
   }) {
+    const navigate = useNavigate();
+
+    const goToHomeScreen = () => {
+        navigate('/');
+    };
     return (
       <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem key="california" onClick={handleGoBack}>
+            <MenuItem key="homeScreen" onClick={goToHomeScreen}>
+                Go back to Select State
+            </MenuItem>
+            <MenuItem key="back" onClick={handleGoBack}>
                 Go Back to Map
             </MenuItem>
             <MenuItem key="" onClick={handleStateChange}>
