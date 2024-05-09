@@ -1,6 +1,7 @@
 package com.states.cse416.Models.enums;
 
 public enum Party {
-    Democrat,
-    Republican
+    Democratic,
+    Republican,
+    NaN
 }
