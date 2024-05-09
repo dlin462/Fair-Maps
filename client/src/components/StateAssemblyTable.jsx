@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function StateAssemblyTable() {
+function StateAssemblyTable({ state, handleDistrictClick }) {
     const [stateAssemblyData, setStateAssemblyData] = useState([]);
-
     useEffect(() => {
-        axios.get('http://localhost:8080/stateAssemblyTable')
+        axios.get(`http://localhost:8080/stateAssemblyTable/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setStateAssemblyData(response.data);
@@ -14,6 +13,12 @@ function StateAssemblyTable() {
                 console.error('Error fetching stateAssembly data:', error);
             });
     }, []);
+
+    console.log(stateAssemblyData);
+
+    const handleRowClick = (district) => {
+        handleDistrictClick(district);
+    };
 
     return (
         <div className="table">
@@ -32,16 +37,16 @@ function StateAssemblyTable() {
                     </thead>
                     <tbody>
                     {stateAssemblyData.map(stateInfo => (
-                        stateInfo.state === "Nevada" && (
-                            <tr key={stateInfo.id.timestamp}>
+                        (
+                            <tr key={stateInfo.id.timestamp} onClick={() => handleRowClick(stateInfo.office.slice(-1))}>
                                 <td>{stateInfo.office}</td>
                                 <td>{stateInfo.name}</td>
                                 <td>{stateInfo.party}</td>
                                 <td>{stateInfo.ethnicity}</td>
-                                <td>{stateInfo.vote_Margin}%</td>
-                                <td>{stateInfo.date_assumed_office}</td>
+                                <td>{stateInfo.voteMargin}%</td>
+                                <td>{stateInfo.dateAssumedOffice}</td>
                                 <td>
-                                    <img src={stateInfo.image} alt="District Representative" style={{ width: '150px', height: '150px' }} />
+                                    <img src={stateInfo.photo} alt="District Representative" style={{ width: '60px', height: '60px' }} />
                                 </td>
                             </tr>
                         )

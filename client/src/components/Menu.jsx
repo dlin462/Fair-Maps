@@ -7,14 +7,17 @@ import PopulationPieChartComponent from './PopulationPieChart';
 
 function MapMenu({
     anchorEl,
-    anchorE1Heatmap,
+    anchorE1HeatmapDistricts,
+    anchorE1HeatmapPrecincts,
     handleClose,
     handleCloseHeatMap,
     handleGoBack,
     handleStateChange,
     handleStateTable,
-    handleClickHeatMap,
-    handleEthnicityOptionClick,
+    handleClickHeatMapDistricts,
+    handleClickHeatMapPrecincts,
+    handleEthnicityOptionClickDistricts,
+    handleEthnicityOptionClickPrecincts,
     handleClickPieChartAssembly,
     handleClickPieChartPopulation,
     handleClickLineGraph,
@@ -33,14 +36,14 @@ function MapMenu({
             </MenuItem>
             <MenuItem key="" onClick={handleStateChange}>
                 Go To
-                {state === 'nevada' ? ' Mississippi' : ' Nevada'}
+                {state === 'Nevada' ? ' Mississippi' : ' Nevada'}
             </MenuItem>
             <MenuItem key="stateInformation" onClick={() => handleStateTable()}>
                 State Information
             </MenuItem>
-            <MenuItem key="heatMap" onClick={handleClickHeatMap}>
-                Heat Map
-                <Menu anchorEl={anchorE1Heatmap} open={Boolean(anchorE1Heatmap)} onClose={handleCloseHeatMap} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
+            <MenuItem key="heatMapDistricts" onClick={handleClickHeatMapDistricts}>
+                Heat Map for Districts
+                <Menu anchorEl={anchorE1HeatmapDistricts} open={Boolean(anchorE1HeatmapDistricts)} onClose={handleCloseHeatMap} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
@@ -49,10 +52,28 @@ function MapMenu({
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <MenuItem onClick={() => handleEthnicityOptionClick('whitePop')}>White</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('blackPop')}>Black</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('asianPop')}>Asian</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClick('hispanicPop')}>Hispanic</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('white')}>White</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('black')}>Black</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('asian')}>Asian</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('hispanic')}>Hispanic</MenuItem>
+                </Menu>
+            </MenuItem>
+
+            <MenuItem key="heatMapPrecincts" onClick={handleClickHeatMapPrecincts}>
+                Heat Map for Precincts
+                <Menu anchorEl={anchorE1HeatmapPrecincts} open={Boolean(anchorE1HeatmapPrecincts)} onClose={handleCloseHeatMap} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('white')}>White</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('black')}>Black</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('asian')}>Asian</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
             

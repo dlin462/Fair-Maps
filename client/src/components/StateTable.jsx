@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function StateTable() {
+function StateTable({state}) {
     const [stateData, setStateData] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/stateTable')
+        axios.get(`http://localhost:8080/state/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setStateData(response.data);

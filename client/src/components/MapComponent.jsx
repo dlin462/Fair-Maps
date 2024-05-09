@@ -17,8 +17,10 @@ function MapComponent() {
     const mapContainerRef = useRef(null);
     const navigate = useNavigate();
     const { state } = useParams(); // Get the state parameter from the URL
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [anchorE1Heatmap, setAnchorElHeatmap] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorE1Heatmap,setAnchorElHeatmap] = useState(null);
+    const [anchorE1HeatmapDistricts, setAnchorElHeatmapDistricts] = useState(null);
+    const [anchorE1HeatmapPrecincts, setAnchorElHeatmapPrecincts] = useState(null);
     const [showPieChartAssembly, setShowPieChartAssembly] = useState(false);
     const [showPieChartPopulation, setShowPieChartPopulation] = useState(false);
     const [showLineGraph, setShowLineGraph] = useState(false);
@@ -27,21 +29,32 @@ function MapComponent() {
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
     const [ethnicity, setEthnicity] = useState(null);
     const [legend, setLegend] = useState(null);
+    const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
+    const [stateAssemblyTableRowClicked, setStateAssemblyTableRowClicked] = useState(null);
 
     const coordinates = {
-        nevada: [39.876019, -117.224121],
-        mississippi: [32.3547, -89.3985],
+        Nevada: [39.876019, -117.224121],
+        Mississippi: [32.3547, -89.3985],
     };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        setStateAssemblyTableRowClicked(null);
     };
 
-    const handleClickHeatMap = (event) => {
+    const handleClickHeatMapDistricts = (event) => {
         event.preventDefault();
-        setAnchorElHeatmap(event.currentTarget);
-        if (anchorE1Heatmap) {
-            setAnchorElHeatmap(null);
+        setAnchorElHeatmapDistricts(event.currentTarget);
+        if (anchorE1HeatmapDistricts) {
+            setAnchorElHeatmapDistricts(null);
+        }
+    };
+
+    const handleClickHeatMapPrecincts = (event) => {
+        event.preventDefault();
+        setAnchorElHeatmapPrecincts(event.currentTarget);
+        if (anchorE1HeatmapPrecincts) {
+            setAnchorElHeatmapPrecincts(null);
         }
     };
 
@@ -69,7 +82,7 @@ function MapComponent() {
     };
 
     const handleStateChange = () => {
-        if (state === 'nevada') {
+        if (state === 'Nevada') {
             handleNavigate('/map/Mississippi');
         }
         else {
@@ -112,30 +125,23 @@ function MapComponent() {
         handleChartDisplay(false, false, false, true);
     }
 
-    const handleEthnicityOptionClick = (ethnicity) => {
-        setAnchorEl(false);
-        console.log(ethnicity)
+    const handleEthnicityOptionClickDistricts = (ethnicity) => {
+        setAnchorElHeatmapDistricts(false);
+        console.log(ethnicity);
         setEthnicity(ethnicity);
+        setPrecinctHeatMap(false);
     };
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/nevadaDistricts')
-    //         .then(response => {
-    //             console.log('Response from server:', response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching stateAssembly data:', error);
-    //         });
-    // }, []);
+    const handleEthnicityOptionClickPrecincts = (ethnicity) => {
+        setAnchorElHeatmapPrecincts(false);
+        console.log(ethnicity);
+        setEthnicity(ethnicity);
+        setPrecinctHeatMap(true);
+    };
 
-    const mergeData = (geometries, demographics) => {
-        const mergedData = [];
-        const minLength = Math.min(geometries.length, demographics.length);
-        for (let i = 0; i < minLength; i++) {
-            const mergedObject = { ...geometries[i], ...demographics[i] };
-            mergedData.push(mergedObject);
-        }
-        return mergedData;
+    const handleDistrictClick = (district) => {
+        console.log('Clicked district:', district);
+        setStateAssemblyTableRowClicked(district);
     };
 
     useEffect(() => {
@@ -144,18 +150,24 @@ function MapComponent() {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-        console.log(state);
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/districts/${state}`);
-                const nevadaDistrictsData = response.data;
+                const districtResponse = await axios.get(`http://localhost:8080/districts/${state}`);
+                const districtsData = districtResponse.data;
                 const districtData = {
                     type: "FeatureCollection",
-                    features: nevadaDistrictsData.map(district => ({
+                    features: districtsData.map(district => ({
                         type: "Feature",
-                        geometry: wellknown.parse(district.geometry)
+                        geometry: wellknown.parse(district.geometry),
+                        properties: {
+                            whitePop: district.demographicData.whiteVAP,
+                            blackPop: district.demographicData.blackVAP,
+                            asianPop: district.demographicData.asianVAP,
+                            hispanicPop: district.demographicData.hispanicVAP,
+                        }
                     }))
                 };
+
                 L.geoJSON(districtData, {
                     style: {
                         color: 'blue', 
@@ -163,78 +175,143 @@ function MapComponent() {
                         fillOpacity: 0.1
                     }
                 }).addTo(map);
-                // const response1 = await axios.get(`http://localhost:8080/districts/${StateName.state}`);
-                // const raw_geometries = response1.data;
-                // convert to geojson 
-                // const wktGeometries = raw_geometries.map(feature => wellknown.parse(feature.coordinates));
-                // const response2 = await axios.get('http://localhost:8080/demographicDataNevada');
-                // const demographic = response2.data;
-                // const mergedData = mergeData(wktGeometries, demographic);
-                   
-                const extractCoords = (mergedData) => {
-                    return mergedData.map(item => ({
-                      type: item.type,
-                      coordinates: item.coordinates, 
-                    }));
-                };
-                const extractEthnicity = (mergedData) => {
-                    return mergedData.map(item => ({
-                        type: item.type,
-                        coordinates: item.coordinates, 
-                        value: item[ethnicity]
-                    }));
-                };
-                // let geojsonLayer = L.geoJSON(extractCoords(mergedData), {
-                //     style: {
-                //         color: 'red',
-                //         weight: 0.5,
-                //         fillOpacity: 0,
-                //     }
-                // });
-                if(ethnicity != null){
-                    const EthnicityValues = extractEthnicity(districtData);
-                    const maxValue = Math.max(...EthnicityValues.map(item => item.value));
-                    const colorScale = chroma.scale(['white', 'red']).domain([0, maxValue]);
-                    // console.log(extractEthnicity(districtData));
-                    // console.log(maxValue); 
-                    const geojsonData = {
-                        type: "FeatureCollection",
-                        features: EthnicityValues.map(item => ({
-                            type: "Feature",
-                            properties: {
-                                value: item.value
-                            },
-                            geometry: {
-                                type: item.type,
-                                coordinates: item.coordinates
-                            }
-                        }))
-                    };
-                    geojsonLayer = L.geoJSON(geojsonData, {
-                        style: feature => {
-                            const value = feature.properties.value;
-                            const color = colorScale(value).hex();
-                            return {
-                                fillColor: color,
-                                color: 'black',
-                                weight: 1,
-                                fillOpacity: 0.7
-                            };
-                        },
-                        onEachFeature: (feature, layer) => {
-                            const value = feature.properties.value;
-                            layer.bindPopup(`Value: ${value}`);
-                            layer.on({
-                                mouseover: (e) => {
-                                    layer.openPopup();
-                                },
-                                mouseout: (e) => {
-                                    layer.closePopup();
+
+                if (stateAssemblyTableRowClicked) {
+                    districtsData.forEach(district => {
+                        if (district.districtNum === +stateAssemblyTableRowClicked) {
+                            const bounds = L.geoJSON(wellknown.parse(district.geometry)).getBounds();
+                            const districtLayer = L.geoJSON(wellknown.parse(district.geometry), {
+                                style: {
+                                    color: 'red',
+                                    weight: 3, 
+                                    fillOpacity: 0.1 
                                 }
                             });
+                            districtLayer.addTo(map);
+                            map.fitBounds(bounds, { maxZoom: 18 });
+                        }
+                    });
+                }
+
+
+                if(ethnicity != null && !precinctHeatmap &&!stateAssemblyTableRowClicked){
+                    const allPopulations = ['whiteVAP', 'blackVAP', 'asianVAP', 'hispanicVAP'];
+                    const EthnicityValues = districtsData.flatMap(district => allPopulations.map(population => district.demographicData[population]));
+                    const maxValue = Math.max(...EthnicityValues);
+                    const colorScale = chroma.scale(['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']).domain([0, 0.125, 0.25, 0.5]);
+                    let geojsonLayer = L.geoJSON(districtData, {
+                        style: feature => {
+                            const demographicData = feature.properties[`${ethnicity}Pop`];
+                            if (demographicData) {
+                                const percentage = (demographicData / maxValue) * 100;
+                                let color;
+                                if (percentage <= 12.5) {
+                                    color = colorScale(0).hex();
+                                } else if (percentage <= 25) {
+                                    color = colorScale(0.125).hex();
+                                } else if (percentage <= 50) {
+                                    color = colorScale(0.25).hex();
+                                } else {
+                                    color = colorScale(1).hex();
+                                }
+                                return {
+                                    fillColor: color,
+                                    color: 'black',
+                                    weight: 1,
+                                    fillOpacity: 0.7
+                                };
+                            }
+                        },
+                        onEachFeature: (feature, layer) => {
+                            const demographicData = feature.properties;
+                            if (demographicData) {
+                                const value = demographicData[`${ethnicity}Pop`];
+                                layer.bindPopup(`Value: ${value}`);
+                                layer.on({
+                                    mouseover: (e) => {
+                                        layer.openPopup();
+                                    },
+                                    mouseout: (e) => {
+                                        layer.closePopup();
+                                    }
+                                });
+                            }
                         }
                     });
                     geojsonLayer.addTo(map);
+                }
+
+                if(ethnicity != null && precinctHeatmap &&!stateAssemblyTableRowClicked){
+                    const precinctResponse = await axios.get(`http://localhost:8080/precincts/${state}`);
+                    const precinctsData = precinctResponse.data;
+                    const precinctData = {
+                        type: "FeatureCollection",
+                        features: precinctsData.map(precinct => ({
+                            type: "Feature",
+                            geometry: wellknown.parse(precinct.geometry),
+                            properties: {
+                                whitePop: precinct.demographicData.whiteVAP,
+                                blackPop: precinct.demographicData.blackVAP,
+                                asianPop: precinct.demographicData.asianVAP,
+                                hispanicPop: precinct.demographicData.hispanicVAP,
+                            }
+                        }))
+                    };
+
+                    const allPopulations = ['whiteVAP', 'blackVAP', 'asianVAP', 'hispanicVAP'];
+                    const EthnicityValues = precinctsData.flatMap(precinct => allPopulations.map(population => precinct.demographicData[population]));
+                    const maxValue = Math.max(...EthnicityValues);
+                    const colorScale = chroma.scale(['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']).domain([0, 0.125, 0.25, 0.5]);
+                    let geojsonLayer = L.geoJSON(precinctData, {
+                        style: feature => {
+                            const demographicData = feature.properties[`${ethnicity}Pop`];
+                            if (!demographicData) {
+                                return {
+                                    fillColor: colorScale(0).hex(),
+                                    color: 'black',
+                                    weight: 1,
+                                    fillOpacity: 0.7
+                                };
+                            }
+                            if (demographicData) {
+                                const percentage = (demographicData / maxValue) * 100;
+                                let color;
+                                if (percentage <= 12.5) {
+                                    color = colorScale(0).hex();
+                                } else if (percentage <= 25) {
+                                    color = colorScale(0.125).hex();
+                                } else if (percentage <= 50) {
+                                    color = colorScale(0.25).hex();
+                                } else {
+                                    color = colorScale(1).hex();
+                                }
+
+                                return {
+                                    fillColor: color,
+                                    color: 'black',
+                                    weight: 1,
+                                    fillOpacity: 0.7
+                                };
+                            }
+                        },
+                        onEachFeature: (feature, layer) => {
+                            const demographicData = feature.properties;
+                            if (demographicData) {
+                                const value = demographicData[`${ethnicity}Pop`];
+                                layer.bindPopup(`Value: ${value}`);
+                                layer.on({
+                                    mouseover: (e) => {
+                                        layer.openPopup();
+                                    },
+                                    mouseout: (e) => {
+                                        layer.closePopup();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    geojsonLayer.addTo(map);
+
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -242,7 +319,7 @@ function MapComponent() {
         };
         fetchData();
         return () => map.remove();
-    }, [state, showMap, ethnicity, showStateAssemblyTable]);
+    }, [state, showMap, ethnicity, showStateAssemblyTable, precinctHeatmap, stateAssemblyTableRowClicked]);
 
     return (
         <div>
@@ -253,14 +330,17 @@ function MapComponent() {
                     </div>
                     <MapMenu
                         anchorEl={anchorEl}
-                        anchorE1Heatmap={anchorE1Heatmap}
+                        anchorE1HeatmapDistricts={anchorE1HeatmapDistricts}
+                        anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts}
                         handleClose={handleClose}
                         handleCloseHeatMap={handleCloseHeatMap}
                         handleGoBack={handleGoBack}
                         handleStateChange={handleStateChange}
                         handleStateTable={handleStateTable}
-                        handleClickHeatMap={handleClickHeatMap}
-                        handleEthnicityOptionClick={handleEthnicityOptionClick}
+                        handleClickHeatMapDistricts={handleClickHeatMapDistricts}
+                        handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
+                        handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts}
+                        handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
                         handleClickPieChartAssembly={handleClickPieChartAssembly}
                         handleClickPieChartPopulation={handleClickPieChartPopulation}
                         handleClickLineGraph={handleClickLineGraph}
@@ -276,8 +356,8 @@ function MapComponent() {
             </div>
             {showStateAssemblyTable && (
                 <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>
-                    <StateTable />
-                    <StateAssemblyTable />
+                    <StateTable state={state}/>
+                    <StateAssemblyTable state={state} handleDistrictClick={handleDistrictClick}/>
                 </div>
             )}
         </div>
