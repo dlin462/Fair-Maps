@@ -21,6 +21,10 @@ function HomePage() {
                 onClick={() => navigate('/map/Nevada')}>
                 Nevada
             </Button>
+            <Button variant="contained" color="secondary" style={{ margin: '10px' }}
+                onClick={() => navigate('/gingles')}>
+                Charts
+            </Button>
             {/* <Box display="flex" p={1} style={{ height:'100vh' }}>
                 <Box flex={1}>
                 <div>
