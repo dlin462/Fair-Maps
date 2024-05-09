@@ -56,7 +56,9 @@ def aggr_demographic_to_dict(dataframe: pd.DataFrame) -> Dict:
 
     return demographic_dict
 
-def df_to_dict(main_dataframe: pd.DataFrame, dict_items, is_precinct=False) -> List[Dict]:
+def df_to_dict(main_dataframe: pd.DataFrame,
+               dict_items: Dict,
+               is_precinct: bool = False) -> List[Dict]:
     """Convert a GeoDataFrame to a dictionary of records"""
     final_dict = main_dataframe.to_dict(orient='records')
     for name, docs in dict_items.items():
@@ -101,9 +103,6 @@ def send_one(collection_name, data, database) -> None:
 def send_many(collection_name, data, database) -> None:
     """Send many documents to a MongoDB collection"""
     collection = database[collection_name]
-    # if is_geometry:
-    #     collection.create_index([("geometry")])
-
     try:
         collection.insert_many(data)
     except BulkWriteError as bwe:
@@ -147,7 +146,9 @@ if __name__ == '__main__':
     ### Nevada Statewide Measures ### COMPLETED
     # statewide_info = ['PRE20D', 'PRE20R', 'vap', 'wvap', 'bvap', 'asianvap', 'hvap']
     # nv_statewide_data = calculate_statewide_measures(nv_district_df, statewide_info)
-    # nv_statewide_dict = nv_statewide_data.to_dict(orient='records')
+    # nv_state_demo_dict = aggr_demographic_to_dict(nv_statewide_data)
+    # documents = {'demographicData': nv_state_demo_dict}
+    # nv_statewide_dict = df_to_dict(nv_statewide_data, documents)
     # send_many(collection_name='state', data=nv_statewide_dict, database=db)
 
     ### Nevada State Assembly Districts ### COMPLETED
@@ -190,7 +191,9 @@ if __name__ == '__main__':
     ### Mississippi Statewide Measures ### COMPLETED
     # statewide_info = ['PRE20D', 'PRE20R', 'vap', 'wvap', 'bvap', 'asianvap', 'hvap']
     # ms_statewide_data = calculate_statewide_measures(ms_district_df, statewide_info)
-    # ms_statewide_dict = ms_statewide_data.to_dict(orient='records')
+    # ms_state_demo_dict = aggr_demographic_to_dict(ms_statewide_data)
+    # documents = {'demographicData': ms_state_demo_dict}
+    # ms_statewide_dict = df_to_dict(ms_statewide_data, documents)
     # send_many(collection_name='state', data=ms_statewide_dict, database=db)
 
     ### Mississippi State Assembly Districts ### COMPLETED

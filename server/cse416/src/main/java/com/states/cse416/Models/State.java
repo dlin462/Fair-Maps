@@ -7,22 +7,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "state_wide_data")
+@Document(collection = "state")
 public class State {
     @Id
     private ObjectId id;
     private StateName state;
-    private Party redistrictControl;
-    private Election presResults;
-    private Election guberResults;
-    private Election atgResults;
+    private Party partyControl;
+    private int democrat;
+    private int republican;
+    @Field("pct_dem")
+    private double pctDem;
+    @Field("pct_rep")
+    private double pctRep;
+    @DBRef
     private DemographicData demographicData;
 }
