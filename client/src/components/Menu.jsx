@@ -48,7 +48,7 @@ function MapMenu({
       <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
             <MenuItem key="back" onClick={handleGoBack}>
-                Go Back to Map
+                Reset
             </MenuItem>
             <MenuItem key="" onClick={handleStateChange}>
                 Go To

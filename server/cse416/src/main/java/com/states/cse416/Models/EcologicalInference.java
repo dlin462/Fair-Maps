@@ -11,7 +11,8 @@ public class EcologicalInference {
     private Race race;
     private double raceProb;
     private StateName state;
-    private double[] data;
+    private double[] asian;
+    private double[] other;
     private double mean;
     private double std;
 }

@@ -1,8 +1,10 @@
 package com.states.cse416.Controller;
 
+import com.states.cse416.Models.EcologicalInference;
 import com.states.cse416.Models.Gingles;
 import com.states.cse416.Models.enums.Race;
 import com.states.cse416.Models.enums.StateName;
+import com.states.cse416.Service.EcologicalInferenceService;
 import com.states.cse416.Service.GinglesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +25,19 @@ public class AnalysisController {
     @Autowired
     private GinglesService ginglesService;
 
+    @Autowired
+    private EcologicalInferenceService ecologicalInferenceService;
+
     @GetMapping("/gingles/{state}/{race}")
     public ResponseEntity<List<Gingles>> getGinglesPlot(@PathVariable StateName state, @PathVariable Race race) {
 //        return ResponseEntity.ok(ginglesService.getGinglesByStateAndRace(state, race));
         return new ResponseEntity<>(ginglesService.getGinglesByStateAndRace(state, race), HttpStatus.OK);
     }
 
+    @GetMapping("/ecoInference")
+    public ResponseEntity<List<EcologicalInference>> getEcoInference() {
+        return new ResponseEntity<>(ecologicalInferenceService.getEcologicalInference(), HttpStatus.OK);
+    }
 
 //    @GetMapping("/{state}/barChart")
 //    public ResponseEntity<Object> getBarChart(@PathVariable StateName state) {
