@@ -29,19 +29,33 @@ const ScatterPlot = () => {
                         data={[
                             {
                                 x: data.xdata,
-                                y: data.ydataRep,
+                                y: data.ydataDem,
+                                opacity: 0.7,
                                 mode: 'markers',
                                 type: 'scatter',
-                                name: `${data.race} (Democrat)`,
-                                marker: { color: 'blue' }
+                                name: `${data.race} ()`,
+                                marker: { 
+                                    color: 'lightskyblue',
+                                    line: { 
+                                        width: 1.5, 
+                                        color: 'darkblue'
+                                    }
+                                 }
                             },
                             {
                                 x: data.xdata,
-                                y: data.ydataDem,
+                                y: data.ydataRep,
+                                opacity: 0.7,
                                 mode: 'markers',
                                 type: 'scatter',
-                                name: `${data.race} (Republican)`,
-                                marker: { color: 'red' }
+                                name: `${data.race} ()`,
+                                marker: { 
+                                    color: 'indianred',
+                                    line: { 
+                                        width: 1.5, 
+                                        color: 'darkred'
+                                    }
+                                 }
                             },
                             {
                                 x: data.xdata,

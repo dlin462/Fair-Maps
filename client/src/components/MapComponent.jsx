@@ -220,7 +220,7 @@ function MapComponent() {
                     const allPopulations = ['whiteVAP', 'blackVAP', 'asianVAP', 'hispanicVAP'];
                     const EthnicityValues = districtsData.flatMap(district => allPopulations.map(population => district.demographicData[population]));
                     const maxValue = Math.max(...EthnicityValues);
-                    const colorScale = chroma.scale(['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']).domain([0, 0.125, 0.25, 0.5]);
+                    const colorScale = chroma.scale(['#fee5d9','#fcbba1','#fc9272','#fb6a4a','#cb181d']).domain([0, 0.125, 0.25, 0.5]);
                     let geojsonLayer = L.geoJSON(districtData, {
                         style: feature => {
                             const demographicData = feature.properties[`${ethnicity}Pop`];
