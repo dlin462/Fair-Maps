@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
-
 public class AnalysisController {
 
     @Autowired
