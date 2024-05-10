@@ -9,9 +9,14 @@ const Header = ({ state, ethnicity, handleClick }) => {
             <div className="legend">
                 {ethnicity && <HeatmapLegend />}
             </div>
+            <div style={{ marginRight: '0px' }}>
+                {/* <Button variant="contained" style={{backgroundColor: 'red', color: 'white'}} onClick={handleClick}>
+                    State
+                </Button> */}
+            </div>
             <div style={{ marginRight: '10px' }}>
-                <Button variant="contained" color="primary" onClick={handleClick}>
-                    Open Menu
+                <Button variant="contained" style={{backgroundColor: 'blue', color: 'white'}} onClick={handleClick}>
+                    Main Menu
                 </Button>
             </div>
         </div>

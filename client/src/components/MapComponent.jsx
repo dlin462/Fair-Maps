@@ -8,11 +8,12 @@ import React from 'react';
 import axios from 'axios'
 import chroma from 'chroma-js';
 import Header from './Header';
-import MapMenu from './Menu';
+import MapMenu from './MainMenu';
 import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
 import StateAssemblyBarChart from './StateAssemblyBarChart';
+import EcologicalInference from './EcologicalInference';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -28,6 +29,7 @@ function MapComponent() {
     const [showBarGraph, setShowBarGraph] = useState(false);
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
     const [showBarGraphStateAssembly, setShowBarGraphStateAssembly] = useState(false);
+    const [showEcologicalInference, setShowEcologicalInference] = useState(false);
     const [ethnicity, setEthnicity] = useState(null);
     const [legend, setLegend] = useState(null);
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
@@ -70,22 +72,34 @@ function MapComponent() {
     const handleStateTable = () => {
         setShowStateAssemblyTable(!showStateAssemblyTable);
         setShowBarGraphStateAssembly(false);
+        setShowEcologicalInference(false);
         handleClose();
     };
 
     const handleClickBarGraphStateAssembly = () => {
         setShowBarGraphStateAssembly(!showBarGraphStateAssembly);
         setShowStateAssemblyTable(false);
+        setShowEcologicalInference(false);
+        handleClose();
+    }
+
+    const handleClickEcologicalInference = () => {
+        setShowBarGraphStateAssembly(false);
+        setShowStateAssemblyTable(false);
+        setShowEcologicalInference(!showEcologicalInference);
         handleClose();
     }
 
     const handleNavigate = (path) => {
+        setShowStateAssemblyTable(false);
+        setShowBarGraphStateAssembly(false);
         handleClose();
         navigate(path);
         setShowPieChartPopulation(false);
         setShowLineGraph(false);
         setShowBarGraph(false);
         setShowMap(true);
+        setShowEcologicalInference(false);
     };
 
     const handleStateChange = () => {
@@ -332,7 +346,13 @@ function MapComponent() {
     return (
         <div>
             <Header state={state} ethnicity={ethnicity} handleClick={handleClick} />
-            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showBarGraphStateAssembly ? '50%' : (showStateAssemblyTable ? '50%' : '100%'), float: 'left', display: 'flex'}}>
+            <div ref={mapContainerRef} className="fullscreen-map" style={{ 
+                width: showBarGraphStateAssembly ? '50%' : 
+                    showStateAssemblyTable ? '50%' : 
+                    showEcologicalInference ? '50%' : '100%',
+                float: 'left',
+                display: 'flex'
+            }}>
                 <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
@@ -347,12 +367,13 @@ function MapComponent() {
                         handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
                         showLineGraph={showLineGraph} showBarGraph={showBarGraph} showPieChartPopulation={showPieChartPopulation}
                         state={state}
+                        handleClickEcologicalInference={handleClickEcologicalInference}
                     />
 
                 </div>
             </div>
             {showStateAssemblyTable && (
-                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000' }}>
+                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', }}>
                     <StateTable state={state}/>
                     <StateAssemblyTable state={state} handleDistrictClick={handleDistrictClick}/>
                 </div>
@@ -360,6 +381,11 @@ function MapComponent() {
             {showBarGraphStateAssembly && (
                 <div className="state-assembly-bar-graph" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000' }}>
                     <StateAssemblyBarChart state={state}/>
+                </div>
+            )}
+            {showEcologicalInference && (
+                <div className="ecological-inference" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                    <EcologicalInference state={state}/>
                 </div>
             )}
         </div>
