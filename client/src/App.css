@@ -9,6 +9,12 @@
   left: 0;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
 .entire-page{
   width: 100%;
 }
@@ -44,6 +50,12 @@ th, td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 th {
