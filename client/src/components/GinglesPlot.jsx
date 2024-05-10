@@ -15,19 +15,21 @@ const ScatterPlot = () => {
           .catch(error => {
               console.error('Error fetching stateAssembly data:', error);
           });
-    }, []);
+    }, [race, state]);
 
-    console.log(ginglesData);
+    // console.log(ginglesData);
+
 
     return (
         <div style={{ display: 'flex' }}>
             {ginglesData.map((data, index) => (
+                console.log(data),
                 <div key={index} style={{ flex: '1' }}>
                     <Plot
                         data={[
                             {
                                 x: data.xdata,
-                                y: data.ydataDem,
+                                y: data.ydataRep,
                                 mode: 'markers',
                                 type: 'scatter',
                                 name: `${data.race} (Democrat)`,
@@ -35,7 +37,7 @@ const ScatterPlot = () => {
                             },
                             {
                                 x: data.xdata,
-                                y: data.ydataRep,
+                                y: data.ydataDem,
                                 mode: 'markers',
                                 type: 'scatter',
                                 name: `${data.race} (Republican)`,
