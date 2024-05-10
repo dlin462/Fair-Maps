@@ -22,7 +22,7 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
 
     return (
         <div className="table">
-            <div className='table-container' style={{ maxHeight: '800px', overflowY: 'auto' }}>
+            <div className='table-container' style={{ maxHeight: '875px', overflowY: 'auto' }}>
                 <table>
                     <thead>
                         <tr>

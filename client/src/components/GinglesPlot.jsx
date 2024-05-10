@@ -1,65 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { getNevadaPrecincts } from '../api/api';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const ScatterPlot = ({ data }) => {
-//   const populationPercentages = data.map(entry => entry.percentPopulation);
-//   const democratPercentages = data.map(entry => entry.percentDemocrat);
-//   const republicanPercentages = data.map(entry => entry.percentRepublican);
-//   const regions = data.map(entry => entry.region);
-    const [plot, setPlot] = useState([]);
-    const [currentState, setCurrentState] = useState('Nevada');
+const ScatterPlot = () => {
+    const { state, race } = useParams();
+    const [ginglesData, setGinglesData] = useState([]);
 
     useEffect(() => {
-        const fetchDataFromAPI = async () => {
-            try {
-              const fetchedData = await getNevadaPrecincts(currentState); // Use imported function directly
-              setPlot(fetchedData);
-              console.log(fetchedData);
-            } catch (error) {
-              // Handle error
-            }
-          };
-      
-        fetchDataFromAPI();
-    }, [currentState])
-    
-    const plotData = [
-    {
-        x: plot.percentPopulation,
-        y: plot.percentDemocrat,
-        mode: 'markers',
-        type: 'scatter',
-        name: 'Democrat',
-        text: regions,
-        marker: { color: 'blue' }
-    },
-    {
-        x: plot.percentPopulation,
-        y: plot.percentRepublican,
-        mode: 'markers',
-        type: 'scatter',
-        name: 'Republican',
-        text: regions,
-        marker: { color: 'red' }
-    }
-    ];
+      axios.get(`http://localhost:8080/gingles/${state}/${race}`)
+          .then(response => {
+              setGinglesData(response.data);
+          })
+          .catch(error => {
+              console.error('Error fetching stateAssembly data:', error);
+          });
+    }, []);
 
-    const layout = {
-    title: 'Population vs Voting Preferences',
-    xaxis: { title: 'Percentage of Population' },
-    yaxis: { title: 'Percentage of Votes' },
-    hovermode: 'closest'
-    };
+    console.log(ginglesData);
 
     return (
-    <Plot
-        data={plotData}
-        layout={layout}
-        style={{ width: '100%', height: '500px' }}
-    />
+        <div style={{ display: 'flex' }}>
+            {ginglesData.map((data, index) => (
+                <div key={index} style={{ flex: '1' }}>
+                    <Plot
+                        data={[
+                            {
+                                x: data.xdata,
+                                y: data.ydataDem,
+                                mode: 'markers',
+                                type: 'scatter',
+                                name: `${data.race} (Democrat)`,
+                                marker: { color: 'blue' }
+                            },
+                            {
+                                x: data.xdata,
+                                y: data.ydataRep,
+                                mode: 'markers',
+                                type: 'scatter',
+                                name: `${data.race} (Republican)`,
+                                marker: { color: 'red' }
+                            },
+                            {
+                                x: data.xdata,
+                                y: data.fitLineDem,
+                                mode: 'lines',
+                                type: 'scatter',
+                                name: `${data.race} (Democrat Fit Line)`,
+                                line: { color: 'blue' }
+                            },
+                            {
+                                x: data.xdata,
+                                y: data.fitLineRep,
+                                mode: 'lines',
+                                type: 'scatter',
+                                name: `${data.race} (Republican Fit Line)`,
+                                line: { color: 'red' }
+                            }
+                        ]}
+                        layout={{
+                            title: `${data.race} - Gingles Data`,
+                            xaxis: { title: `Percent ${data.race}` },
+                            yaxis: { title: 'Vote Share' },
+                            hovermode: 'closest'
+                        }}
+                        style={{ width: '100%', height: '500px' }}
+                    />
+                </div>
+            ))}
+        </div>
     );
 };
-
 export default ScatterPlot;
-

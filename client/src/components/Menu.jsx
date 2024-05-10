@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import PieChartComponent from './PieChart';
 import LineGraphComponent from './LineGraph';
@@ -7,33 +7,43 @@ import PopulationPieChartComponent from './PopulationPieChart';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function MapMenu({
-    anchorEl,
-    anchorE1HeatmapDistricts,
-    anchorE1HeatmapPrecincts,
-    handleClose,
-    handleCloseHeatMap,
+    anchorEl, anchorE1HeatmapDistricts, anchorE1HeatmapPrecincts,
+    handleClose, handleCloseHeatMap,
     handleGoBack,
     handleStateChange,
     handleStateTable,
-    handleClickHeatMapDistricts,
-    handleClickHeatMapPrecincts,
-    handleEthnicityOptionClickDistricts,
-    handleEthnicityOptionClickPrecincts,
-    handleClickPieChartAssembly,
-    handleClickPieChartPopulation,
-    handleClickLineGraph,
-    handleClickBarGraph,
-    showPieChartAssembly,
-    showLineGraph,
-    showBarGraph,
-    showPieChartPopulation,
+    handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts,
+    handleClickPieChartAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
+    showPieChartAssembly, showLineGraph, showBarGraph, showPieChartPopulation,
     state,
   }) {
     const navigate = useNavigate();
 
+    const [anchorE1Gingles, setAnchorE1Gingles] = useState(null);
+    const [race, setRace] = useState(null);
+
+    const handleClickGingles = (event) => {
+      //event.preventDefault();
+      setAnchorE1Gingles(event.currentTarget);
+      if (anchorE1Gingles) {
+          setAnchorE1Gingles(null);
+        }
+    };
+
+    const handleCloseGingles = () => {
+        setAnchorE1Gingles(null);
+    };
+
+    const handleGinglesClickRace = (race) => {
+        setAnchorE1Gingles(false);
+        setRace(race);
+        navigate(`/gingles/scatterplot/${state}/${race}`);
+    };
+
     const goToHomeScreen = () => {
         navigate('/');
     };
+
     return (
       <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
@@ -97,6 +107,23 @@ function MapMenu({
             </MenuItem>
             <MenuItem key="racialGap" onClick={() => handleClickBarGraph()}>
                 Racial Gap Assessment
+            </MenuItem>
+            <MenuItem key="gingles" onClick={(event) => handleClickGingles(event)}>
+                Gingles
+                <Menu anchorEl={anchorE1Gingles} open={Boolean(anchorE1Gingles)} onClose={handleCloseGingles} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                <MenuItem onClick={() => handleGinglesClickRace('White')}>White</MenuItem>
+                <MenuItem onClick={() => handleGinglesClickRace('Black')}>Black</MenuItem>
+                <MenuItem onClick={() => handleGinglesClickRace('Asian')}>Asian</MenuItem>
+                <MenuItem onClick={() => handleGinglesClickRace('Hispanic')}>Hispanic</MenuItem>
+                </Menu>
             </MenuItem>
         </Menu>
         <PieChartComponent showPieChartAssembly={showPieChartAssembly} state={state} />

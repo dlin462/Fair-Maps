@@ -324,38 +324,27 @@ function MapComponent() {
     return (
         <div>
             <Header state={state} ethnicity={ethnicity} handleClick={handleClick} />
-            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex' }}>
+            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex'}}>
                 <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
                     <MapMenu
-                        anchorEl={anchorEl}
-                        anchorE1HeatmapDistricts={anchorE1HeatmapDistricts}
-                        anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts}
-                        handleClose={handleClose}
-                        handleCloseHeatMap={handleCloseHeatMap}
+                        anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts}
+                        handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap}
                         handleGoBack={handleGoBack}
                         handleStateChange={handleStateChange}
                         handleStateTable={handleStateTable}
-                        handleClickHeatMapDistricts={handleClickHeatMapDistricts}
-                        handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
-                        handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts}
-                        handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
-                        handleClickPieChartAssembly={handleClickPieChartAssembly}
-                        handleClickPieChartPopulation={handleClickPieChartPopulation}
-                        handleClickLineGraph={handleClickLineGraph}
-                        handleClickBarGraph={handleClickBarGraph}
-                        showPieChartAssembly={showPieChartAssembly}
-                        showLineGraph={showLineGraph}
-                        showBarGraph={showBarGraph}
-                        showPieChartPopulation={showPieChartPopulation}
+                        handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
+                        handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
+                        handleClickPieChartAssembly={handleClickPieChartAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
+                        showPieChartAssembly={showPieChartAssembly} showLineGraph={showLineGraph} showBarGraph={showBarGraph} showPieChartPopulation={showPieChartPopulation}
                         state={state}
                     />
 
                 </div>
             </div>
             {showStateAssemblyTable && (
-                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0' }}>
+                <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000' }}>
                     <StateTable state={state}/>
                     <StateAssemblyTable state={state} handleDistrictClick={handleDistrictClick}/>
                 </div>

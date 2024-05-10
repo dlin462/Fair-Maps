@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function StateTable({state}) {
-    const [stateData, setStateData] = useState([]);
+function StateTable({ state }) {
+    const [stateData, setStateData] = useState(null); // Initialize with null
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/state/${state}`)
+        axios.get(`http://localhost:8080/state-measures/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setStateData(response.data);
@@ -13,7 +13,11 @@ function StateTable({state}) {
             .catch(error => {
                 console.error('Error fetching state data:', error);
             });
-    }, []);
+    }, [state]);
+
+    if (stateData === null) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className="table">
@@ -31,17 +35,15 @@ function StateTable({state}) {
                         </tr>
                     </thead>
                     <tbody>
-                        {stateData.map(stateInfo => (
-                            <tr key={stateInfo.id.timestamp}>
-                                <td>Nevada</td>
-                                {/* <td>{stateInfo.stateName}</td> */}
-                                <td>{stateInfo.tot_POP22}</td>
-                                <td>{stateInfo.wht_NHSP22}</td>
-                                <td>{stateInfo.blk_NHSP22}</td>
-                                <td>{stateInfo.asn_NHSP22}</td>
-                                <td>{stateInfo.hsp_POP22}</td>
-                            </tr>
-                        ))}
+                        <tr>
+                            <td>{stateData.state}</td>
+                            <td>{stateData.demographicData.vap}</td>
+                            <td>{stateData.demographicData.whiteVAP}</td>
+                            <td>{stateData.demographicData.blackVAP}</td>
+                            <td>{stateData.demographicData.asianVAP}</td>
+                            <td>{stateData.demographicData.hispanicVAP}</td>
+                            <td>{stateData.partyControl}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
