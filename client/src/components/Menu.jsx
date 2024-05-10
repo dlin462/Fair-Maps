@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
-import PieChartComponent from './PieChart';
+import stateAssemblyBarChart from './StateAssemblyBarChart';
 import LineGraphComponent from './LineGraph';
 import BarGraphComponent from './BarGraph';
 import PopulationPieChartComponent from './PopulationPieChart';
@@ -13,8 +13,8 @@ function MapMenu({
     handleStateChange,
     handleStateTable,
     handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts,
-    handleClickPieChartAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
-    showPieChartAssembly, showLineGraph, showBarGraph, showPieChartPopulation,
+    handleClickBarGraphStateAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
+    showLineGraph, showBarGraph,
     state,
   }) {
     const navigate = useNavigate();
@@ -47,9 +47,6 @@ function MapMenu({
     return (
       <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem key="homeScreen" onClick={goToHomeScreen}>
-                Go back to Select State
-            </MenuItem>
             <MenuItem key="back" onClick={handleGoBack}>
                 Go Back to Map
             </MenuItem>
@@ -95,8 +92,7 @@ function MapMenu({
                 <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
-            
-            <MenuItem key="racialDistributionAssembly" onClick={() => handleClickPieChartAssembly()}>
+            <MenuItem key="racialDistributionStateAssembly" onClick={() => handleClickBarGraphStateAssembly()}>
                 Racial Distribution Of Current State Assembly
             </MenuItem>
             <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
@@ -125,11 +121,14 @@ function MapMenu({
                 <MenuItem onClick={() => handleGinglesClickRace('Hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
+            <MenuItem key="homeScreen" onClick={goToHomeScreen}>
+                Go back to Select State
+            </MenuItem>
         </Menu>
-        <PieChartComponent showPieChartAssembly={showPieChartAssembly} state={state} />
+        {/* <stateAssemblyBarChart showPieChartAssembly={showPieChartAssembly} state={state} /> */}
         <LineGraphComponent showLineGraph={showLineGraph} state={state} />
         <BarGraphComponent showBarGraph={showBarGraph} state={state} />
-        <PopulationPieChartComponent showPieChartPopulation={showPieChartPopulation} state={state} />
+        {/* <PopulationPieChartComponent showPieChartPopulation={showPieChartPopulation} state={state} /> */}
     </div>
   );
 }

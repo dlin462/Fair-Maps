@@ -12,6 +12,7 @@ import MapMenu from './Menu';
 import StateTable from './StateTable';
 import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
+import StateAssemblyBarChart from './StateAssemblyBarChart';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -21,12 +22,12 @@ function MapComponent() {
     const [anchorE1Heatmap,setAnchorElHeatmap] = useState(null);
     const [anchorE1HeatmapDistricts, setAnchorElHeatmapDistricts] = useState(null);
     const [anchorE1HeatmapPrecincts, setAnchorElHeatmapPrecincts] = useState(null);
-    const [showPieChartAssembly, setShowPieChartAssembly] = useState(false);
     const [showPieChartPopulation, setShowPieChartPopulation] = useState(false);
     const [showLineGraph, setShowLineGraph] = useState(false);
     const [showMap, setShowMap] = useState(true);
     const [showBarGraph, setShowBarGraph] = useState(false);
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
+    const [showBarGraphStateAssembly, setShowBarGraphStateAssembly] = useState(false);
     const [ethnicity, setEthnicity] = useState(null);
     const [legend, setLegend] = useState(null);
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
@@ -68,13 +69,19 @@ function MapComponent() {
 
     const handleStateTable = () => {
         setShowStateAssemblyTable(!showStateAssemblyTable);
+        setShowBarGraphStateAssembly(false);
         handleClose();
     };
+
+    const handleClickBarGraphStateAssembly = () => {
+        setShowBarGraphStateAssembly(!showBarGraphStateAssembly);
+        setShowStateAssemblyTable(false);
+        handleClose();
+    }
 
     const handleNavigate = (path) => {
         handleClose();
         navigate(path);
-        setShowPieChartAssembly(false);
         setShowPieChartPopulation(false);
         setShowLineGraph(false);
         setShowBarGraph(false);
@@ -91,24 +98,25 @@ function MapComponent() {
     }
 
     const handleChartDisplay = (showPieChartAssembly, showPieChartPopulation, showLineGraph, showBarGraph) => {
-        setShowPieChartAssembly(showPieChartAssembly);
         setShowPieChartPopulation(showPieChartPopulation);
         setShowLineGraph(showLineGraph);
         setShowBarGraph(showBarGraph);
-        setShowMap(!(showPieChartAssembly || showPieChartPopulation || showLineGraph || showBarGraph));
+        setShowMap(!( showPieChartPopulation || showLineGraph || showBarGraph));
         setAnchorEl(false);
         setAnchorElHeatmap(false);
     }
 
     const handleGoBack = () => {
+        setShowStateAssemblyTable(false);
+        setShowBarGraphStateAssembly(false);
         handleChartDisplay(false, false, false, false);
         setEthnicity(null);
     }
 
-    const handleClickPieChartAssembly = () => {
-        setLegend(null);
-        handleChartDisplay(true, false, false, false);
-    };
+    // const handleClickPieChartAssembly = () => {
+    //     setLegend(null);
+    //     handleChartDisplay(true, false, false, false);
+    // };
 
     const handleClickPieChartPopulation = () => {
         setLegend(null);
@@ -319,12 +327,12 @@ function MapComponent() {
         };
         fetchData();
         return () => map.remove();
-    }, [state, showMap, ethnicity, showStateAssemblyTable, precinctHeatmap, stateAssemblyTableRowClicked]);
+    }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked]);
 
     return (
         <div>
             <Header state={state} ethnicity={ethnicity} handleClick={handleClick} />
-            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showStateAssemblyTable ? '50%' : '100%', float: 'left', display: 'flex'}}>
+            <div ref={mapContainerRef} className="fullscreen-map" style={{ width: showBarGraphStateAssembly ? '50%' : (showStateAssemblyTable ? '50%' : '100%'), float: 'left', display: 'flex'}}>
                 <div style={{ position: 'absolute', zIndex: 1000, width: '100%' }}>
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
@@ -336,8 +344,8 @@ function MapComponent() {
                         handleStateTable={handleStateTable}
                         handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
                         handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
-                        handleClickPieChartAssembly={handleClickPieChartAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
-                        showPieChartAssembly={showPieChartAssembly} showLineGraph={showLineGraph} showBarGraph={showBarGraph} showPieChartPopulation={showPieChartPopulation}
+                        handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
+                        showLineGraph={showLineGraph} showBarGraph={showBarGraph} showPieChartPopulation={showPieChartPopulation}
                         state={state}
                     />
 
@@ -347,6 +355,11 @@ function MapComponent() {
                 <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000' }}>
                     <StateTable state={state}/>
                     <StateAssemblyTable state={state} handleDistrictClick={handleDistrictClick}/>
+                </div>
+            )}
+            {showBarGraphStateAssembly && (
+                <div className="state-assembly-bar-graph" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000' }}>
+                    <StateAssemblyBarChart state={state}/>
                 </div>
             )}
         </div>

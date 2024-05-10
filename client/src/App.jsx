@@ -12,7 +12,6 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/map/:state" element={<MapComponent />} />
         <Route path="gingles/scatterplot/:state/:race" element={<GinglesPlot/>} />
-        {/* <Route path="/gingles" component={<GinglesPlot />} /> */}
       </Routes>
     </Router>
   );
