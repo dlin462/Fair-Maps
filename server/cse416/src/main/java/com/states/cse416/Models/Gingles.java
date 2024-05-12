@@ -19,14 +19,9 @@ public class Gingles {
     private StateName state;
     private Race race;
     private String electionType;
-    private double coefficientRep;
-    private double coefficientDem;
-    private double constantRep;
-    private double constantDem;
-    private double rootOrderRep;
-    private double rootOrderDem;
     private double[] fitLineRep;
     private double[] fitLineDem;
+    private double[] xFitData;
     private double[] xData;
     private double[] yDataRep;
     private double[] yDataDem;
