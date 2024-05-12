@@ -341,7 +341,15 @@ function MapComponent() {
         };
         fetchData();
         return () => map.remove();
-    }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked]);
+    }, [state,
+        showMap,
+        ethnicity, 
+        showStateAssemblyTable, 
+        showBarGraphStateAssembly, 
+        precinctHeatmap, 
+        stateAssemblyTableRowClicked,
+        showEcologicalInference,
+    ]);
 
     return (
         <div>

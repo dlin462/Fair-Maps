@@ -26,24 +26,24 @@ function StateTable({ state }) {
                     <thead>
                         <tr>
                             <th>State</th>
-                            <th>TotalP</th>
-                            <th>WhiteP</th>
-                            <th>BlackP</th>
-                            <th>AsianP</th>
-                            <th>HispP</th>
+                            <th>Total</th>
+                            <th>White</th>
+                            <th>Black</th>
+                            <th>Asian</th>
+                            <th>Hispanic</th>
                             <th>Party Control</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>{stateData.state}</td>
-                            <td>{stateData.demographicData.vap}</td>
-                            <td>{stateData.demographicData.whiteVAP}</td>
-                            <td>{stateData.demographicData.blackVAP}</td>
-                            <td>{stateData.demographicData.asianVAP}</td>
-                            <td>{stateData.demographicData.hispanicVAP}</td>
-                            <td>{stateData.partyControl}</td>
-                        </tr>
+                    <tr>
+                        <td>{stateData.state}</td>
+                        <td>{stateData.demographicData.vap.toLocaleString()}</td>
+                        <td>{stateData.demographicData.whiteVAP.toLocaleString()}</td>
+                        <td>{stateData.demographicData.blackVAP.toLocaleString()}</td>
+                        <td>{stateData.demographicData.asianVAP.toLocaleString()}</td>
+                        <td>{stateData.demographicData.hispanicVAP.toLocaleString()}</td>
+                        <td>{stateData.partyControl}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

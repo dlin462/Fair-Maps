@@ -7,7 +7,7 @@ const Header = ({ state, ethnicity, handleClick }) => {
         <div style={{ height: '60px', backgroundColor: 'black', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <div style={{ marginLeft: '20px', color:'white', fontSize: '40px', fontWeight: 'bold' }}>{state === 'Nevada' ? 'NEVADA' : 'MISSISSIPPI'}</div>
             <div className="legend">
-                {ethnicity && <HeatmapLegend />}
+                {ethnicity && <HeatmapLegend ethnicity = {ethnicity}/>}
             </div>
             <div style={{ marginRight: '0px' }}>
                 {/* <Button variant="contained" style={{backgroundColor: 'red', color: 'white'}} onClick={handleClick}>

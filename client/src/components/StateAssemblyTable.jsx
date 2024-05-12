@@ -3,11 +3,17 @@ import axios from 'axios';
 
 function StateAssemblyTable({ state, handleDistrictClick }) {
     const [stateAssemblyData, setStateAssemblyData] = useState([]);
+    
     useEffect(() => {
         axios.get(`http://localhost:8080/stateAssemblyTable/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
-                setStateAssemblyData(response.data);
+                const sortedData = response.data.sort((a, b) => {
+                    const numberA = extractNumber(a.office);
+                    const numberB = extractNumber(b.office);
+                    return numberA - numberB;
+                });
+                setStateAssemblyData(sortedData);
             })
             .catch(error => {
                 console.error('Error fetching stateAssembly data:', error);
@@ -18,6 +24,11 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
 
     const handleRowClick = (district) => {
         handleDistrictClick(district);
+    };
+
+    const extractNumber = (office) => {
+        const lastNumber = office.match(/\d+$/);
+        return lastNumber ? parseInt(lastNumber[0]) : null;
     };
 
     return (
@@ -31,25 +42,21 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
                             <th>Party</th>
                             <th>Race/Ethnicity</th>
                             <th>Vote Margin</th>
-                            <th>Date Assumed Office</th>
                             <th>Photo</th>
                         </tr>
                     </thead>
                     <tbody>
                     {stateAssemblyData.map(stateInfo => (
-                        (
-                            <tr key={stateInfo.id.timestamp} onClick={() => handleRowClick(stateInfo.office.slice(-1))}>
-                                <td>{stateInfo.office}</td>
-                                <td>{stateInfo.name}</td>
-                                <td>{stateInfo.party}</td>
-                                <td>{stateInfo.ethnicity}</td>
-                                <td>{stateInfo.voteMargin}%</td>
-                                <td>{stateInfo.dateAssumedOffice}</td>
-                                <td>
-                                    <img src={stateInfo.photo} alt="District Representative" style={{ width: '60px', height: '60px' }} />
-                                </td>
-                            </tr>
-                        )
+                        <tr key={stateInfo.id.timestamp} onClick={() => handleRowClick(extractNumber(stateInfo.office))}>
+                            <td>{extractNumber(stateInfo.office)}</td>
+                            <td>{stateInfo.name}</td>
+                            <td>{stateInfo.party}</td>
+                            <td>{stateInfo.ethnicity}</td>
+                            <td>{stateInfo.voteMargin}%</td>
+                            <td>
+                                <img src={stateInfo.photo} alt="District Representative" style={{ width: '60px', height: '60px', objectFit: 'cover' }} />
+                            </td>
+                        </tr>
                     ))}
                     </tbody>
                 </table>

@@ -33,7 +33,7 @@ const ScatterPlot = () => {
                                 opacity: 0.7,
                                 mode: 'markers',
                                 type: 'scatter',
-                                name: `${data.race} ()`,
+                                name: `Democratic`,
                                 marker: { 
                                     color: 'lightskyblue',
                                     line: { 
@@ -48,7 +48,7 @@ const ScatterPlot = () => {
                                 opacity: 0.7,
                                 mode: 'markers',
                                 type: 'scatter',
-                                name: `${data.race} ()`,
+                                name: `Republican`,
                                 marker: { 
                                     color: 'indianred',
                                     line: { 
@@ -62,7 +62,7 @@ const ScatterPlot = () => {
                                 y: data.fitLineDem,
                                 mode: 'lines',
                                 type: 'scatter',
-                                name: `${data.race} (Democrat Fit Line)`,
+                                name: `${data.race} Democrat`,
                                 line: { color: 'blue' }
                             },
                             {
@@ -70,12 +70,12 @@ const ScatterPlot = () => {
                                 y: data.fitLineRep,
                                 mode: 'lines',
                                 type: 'scatter',
-                                name: `${data.race} (Republican Fit Line)`,
+                                name: `${data.race} Republican`,
                                 line: { color: 'red' }
                             }
                         ]}
                         layout={{
-                            title: `${data.race} - Gingles Data`,
+                            title: `${data.race} - Presidential Data`,
                             xaxis: { title: `Percent ${data.race}` },
                             yaxis: { title: 'Vote Share' },
                             hovermode: 'closest'

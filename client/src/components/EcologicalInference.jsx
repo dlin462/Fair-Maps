@@ -59,8 +59,8 @@ const EcologicalInference = ({ state }) => {
                 ]}
                 layout={{
                     width: 920, 
-                    height: 700, 
-                    title: 'Ecological Inference Summary',
+                    height: 900, 
+                    title: 'Probability of an Ethnic Group for a Specific Candidate',
                     xaxis: {
                         range: [0, 1
                         ],
@@ -68,7 +68,7 @@ const EcologicalInference = ({ state }) => {
                     },
                     yaxis: {
                         range: [0, 300],
-                        title: 'probability',
+                        title: 'count',
                     },
                     barmode: 'overlay',
                     bargap: 0.05,
