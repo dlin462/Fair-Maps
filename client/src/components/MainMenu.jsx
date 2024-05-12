@@ -1,26 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+
 import { Menu, MenuItem } from '@mui/material';
-import LineGraphComponent from './LineGraph';
-import BarGraphComponent from './BarGraph';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function MapMenu({
-    anchorEl, anchorE1HeatmapDistricts, anchorE1HeatmapPrecincts, anchorE1Gingles,
-    handleClose, handleCloseHeatMap, handleCloseGingles,
-    handleGoBack,
-    handleStateChange,
-    handleStateTable,
-    handleGinglesClickRace,
-    handleClickGingles,
-    handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts,
-    handleClickBarGraphStateAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
-    handleClickEcologicalInference,
-    showLineGraph, showBarGraph,
-    state,
+    anchorEl, anchorE1HeatmapDistricts, anchorE1HeatmapPrecincts, anchorE1Gingles, handleClose, handleCloseHeatMap, handleCloseGingles, handleGoBack, handleStateChange, handleStateTable, handleGinglesClickRace, handleClickGingles, handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts, handleClickBarGraphStateAssembly, handleClickEcologicalInference, state,
   }) {
 
     const navigate = useNavigate();
-
     const goToHomeScreen = () => {
         navigate('/');
     };
@@ -49,10 +35,7 @@ function MapMenu({
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('white')}>White</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('black')}>Black</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('asian')}>Asian</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('hispanic')}>Hispanic</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickDistricts('white')}>White</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickDistricts('black')}>Black</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickDistricts('asian')}>Asian</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickDistricts('hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
 
@@ -67,10 +50,7 @@ function MapMenu({
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('white')}>White</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('black')}>Black</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('asian')}>Asian</MenuItem>
-                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('hispanic')}>Hispanic</MenuItem>
+                <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('white')}>White</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('black')}>Black</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('asian')}>Asian</MenuItem> <MenuItem onClick={() => handleEthnicityOptionClickPrecincts('hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
             <MenuItem key="racialDistributionStateAssembly" onClick={() => handleClickBarGraphStateAssembly()}>
@@ -79,15 +59,6 @@ function MapMenu({
             <MenuItem key="ecologicalInference" onClick={() => handleClickEcologicalInference()}>
                 Ecological Inference
             </MenuItem>
-            <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
-                Racial Distribution Of Current State Population
-            </MenuItem>
-            {/* <MenuItem key="voterTurnout" onClick={() => handleClickLineGraph()}>
-                Voter Turnout
-            </MenuItem>
-            <MenuItem key="racialGap" onClick={() => handleClickBarGraph()}>
-                Racial Gap Assessment
-            </MenuItem> */}
             <MenuItem key="gingles" onClick={handleClickGingles}>
                 Gingles
                 <Menu anchorEl={anchorE1Gingles} open={Boolean(anchorE1Gingles)} onClose={handleCloseGingles} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
@@ -99,21 +70,13 @@ function MapMenu({
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <MenuItem onClick={() => handleGinglesClickRace('White')}>White</MenuItem>
-                <MenuItem onClick={() => handleGinglesClickRace('Black')}>Black</MenuItem>
-                <MenuItem onClick={() => handleGinglesClickRace('Asian')}>Asian</MenuItem>
-                <MenuItem onClick={() => handleGinglesClickRace('Hispanic')}>Hispanic</MenuItem>
+                <MenuItem onClick={() => handleGinglesClickRace('White')}>White</MenuItem> <MenuItem onClick={() => handleGinglesClickRace('Black')}>Black</MenuItem> <MenuItem onClick={() => handleGinglesClickRace('Asian')}>Asian</MenuItem> <MenuItem onClick={() => handleGinglesClickRace('Hispanic')}>Hispanic</MenuItem>
                 </Menu>
             </MenuItem>
-
             <MenuItem key="homeScreen" onClick={goToHomeScreen}>
                 Go back to Select State
             </MenuItem>
         </Menu>
-        {/* <stateAssemblyBarChart showPieChartAssembly={showPieChartAssembly} state={state} /> */}
-        <LineGraphComponent showLineGraph={showLineGraph} state={state} />
-        <BarGraphComponent showBarGraph={showBarGraph} state={state} />
-        {/* <PopulationPieChartComponent showPieChartPopulation={showPieChartPopulation} state={state} /> */}
     </div>
   );
 }

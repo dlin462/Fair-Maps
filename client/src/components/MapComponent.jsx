@@ -19,22 +19,18 @@ import ScatterPlot from './GinglesPlot';
 function MapComponent() {
     const mapContainerRef = useRef(null);
     const navigate = useNavigate();
-    const { state } = useParams(); // Get the state parameter from the URL
+    const { state } = useParams();
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorE1Heatmap,setAnchorElHeatmap] = useState(null);
     const [anchorE1HeatmapDistricts, setAnchorElHeatmapDistricts] = useState(null);
     const [anchorE1HeatmapPrecincts, setAnchorElHeatmapPrecincts] = useState(null);
     const [anchorE1Gingles, setAnchorE1Gingles] = useState(null);
-    const [showPieChartPopulation, setShowPieChartPopulation] = useState(false);
-    const [showLineGraph, setShowLineGraph] = useState(false);
     const [showMap, setShowMap] = useState(true);
-    const [showBarGraph, setShowBarGraph] = useState(false);
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
     const [showBarGraphStateAssembly, setShowBarGraphStateAssembly] = useState(false);
     const [showEcologicalInference, setShowEcologicalInference] = useState(false);
     const [showGingles, setShowGingles] = useState(false);
     const [ethnicity, setEthnicity] = useState(null);
-    const [legend, setLegend] = useState(null);
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
     const [stateAssemblyTableRowClicked, setStateAssemblyTableRowClicked] = useState(null);
 
@@ -101,9 +97,6 @@ function MapComponent() {
         setShowBarGraphStateAssembly(false);
         handleClose();
         navigate(path);
-        setShowPieChartPopulation(false);
-        setShowLineGraph(false);
-        setShowBarGraph(false);
         setShowMap(true);
         setShowEcologicalInference(false);
     };
@@ -117,10 +110,7 @@ function MapComponent() {
         }
     }
 
-    const handleChartDisplay = (showPieChartAssembly, showPieChartPopulation, showLineGraph, showBarGraph) => {
-        setShowPieChartPopulation(showPieChartPopulation);
-        setShowLineGraph(showLineGraph);
-        setShowBarGraph(showBarGraph);
+    const handleChartDisplay = (showPieChartPopulation, showLineGraph, showBarGraph) => {
         setShowMap(!( showPieChartPopulation || showLineGraph || showBarGraph));
         setAnchorEl(false);
         setAnchorElHeatmap(false);
@@ -134,23 +124,8 @@ function MapComponent() {
         setShowGingles(false);
     }
 
-    const handleClickPieChartPopulation = () => {
-        setLegend(null);
-        handleChartDisplay(false, true, false, false);
-    }
-
-    const handleClickLineGraph = () => {
-        setLegend(null);
-        handleChartDisplay(false, false, true, false);
-    }
-
-    const handleClickBarGraph = () => {
-        setLegend(null);
-        handleChartDisplay(false, false, false, true);
-    }
-
     const handleClickGingles = (event) => {
-        //event.preventDefault();
+        event.preventDefault();
         setAnchorE1Gingles(event.currentTarget);
         if (anchorE1Gingles) {
             setAnchorE1Gingles(null);
@@ -360,15 +335,7 @@ function MapComponent() {
         };
         fetchData();
         return () => map.remove();
-    }, [state,
-        showMap,
-        ethnicity, 
-        showStateAssemblyTable, 
-        showBarGraphStateAssembly, 
-        precinctHeatmap, 
-        stateAssemblyTableRowClicked,
-        showEcologicalInference,
-        showGingles
+    }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked, showEcologicalInference, showGingles
     ]);
 
     return (
@@ -387,19 +354,8 @@ function MapComponent() {
                     </div>
                     <MapMenu
                         anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts} anchorE1Gingles={anchorE1Gingles}
-                        handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap}
-                        handleGoBack={handleGoBack}
-                        handleStateChange={handleStateChange}
-                        handleStateTable={handleStateTable}
-                        handleClickGingles={handleClickGingles}
-                        handleCloseGingle={handleCloseGingles}
-                        handleGinglesClickRace={handleGinglesClickRace}
-                        handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
-                        handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
-                        handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
-                        showLineGraph={showLineGraph} showBarGraph={showBarGraph} showPieChartPopulation={showPieChartPopulation}
-                        state={state}
-                        handleClickEcologicalInference={handleClickEcologicalInference}
+                        state={state} handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap} handleGoBack={handleGoBack} handleStateChange={handleStateChange} handleStateTable={handleStateTable} handleClickGingles={handleClickGingles} handleCloseGingle={handleCloseGingles} handleGinglesClickRace={handleGinglesClickRace}
+                        handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts} handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts} handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickEcologicalInference={handleClickEcologicalInference}
                     />
 
                 </div>

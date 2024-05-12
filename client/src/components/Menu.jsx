@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, MenuItem } from '@mui/material';
-import stateAssemblyBarChart from './StateAssemblyBarChart';
 import LineGraphComponent from './LineGraph';
 import BarGraphComponent from './BarGraph';
-import PopulationPieChartComponent from './PopulationPieChart';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function MapMenu({
@@ -125,10 +123,6 @@ function MapMenu({
                 Go back to Select State
             </MenuItem>
         </Menu>
-        {/* <stateAssemblyBarChart showPieChartAssembly={showPieChartAssembly} state={state} /> */}
-        <LineGraphComponent showLineGraph={showLineGraph} state={state} />
-        <BarGraphComponent showBarGraph={showBarGraph} state={state} />
-        {/* <PopulationPieChartComponent showPieChartPopulation={showPieChartPopulation} state={state} /> */}
     </div>
   );
 }
