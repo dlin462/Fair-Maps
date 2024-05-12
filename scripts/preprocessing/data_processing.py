@@ -192,25 +192,3 @@ if __name__ == "__main__":
     # State Assembly Data
     # Precinct Data - Geometry, Vote Results + % (How many elections?), Demographics + %
     # District Data - Geometry, Vote Results, Representative
-    # 
-    # nv_elections_precinct = pd.DataFrame()
-    # pres_election_dict = nv_elections_precinct[['elec', 'elec']].to_dict(orient='records')
-    # us_senate_dict = nv_elections_precinct[['elec', 'elec']].to_dict(orient='records')
-    # guber_dict = nv_elections_precinct[['elec', 'elec']].to_dict(orient='records')
-
-    # nv_precinct_data = gpd.read_file('NV Final/nv_precinct_final_data.shp')
-    # nv_county = gpd.read_file('tl_2022_06057_roads/tl_2022_06057_roads.shp')
-    # pprint(nv_county)
-    # pprint(nv_precinct_data.isna().sum())
-    # data = find_precinct_neighbors(nv_precinct_data)
-    # print(data.neighbors)
-
-    # find_precinct_neighbors
-    # maup.doctor(nv_block_df)
-    # print_spacer()
-    # maup.doctor(nv_pres_results_prec)
-    # print_spacer()
-    # maup.doctor(nv_atg_gov_vote_2022)
-
-    # blocks_to_pres_assignments = combine_election_results(nv_block_df, nv_pres_results_prec)
-    # blocks_to_atg_gov_assignments = combine_election_results(nv_block_df, nv_atg_gov_results_prec)

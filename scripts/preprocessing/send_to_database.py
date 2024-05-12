@@ -5,7 +5,8 @@ from pymongo import MongoClient
 from shapely.wkt import dumps
 from data_processing import *
 from gingles_regression import *
-import multiprocessing as mp
+from ecologicalInference import *
+from multiprocessing import Pool
 from pprint import pprint
 import geopandas as gpd
 import pandas as pd
@@ -62,6 +63,7 @@ def df_to_dict(main_dataframe: pd.DataFrame,
     """Convert a GeoDataFrame to a dictionary of records"""
     final_dict = main_dataframe.to_dict(orient='records')
     for name, docs in dict_items.items():
+        print('Are we here?')
         for final_doc, nested_doc in zip(final_dict, docs):
             new_doc = {}
             if 'Election' in name:
@@ -126,6 +128,8 @@ if __name__ == '__main__':
 
     ms_district_df = pd.read_csv('MS/ms_district_final_data.csv')
     ms_precinct_df = pd.read_csv('MS/ms_precinct_final_data.csv')
+    pprint(nv_precinct_df.columns)
+    pprint(ms_precinct_df.columns)
 
     ### Nevada Districts Data ### COMPLETED
     # pres_dict, uss_dict = aggr_elections_to_dict(nv_district_df)
@@ -166,8 +170,10 @@ if __name__ == '__main__':
 
 
     ### Nevada Ecological Inference ###
-    # send_many(collection_name='eco_infer', data=ms_eco_infer, database=db)
-
+    nv_ecological_inference_df = run_ecological_inference(nv_precinct_df)
+    # nv_eco_infer_dict = df_to_dict(nv_ecological_inference_df, {})
+    nv_eco_infer_dict = nv_ecological_inference_df.to_dict(orient='records')
+    send_many(collection_name='eco_infer', data=nv_eco_infer_dict, database=db)
 
 
 
