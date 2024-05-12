@@ -4,11 +4,11 @@ import Plot from 'react-plotly.js';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const EcologicalInference = ({ state }) => {
+const EcologicalInference = ({ state, ethnicity }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/ecoInference`)
+        axios.get(`http://localhost:8080/ecoInference/${state}/${ethnicity}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setData(response.data);
@@ -59,7 +59,7 @@ const EcologicalInference = ({ state }) => {
                 ]}
                 layout={{
                     width: 920, 
-                    height: 900, 
+                    height: 300, 
                     title: 'Probability of an Ethnic Group for a Specific Candidate',
                     xaxis: {
                         range: [0, 1

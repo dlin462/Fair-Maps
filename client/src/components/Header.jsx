@@ -15,7 +15,7 @@ const Header = ({ state, ethnicity, handleClick }) => {
                 </Button> */}
             </div>
             <div style={{ marginRight: '10px' }}>
-                <Button variant="contained" style={{backgroundColor: 'blue', color: 'white'}} onClick={handleClick}>
+                <Button variant="contained" style={{backgroundColor: '#1976D2', color: 'white'}} onClick={handleClick}>
                     Main Menu
                 </Button>
             </div>

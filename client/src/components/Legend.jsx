@@ -6,7 +6,7 @@ const HeatmapLegend = ({ethnicity}) => {
     const legendItems = ['0-12%', '12-25%', '25-37%', '37-50%', '50-100%']; 
     const legendContent = (
         <div className="legend-container" style={{ display: 'flex', alignItems: 'center' }}>
-            <div  className="ethnicity" style={{ color:'white', fontSize: '25px', fontWeight: 'bold', marginRight:'40px' }}>Heatmap For {ethnicity.charAt(0).toUpperCase() + ethnicity.slice(1)} Population</div>
+            <div  className="ethnicity" style={{ color:'white', fontSize: '25px', fontWeight: 'bold', marginRight:'40px' }}>{ethnicity.charAt(0).toUpperCase() + ethnicity.slice(1)} Population</div>
             {legendItems.map((item, index) => (
                 <div key={index} className="legend-item" style={{ display: 'flex', alignItems: 'center', marginRight: '30px' }}>
                     <span className="legend-color-box" style={{ backgroundColor: colorScale((index + 1) * 0.125).hex(), width: '20px', height: '20px', display: 'inline-block', marginRight: '10px' }}></span>

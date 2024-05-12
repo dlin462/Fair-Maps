@@ -373,7 +373,7 @@ function MapComponent() {
             )}
             {showEcologicalInference && (
                 <div className="ecological-inference" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
-                    <EcologicalInference state={state}/>
+                    <EcologicalInference state={state} ethnicity={ethnicity}/>
                 </div>
             )}
             {showGingles && (

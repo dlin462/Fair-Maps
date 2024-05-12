@@ -12,7 +12,6 @@ function MapMenu({
     handleStateTable,
     handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts,
     handleClickBarGraphStateAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
-    showLineGraph, showBarGraph,
     state,
   }) {
     const navigate = useNavigate();

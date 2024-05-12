@@ -1,10 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ScatterPlot = ({state, ethnicity}) => {
-
     const [ginglesData, setGinglesData] = useState(null);
 
     useEffect(() => {
@@ -17,15 +17,16 @@ const ScatterPlot = ({state, ethnicity}) => {
             });
     }, [state, ethnicity]);
 
+    console.log(ginglesData);
+
     return (
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
             {ginglesData && ginglesData.map((data, index) => (
-                console.log(data),
-                <div key={index} style={{ flex: '1' }}>
+                <div key={index} style={{ marginBottom: '40px' }}>
                     <Plot
                         data={[
                             {
-                                x: data.xdata,
+                                x: data.xFitData,
                                 y: data.ydataDem,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -40,7 +41,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                                  }
                             },
                             {
-                                x: data.xdata,
+                                x: data.xFitData,
                                 y: data.ydataRep,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -55,16 +56,16 @@ const ScatterPlot = ({state, ethnicity}) => {
                                  }
                             },
                             {
-                                x: data.xdata, 
-                                y: data.fitLineRep,
+                                x: data.xFitData,
+                                y: data.fitLineDem,
                                 mode: 'lines',
                                 type: 'scatter',
                                 name: `${data.race} Democrat`,
                                 line: { color: 'blue' }
                             },
                             {
-                                x: data.xdata,
-                                y: data.fitLineDem,
+                                x: data.xFitData,
+                                y: data.fitLineRep,
                                 mode: 'lines',
                                 type: 'scatter',
                                 name: `${data.race} Republican`,
@@ -72,16 +73,17 @@ const ScatterPlot = ({state, ethnicity}) => {
                             }
                         ]}
                         layout={{
-                            title: `${data.race} - Presidential Data`,
+                            title: data.electionType === 'President' ? 'Presidential Election' : 'Senate Election',
                             xaxis: { title: `Percent ${data.race}` },
                             yaxis: { title: 'Vote Share' },
                             hovermode: 'closest'
                         }}
-                        style={{ width: '100%', height: '500px' }}
+                        style={{ width: '100%', height: '400px' }}
                     />
                 </div>
             ))}
         </div>
     );
 };
+
 export default ScatterPlot;
