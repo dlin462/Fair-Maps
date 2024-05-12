@@ -5,39 +5,21 @@ import BarGraphComponent from './BarGraph';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 function MapMenu({
-    anchorEl, anchorE1HeatmapDistricts, anchorE1HeatmapPrecincts,
-    handleClose, handleCloseHeatMap,
+    anchorEl, anchorE1HeatmapDistricts, anchorE1HeatmapPrecincts, anchorE1Gingles,
+    handleClose, handleCloseHeatMap, handleCloseGingles,
     handleGoBack,
     handleStateChange,
     handleStateTable,
+    handleGinglesClickRace,
+    handleClickGingles,
     handleClickHeatMapDistricts, handleClickHeatMapPrecincts, handleEthnicityOptionClickDistricts, handleEthnicityOptionClickPrecincts,
     handleClickBarGraphStateAssembly, handleClickPieChartPopulation, handleClickLineGraph, handleClickBarGraph,
     handleClickEcologicalInference,
     showLineGraph, showBarGraph,
     state,
   }) {
+
     const navigate = useNavigate();
-
-    const [anchorE1Gingles, setAnchorE1Gingles] = useState(null);
-    const [race, setRace] = useState(null);
-
-    const handleClickGingles = (event) => {
-      //event.preventDefault();
-      setAnchorE1Gingles(event.currentTarget);
-      if (anchorE1Gingles) {
-          setAnchorE1Gingles(null);
-        }
-    };
-
-    const handleCloseGingles = () => {
-        setAnchorE1Gingles(null);
-    };
-
-    const handleGinglesClickRace = (race) => {
-        setAnchorE1Gingles(false);
-        setRace(race);
-        navigate(`/gingles/scatterplot/${state}/${race}`);
-    };
 
     const goToHomeScreen = () => {
         navigate('/');
@@ -100,13 +82,13 @@ function MapMenu({
             <MenuItem key="racialDistributionPopulation" onClick={() => handleClickPieChartPopulation()}>
                 Racial Distribution Of Current State Population
             </MenuItem>
-            <MenuItem key="voterTurnout" onClick={() => handleClickLineGraph()}>
+            {/* <MenuItem key="voterTurnout" onClick={() => handleClickLineGraph()}>
                 Voter Turnout
             </MenuItem>
             <MenuItem key="racialGap" onClick={() => handleClickBarGraph()}>
                 Racial Gap Assessment
-            </MenuItem>
-            <MenuItem key="gingles" onClick={(event) => handleClickGingles(event)}>
+            </MenuItem> */}
+            <MenuItem key="gingles" onClick={handleClickGingles}>
                 Gingles
                 <Menu anchorEl={anchorE1Gingles} open={Boolean(anchorE1Gingles)} onClose={handleCloseGingles} PaperProps={{ style: { transform: 'translateX(-385%)',  },}}
                 anchorOrigin={{

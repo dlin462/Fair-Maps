@@ -3,26 +3,23 @@ import Plot from 'react-plotly.js';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const ScatterPlot = () => {
-    const { state, race } = useParams();
-    const [ginglesData, setGinglesData] = useState([]);
+const ScatterPlot = ({state, ethnicity}) => {
+
+    const [ginglesData, setGinglesData] = useState(null);
 
     useEffect(() => {
-      axios.get(`http://localhost:8080/gingles/${state}/${race}`)
-          .then(response => {
-              setGinglesData(response.data);
-          })
-          .catch(error => {
-              console.error('Error fetching stateAssembly data:', error);
-          });
-    }, [race, state]);
-
-    // console.log(ginglesData);
-
+        axios.get(`http://localhost:8080/gingles/${state}/${ethnicity}`)
+            .then(response => {
+                setGinglesData(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching stateAssembly data:', error);
+            });
+    }, [state, ethnicity]);
 
     return (
         <div style={{ display: 'flex' }}>
-            {ginglesData.map((data, index) => (
+            {ginglesData && ginglesData.map((data, index) => (
                 console.log(data),
                 <div key={index} style={{ flex: '1' }}>
                     <Plot
@@ -58,8 +55,8 @@ const ScatterPlot = () => {
                                  }
                             },
                             {
-                                x: data.xdata,
-                                y: data.fitLineDem,
+                                x: data.xdata, 
+                                y: data.fitLineRep,
                                 mode: 'lines',
                                 type: 'scatter',
                                 name: `${data.race} Democrat`,
@@ -67,7 +64,7 @@ const ScatterPlot = () => {
                             },
                             {
                                 x: data.xdata,
-                                y: data.fitLineRep,
+                                y: data.fitLineDem,
                                 mode: 'lines',
                                 type: 'scatter',
                                 name: `${data.race} Republican`,

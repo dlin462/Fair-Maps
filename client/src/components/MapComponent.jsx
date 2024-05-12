@@ -14,6 +14,7 @@ import StateAssemblyTable from './StateAssemblyTable';
 import wellknown from 'wellknown';
 import StateAssemblyBarChart from './StateAssemblyBarChart';
 import EcologicalInference from './EcologicalInference';
+import ScatterPlot from './GinglesPlot';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -23,6 +24,7 @@ function MapComponent() {
     const [anchorE1Heatmap,setAnchorElHeatmap] = useState(null);
     const [anchorE1HeatmapDistricts, setAnchorElHeatmapDistricts] = useState(null);
     const [anchorE1HeatmapPrecincts, setAnchorElHeatmapPrecincts] = useState(null);
+    const [anchorE1Gingles, setAnchorE1Gingles] = useState(null);
     const [showPieChartPopulation, setShowPieChartPopulation] = useState(false);
     const [showLineGraph, setShowLineGraph] = useState(false);
     const [showMap, setShowMap] = useState(true);
@@ -30,6 +32,7 @@ function MapComponent() {
     const [showStateAssemblyTable, setShowStateAssemblyTable] = useState(false);
     const [showBarGraphStateAssembly, setShowBarGraphStateAssembly] = useState(false);
     const [showEcologicalInference, setShowEcologicalInference] = useState(false);
+    const [showGingles, setShowGingles] = useState(false);
     const [ethnicity, setEthnicity] = useState(null);
     const [legend, setLegend] = useState(null);
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
@@ -73,6 +76,7 @@ function MapComponent() {
         setShowStateAssemblyTable(!showStateAssemblyTable);
         setShowBarGraphStateAssembly(false);
         setShowEcologicalInference(false);
+        setShowGingles(false);
         handleClose();
     };
 
@@ -80,6 +84,7 @@ function MapComponent() {
         setShowBarGraphStateAssembly(!showBarGraphStateAssembly);
         setShowStateAssemblyTable(false);
         setShowEcologicalInference(false);
+        setShowGingles(false);
         handleClose();
     }
 
@@ -88,6 +93,7 @@ function MapComponent() {
         setShowStateAssemblyTable(false);
         setShowEcologicalInference(!showEcologicalInference);
         handleClose();
+        setShowGingles(false);
     }
 
     const handleNavigate = (path) => {
@@ -125,12 +131,8 @@ function MapComponent() {
         setShowBarGraphStateAssembly(false);
         handleChartDisplay(false, false, false, false);
         setEthnicity(null);
+        setShowGingles(false);
     }
-
-    // const handleClickPieChartAssembly = () => {
-    //     setLegend(null);
-    //     handleChartDisplay(true, false, false, false);
-    // };
 
     const handleClickPieChartPopulation = () => {
         setLegend(null);
@@ -147,22 +149,39 @@ function MapComponent() {
         handleChartDisplay(false, false, false, true);
     }
 
+    const handleClickGingles = (event) => {
+        //event.preventDefault();
+        setAnchorE1Gingles(event.currentTarget);
+        if (anchorE1Gingles) {
+            setAnchorE1Gingles(null);
+          }
+      };
+  
+    const handleCloseGingles = () => {
+        setAnchorE1Gingles(null);
+    };
+
+    const handleGinglesClickRace = (ethnicity) => {
+        setAnchorE1Gingles(false);
+        setEthnicity(ethnicity);
+        setShowGingles(true);
+    }
+
     const handleEthnicityOptionClickDistricts = (ethnicity) => {
         setAnchorElHeatmapDistricts(false);
-        console.log(ethnicity);
         setEthnicity(ethnicity);
         setPrecinctHeatMap(false);
+        setShowGingles(false);
     };
 
     const handleEthnicityOptionClickPrecincts = (ethnicity) => {
         setAnchorElHeatmapPrecincts(false);
-        console.log(ethnicity);
         setEthnicity(ethnicity);
         setPrecinctHeatMap(true);
+        setShowGingles(false);
     };
 
     const handleDistrictClick = (district) => {
-        console.log('Clicked district:', district);
         setStateAssemblyTableRowClicked(district);
     };
 
@@ -349,6 +368,7 @@ function MapComponent() {
         precinctHeatmap, 
         stateAssemblyTableRowClicked,
         showEcologicalInference,
+        showGingles
     ]);
 
     return (
@@ -357,6 +377,7 @@ function MapComponent() {
             <div ref={mapContainerRef} className="fullscreen-map" style={{ 
                 width: showBarGraphStateAssembly ? '50%' : 
                     showStateAssemblyTable ? '50%' : 
+                    showGingles ? '50%' : 
                     showEcologicalInference ? '50%' : '100%',
                 float: 'left',
                 display: 'flex'
@@ -365,11 +386,14 @@ function MapComponent() {
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
                     <MapMenu
-                        anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts}
+                        anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts} anchorE1Gingles={anchorE1Gingles}
                         handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap}
                         handleGoBack={handleGoBack}
                         handleStateChange={handleStateChange}
                         handleStateTable={handleStateTable}
+                        handleClickGingles={handleClickGingles}
+                        handleCloseGingle={handleCloseGingles}
+                        handleGinglesClickRace={handleGinglesClickRace}
                         handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts}
                         handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts}
                         handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickPieChartPopulation={handleClickPieChartPopulation} handleClickLineGraph={handleClickLineGraph} handleClickBarGraph={handleClickBarGraph}
@@ -394,6 +418,11 @@ function MapComponent() {
             {showEcologicalInference && (
                 <div className="ecological-inference" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
                     <EcologicalInference state={state}/>
+                </div>
+            )}
+            {showGingles && (
+                <div className="gingles" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                    <ScatterPlot state={state} ethnicity={ethnicity}/>
                 </div>
             )}
         </div>
