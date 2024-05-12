@@ -2,6 +2,7 @@ package com.states.cse416.Controller;
 
 import com.states.cse416.Models.EcologicalInference;
 import com.states.cse416.Models.Gingles;
+import com.states.cse416.Models.enums.ElectionType;
 import com.states.cse416.Models.enums.Race;
 import com.states.cse416.Models.enums.StateName;
 import com.states.cse416.Service.EcologicalInferenceService;
@@ -33,9 +34,20 @@ public class AnalysisController {
         return new ResponseEntity<>(ginglesService.getGinglesByStateAndRace(state, race), HttpStatus.OK);
     }
 
-    @GetMapping("/ecoInference")
-    public ResponseEntity<List<EcologicalInference>> getEcoInference() {
-        return new ResponseEntity<>(ecologicalInferenceService.getEcologicalInference(), HttpStatus.OK);
+    @GetMapping("/ecoInference/{state}/{race}")
+    public ResponseEntity<List<EcologicalInference>> getEcoInferences(@PathVariable StateName state, @PathVariable Race race) {
+        return new ResponseEntity<>(ecologicalInferenceService.getEcologicalInferenceByState(state, race), HttpStatus.OK);
+    }
+
+    @GetMapping("/ecoInference/{state}/{race}/{election}")
+    public ResponseEntity<List<EcologicalInference>> getEcoInferences(@PathVariable StateName state,
+                                                                      @PathVariable Race race,
+                                                                      @PathVariable ElectionType election) {
+        return new ResponseEntity<>(
+                ecologicalInferenceService.
+                        getEcologicalInferenceByElectionAndRace(state, race, election),
+                HttpStatus.OK
+        );
     }
 
 //    @GetMapping("/{state}/barChart")

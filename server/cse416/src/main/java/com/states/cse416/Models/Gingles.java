@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Gingles {
     @Id
     private ObjectId id;
+    private String[] uniqueId;
     private StateName state;
     private Race race;
     private String electionType;
