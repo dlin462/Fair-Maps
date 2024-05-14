@@ -204,7 +204,7 @@ const EcologicalInference = ({ state, election, ethnicity }) => {
                         title: `Polarization KDE For ${data[1]?.candidate || 'Candidate'}`,
                         xaxis: {
                             range: [0, 1],
-                            title: `(${ethnicity} - Other) Support For ${data[0]?.candidate || 'Candidate'}`,
+                            title: `(${ethnicity} - Other) Support For ${data[1]?.candidate || 'Candidate'}`,
                         },
                         yaxis: {
                             range: [0, 300],

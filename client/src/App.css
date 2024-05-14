@@ -70,6 +70,20 @@ tbody tr:hover {
   background-color: #ddd;
 }
 
+.menuItem {
+  padding: 8px 16px; /* Adjust padding as needed */
+  color: #333; /* Change text color */
+}
+
+.menuItem:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}
+
+.menuItem.selected {
+  background-color: #007bff; /* Change background color of selected item */
+  color: #fff; /* Change text color of selected item */
+}
+
 
 /* .fullscreen-map {
   height: 100vh;

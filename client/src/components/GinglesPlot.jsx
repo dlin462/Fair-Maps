@@ -74,9 +74,9 @@ const ScatterPlot = ({state, ethnicity}) => {
                             }
                         ]}
                         layout={{
-                            title: data.electionType === 'President' ? 'Presidential Election' : 'Senate Election',
+                            title: `${data.race} - Gingles Data`,
                             xaxis: { title: `Percent ${data.race}`, range: [0, 1] },
-                            yaxis: { title: 'Vote Share', range: [0, 1] },
+                            yaxis: { title: 'Vote Share' },
                             hovermode: 'closest'
                         }}
                         style={{ width: '100%', height: '400px' }}
@@ -88,3 +88,5 @@ const ScatterPlot = ({state, ethnicity}) => {
 };
 
 export default ScatterPlot;
+
+
