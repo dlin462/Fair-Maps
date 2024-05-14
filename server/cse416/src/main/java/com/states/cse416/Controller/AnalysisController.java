@@ -3,12 +3,14 @@ package com.states.cse416.Controller;
 import com.states.cse416.Models.BoxAndWhisker;
 import com.states.cse416.Models.EcologicalInference;
 import com.states.cse416.Models.Gingles;
+import com.states.cse416.Models.OpportunityDistrict;
 import com.states.cse416.Models.enums.ElectionType;
 import com.states.cse416.Models.enums.Race;
 import com.states.cse416.Models.enums.StateName;
 import com.states.cse416.Service.BoxAndWhiskerService;
 import com.states.cse416.Service.EcologicalInferenceService;
 import com.states.cse416.Service.GinglesService;
+import com.states.cse416.Service.OpportunityDistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,9 @@ public class AnalysisController {
 
     @Autowired
     private BoxAndWhiskerService boxAndWhiskerService;
+
+    @Autowired
+    private OpportunityDistrictService opportunityDistrictService;
 
     @GetMapping("/gingles/{state}/{race}")
     public ResponseEntity<List<Gingles>> getGinglesPlot(@PathVariable StateName state, @PathVariable Race race) {
@@ -58,6 +63,14 @@ public class AnalysisController {
     public ResponseEntity<List<BoxAndWhisker>> getBoxAndWhisker(@PathVariable StateName state, @PathVariable Race race) {
         return new ResponseEntity<>(
                 boxAndWhiskerService.getBoxAndWhiskerByStateAndRace(state, race),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/opportunityDistrict/{state}")
+    public ResponseEntity<List<OpportunityDistrict>> getOpportunityDistricts(@PathVariable StateName state) {
+        return new ResponseEntity<>(
+                opportunityDistrictService.getOpportunityDistrictsByState(state),
                 HttpStatus.OK
         );
     }
