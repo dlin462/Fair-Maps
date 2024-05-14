@@ -1,10 +1,12 @@
 package com.states.cse416.Controller;
 
+import com.states.cse416.Models.BoxAndWhisker;
 import com.states.cse416.Models.EcologicalInference;
 import com.states.cse416.Models.Gingles;
 import com.states.cse416.Models.enums.ElectionType;
 import com.states.cse416.Models.enums.Race;
 import com.states.cse416.Models.enums.StateName;
+import com.states.cse416.Service.BoxAndWhiskerService;
 import com.states.cse416.Service.EcologicalInferenceService;
 import com.states.cse416.Service.GinglesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class AnalysisController {
     @Autowired
     private EcologicalInferenceService ecologicalInferenceService;
 
+    @Autowired
+    private BoxAndWhiskerService boxAndWhiskerService;
+
     @GetMapping("/gingles/{state}/{race}")
     public ResponseEntity<List<Gingles>> getGinglesPlot(@PathVariable StateName state, @PathVariable Race race) {
 //        return ResponseEntity.ok(ginglesService.getGinglesByStateAndRace(state, race));
@@ -44,8 +49,15 @@ public class AnalysisController {
                                                                       @PathVariable Race race,
                                                                       @PathVariable ElectionType election) {
         return new ResponseEntity<>(
-                ecologicalInferenceService.
-                        getEcologicalInferenceByElectionAndRace(state, race, election),
+                ecologicalInferenceService.getEcologicalInferenceByElectionAndRace(state, race, election),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/boxWhisker/{state}/{race}")
+    public ResponseEntity<List<BoxAndWhisker>> getBoxAndWhisker(@PathVariable StateName state, @PathVariable Race race) {
+        return new ResponseEntity<>(
+                boxAndWhiskerService.getBoxAndWhiskerByStateAndRace(state, race),
                 HttpStatus.OK
         );
     }
