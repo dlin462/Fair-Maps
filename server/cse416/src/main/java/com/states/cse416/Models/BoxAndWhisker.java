@@ -18,4 +18,5 @@ public class BoxAndWhisker {
     private Race race;
     private int districtId;
     private double[] data;
+    private double enacted;
 }
