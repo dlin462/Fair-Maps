@@ -1,5 +1,6 @@
 from typing import Tuple
 
+import matplotlib.pyplot as plt
 from pyei.plot_utils import plot_precinct_scatterplot
 from pyei.plot_utils import tomography_plot
 from pyei.two_by_two import TwoByTwoEI
@@ -12,6 +13,8 @@ import numpy as np
 import re
 import os
 
+
+PLOTDIR = 'plots/ecologicalInference/'
 
 def read_data(data) -> pd.DataFrame:
     # Load the data
@@ -65,6 +68,39 @@ def calculate_ei_kdes_data(
         np.percentile(polarization, 95)
     ]
     return polarization, confidence_intervals
+
+
+def save_precinct_choropleth_map(orig_data: pd.DataFrame,
+                                 precinct_level_posterior: list,
+                                 state: str,
+                                 candidate: str,
+                                 race: str) -> None:
+    color_map = ''
+    if candidate in ['Biden', 'Cortez', 'Espy']:
+        color_map = 'GnBu'
+    if candidate in ['Trump', 'Laxalt', 'Hyde']:
+        color_map = 'OrRd'
+    orig_data[f'{race}_support_{candidate}'] = precinct_level_posterior
+    ax = orig_data.plot(
+        column=f'{race}_support_{candidate}',
+        scheme="JenksCaspall",
+        k=5,
+        legend=True,
+        cmap=color_map,
+        figsize=(12, 8),
+        edgecolor="black",
+        linewidth=0.4,
+        categorical=True,
+        legend_kwds={
+            "loc": "lower left",
+            "fmt": '{:.4f}',
+            "fontsize": 11,
+        },
+    )
+    ax.set_axis_off()
+    ax.set_title(f'{race} Support for {candidate}', fontweight="bold")
+    plt.savefig(PLOTDIR + f'choropleth_{state}_{race}_{candidate}.png')
+
 
 
 def run_ecological_inference(data) -> pd.DataFrame:
@@ -174,6 +210,12 @@ def run_ecological_inference(data) -> pd.DataFrame:
                 polarization.tolist(),
                 confidence_intervals
             ]
+
+            save_precinct_choropleth_map(data,
+                                         precinct_posteriors_list,
+                                         state_name,
+                                         candidate,
+                                         race)
 
             row_counter += 1
             print('Loading... ')

@@ -6,6 +6,7 @@ from shapely.wkt import dumps
 from data_processing import *
 from gingles_regression import *
 from ecologicalInference import *
+from scripts.seawulf.mgggReCom import *
 from multiprocessing import Pool
 from pprint import pprint
 import geopandas as gpd
@@ -19,7 +20,7 @@ import os
 def geometry_to_wkt(geometry_data):
     """Convert a GeoDataFrame geometries to WKT format"""
     try:
-        geometry_data['coordinates'] = gpd.array.to_wkt(geometry_data['geometry'].values)
+        geometry_data['geometry'] = gpd.array.to_wkt(geometry_data['geometry'].values)
         geometry_data.drop(columns=['geometry'], inplace=True, axis=1)
     except Exception as e:
         pprint(e)
@@ -30,7 +31,7 @@ def geometry_to_wkt(geometry_data):
 def wkt_to_geometry_data(geometry_data):
     """Convert a WKT geometries to GeoDataFrame geometries"""
     try:
-        geometry_data['coordinates'] = gpd.GeoSeries.from_wkt(geometry_data['coordinates'])
+        geometry_data['geometry'] = gpd.GeoSeries.from_wkt(geometry_data['geometry'])
     except Exception as e:
         pprint(e)
 
@@ -93,8 +94,11 @@ def read_geometry_file(file_path: str, state: str) -> Dict:
 
 
 # Database Methods
-def send_one(collection_name, data, database) -> None:
+def send_one(collection_name, data) -> None:
     """Send a single document to a MongoDB collection"""
+    cluster = MongoClient(
+        "mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/?retryWrites=true&w=majority&appName=CSE416-Redistricting")
+    database = cluster['CSE416-Redistricting']
     collection = database[collection_name]
     try:
         collection.insert_one(data)
@@ -102,8 +106,11 @@ def send_one(collection_name, data, database) -> None:
         pprint(bwe.details)
 
 
-def send_many(collection_name, data, database) -> None:
+def send_many(collection_name, data) -> None:
     """Send many documents to a MongoDB collection"""
+    cluster = MongoClient(
+        "mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/?retryWrites=true&w=majority&appName=CSE416-Redistricting")
+    database = cluster['CSE416-Redistricting']
     collection = database[collection_name]
     try:
         collection.insert_many(data)
@@ -116,20 +123,21 @@ if __name__ == '__main__':
     move_up = os.path.dirname(os.path.dirname(os.path.dirname(current_directory)))
     data_dir = os.path.join(move_up, 'Data')
     new_path = os.chdir(data_dir)
+    print(os.getcwd())
     # pprint(os.listdir())
-
-    cluster = MongoClient(
-        "mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/?retryWrites=true&w=majority&appName=CSE416-Redistricting")
-    db = cluster['CSE416-Redistricting']
 
 
     nv_district_df = pd.read_csv('NV/nv_district_final_data.csv')
     nv_precinct_df = pd.read_csv('NV/nv_precinct_final_data.csv')
+    nv_precinct_graph_data = gpd.read_file('NV/nv_precinct_cont_data.shp')
+    nv_precinct_graph_data.rename(columns={'districtNu': 'districtNum'}, inplace=True)
 
     ms_district_df = pd.read_csv('MS/ms_district_final_data.csv')
     ms_precinct_df = pd.read_csv('MS/ms_precinct_final_data.csv')
-    pprint(nv_precinct_df.columns)
-    pprint(ms_precinct_df.columns)
+    ms_precinct_graph_data = gpd.read_file('MS/ms_precinct_cont_data.shp')
+    ms_precinct_graph_data.rename(columns={'distrctNum': 'districtNum'}, inplace=True)
+    # pprint(nv_precinct_graph_data.columns)
+    # pprint(ms_precinct_graph_data.columns)
 
     ### Nevada Districts Data ### COMPLETED
     # pres_dict, uss_dict = aggr_elections_to_dict(nv_district_df)
@@ -137,7 +145,7 @@ if __name__ == '__main__':
     # documents = {'presElection': pres_dict, 'ussElection': uss_dict, 'demographicData': demo_dict}
     # nv_district_df.drop(labels=['pct_rep', 'pct_dem'], axis=1, inplace=True)
     # nv_district_dict = df_to_dict(nv_district_df, documents)
-    # send_many(collection_name='districts', data=nv_district_dict, database=db)
+    # send_many(collection_name='districts', data=nv_district_dict)
 
     ### Nevada Precinct Data ### COMPLETED
     # pres_dict, uss_dict = aggr_elections_to_dict(nv_precinct_df)
@@ -145,7 +153,7 @@ if __name__ == '__main__':
     # documents = {'presElection': pres_dict, 'ussElection': uss_dict, 'demographicData': demo_dict}
     # nv_precinct_df.drop(labels=['pct_bid', 'pct_tru', 'pct_cor', 'pct_lax'], axis=1, inplace=True)
     # nv_precinct_dict = df_to_dict(nv_precinct_df, documents)
-    # send_many(collection_name='precincts', data=nv_precinct_dict, database=db)
+    # send_many(collection_name='precincts', data=nv_precinct_dict)
 
     ### Nevada Statewide Measures ### COMPLETED
     # statewide_info = ['PRE20D', 'PRE20R', 'vap', 'wvap', 'bvap', 'asianvap', 'hvap']
@@ -153,27 +161,37 @@ if __name__ == '__main__':
     # nv_state_demo_dict = aggr_demographic_to_dict(nv_statewide_data)
     # documents = {'demographicData': nv_state_demo_dict}
     # nv_statewide_dict = df_to_dict(nv_statewide_data, documents)
-    # send_many(collection_name='state', data=nv_statewide_dict, database=db)
+    # send_many(collection_name='state', data=nv_statewide_dict)
 
     ### Nevada State Assembly Districts ### COMPLETED
     # nv_district_dict = read_geometry_file('NV/nv_state_district_2022')
-    # send_many(collection_name='districts', data=nv_district_dict, database=db)
+    # send_many(collection_name='districts', data=nv_district_dict)
 
     ### Nevada Nonlinear Regression ### COMPLETED
     # nv_elections = [['pct_bid', 'pct_tru'], ['pct_cor', 'pct_lax']]
     # nv_nonlinear_df = fit_nonlinear_model(nv_precinct_df, nv_elections)
     # nv_nonlinear_dict = nv_nonlinear_df.to_dict(orient='records')
     # pprint(nv_nonlinear_dict)
-    # send_many(collection_name='non_linear', data=nv_nonlinear_dict, database=db)
+    # send_many(collection_name='non_linear', data=nv_nonlinear_dict)
+
+
+    ### Nevada Ecological Inference ### COMPLETED
+    # wkt_to_geometry_data(nv_precinct_df)
+    # nv_precinct_geodataframe = gpd.GeoDataFrame(nv_precinct_df, geometry='geometry')
+    # nv_ecological_inference_df = run_ecological_inference(nv_precinct_geodataframe)
+    # nv_eco_infer_dict = nv_ecological_inference_df.to_dict(orient='records')
+    # send_many(collection_name='eco_infer', data=nv_eco_infer_dict)
 
     ### Nevada Opportunity Districts ###
+    # nv_opportunity_districts_data, nv_box_whisker_data_grouped = run_markov_chain(nv_precinct_graph_data, 5000)
+    # for box_whisker in nv_box_whisker_data_grouped:
+    #     send_many(collection_name='box_whisker', data=box_whisker)
+    # send_many(collection_name='opportunity_districts', data=nv_opportunity_districts_data)
 
 
-    ### Nevada Ecological Inference ###
-    nv_ecological_inference_df = run_ecological_inference(nv_precinct_df)
-    # nv_eco_infer_dict = df_to_dict(nv_ecological_inference_df, {})
-    nv_eco_infer_dict = nv_ecological_inference_df.to_dict(orient='records')
-    send_many(collection_name='eco_infer', data=nv_eco_infer_dict, database=db)
+    ### Nevada GerryChain ###
+    # nv_precinct_df.rename(columns={'districtNum': 'districtNu'}, inplace=True)
+    # send_many(collection_name='eco_infer', data=nv_eco_infer_dict)
 
 
 
@@ -184,7 +202,7 @@ if __name__ == '__main__':
     # ms_district_df.drop(labels=['Unnamed: 0', 'pct_rep', 'pct_dem'], inplace=True, axis=1)
     # documents = {'presElection': pres_dict, 'ussElection': uss_dict, 'demographicData': demo_dict}
     # ms_district_dict = df_to_dict(ms_district_df, documents)
-    # send_many(collection_name='districts', data=ms_district_dict, database=db)
+    # send_many(collection_name='districts', data=ms_district_dict)
 
     ### Mississippi Precinct Boundaries ### COMPLETED
     # ms_precinct_df.drop(labels=['Unnamed: 0', 'index', 'pct_bid', 'pct_tru', 'pct_hyd', 'pct_esp'], axis=1, inplace=True)
@@ -192,7 +210,7 @@ if __name__ == '__main__':
     # demo_dict = aggr_demographic_to_dict(ms_precinct_df)
     # documents = {'presElection': pres_dict, 'ussElection': uss_dict, 'demographicData': demo_dict}
     # ms_precinct_dict = df_to_dict(ms_precinct_df, documents)
-    # send_many(collection_name='precincts', data=ms_precinct_dict, database=db)
+    # send_many(collection_name='precincts', data=ms_precinct_dict)
 
     ### Mississippi Statewide Measures ### COMPLETED
     # statewide_info = ['PRE20D', 'PRE20R', 'vap', 'wvap', 'bvap', 'asianvap', 'hvap']
@@ -200,7 +218,7 @@ if __name__ == '__main__':
     # ms_state_demo_dict = aggr_demographic_to_dict(ms_statewide_data)
     # documents = {'demographicData': ms_state_demo_dict}
     # ms_statewide_dict = df_to_dict(ms_statewide_data, documents)
-    # send_many(collection_name='state', data=ms_statewide_dict, database=db)
+    # send_many(collection_name='state', data=ms_statewide_dict)
 
     ### Mississippi State Assembly Districts ### COMPLETED
     # ms_district_dict = gpd.read_file('ms_State_Assembly_2022.geojson')
@@ -210,7 +228,23 @@ if __name__ == '__main__':
     # ms_elections = [['pct_bid', 'pct_tru'], ['pct_esp', 'pct_hyd']]
     # ms_nonlinear_df = fit_nonlinear_model(ms_precinct_df, ms_elections)
     # ms_nonlinear_dict = ms_nonlinear_df.to_dict(orient='records')
-    # send_many(collection_name='non_linear', data=ms_nonlinear_dict, database=db)
+    # send_many(collection_name='non_linear', data=ms_nonlinear_dict)
+
+    ### Mississippi Ecological Inference ### COMPLETED
+    # wkt_to_geometry_data(ms_precinct_df)
+    # ms_precinct_geodataframe = gpd.GeoDataFrame(ms_precinct_df, geometry='geometry')
+    # ms_ecological_inference_df = run_ecological_inference(ms_precinct_geodataframe)
+    # ms_eco_infer_dict = ms_ecological_inference_df.to_dict(orient='records')
+    # send_many(collection_name='eco_infer', data=ms_eco_infer_dict)
 
     ### Mississippi Opportunity Districts ###
-    # send_many(collection_name='opportunity_districts', data=ms_opportunity_data, database=db)
+    # ms_opportunity_districts_data, ms_box_whisker_data_grouped = run_markov_chain(ms_precinct_graph_data, 5000)
+
+    # for box_whisker in ms_box_whisker_data_grouped:
+    #     send_many(collection_name='box_whisker', data=box_whisker)
+    # send_many(collection_name='opportunity_districts', data=ms_opportunity_districts_data)
+
+
+    ### Mississippi GerryChain ###
+    # ms_precinct_df.rename(columns={'distrctNum': 'districtNu'}, inplace=True)
+    # send_many(collection_name='opportunity_districts', data=ms_opportunity_data)
