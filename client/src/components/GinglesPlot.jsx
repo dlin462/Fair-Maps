@@ -21,11 +21,13 @@ const ScatterPlot = ({state, ethnicity}) => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
             {ginglesData && ginglesData.map((data, index) => (
+                console.log(data.fitLineDem),
+                console.log(data.fitLineRep),
                 <div key={index} style={{ marginBottom: '40px' }}>
                     <Plot
                         data={[
                             {
-                                x: data.xFitData,
+                                x: data.xdata,
                                 y: data.ydataDem,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -40,7 +42,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                                  }
                             },
                             {
-                                x: data.xFitData,
+                                x: data.xdata,
                                 y: data.ydataRep,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -55,7 +57,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                                  }
                             },
                             {
-                                x: data.xFitData,
+                                x: data.xfitData,
                                 y: data.fitLineDem,
                                 mode: 'lines',
                                 type: 'scatter',
@@ -63,7 +65,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                                 line: { color: 'blue' }
                             },
                             {
-                                x: data.xFitData,
+                                x: data.xfitData,
                                 y: data.fitLineRep,
                                 mode: 'lines',
                                 type: 'scatter',
@@ -73,8 +75,8 @@ const ScatterPlot = ({state, ethnicity}) => {
                         ]}
                         layout={{
                             title: data.electionType === 'President' ? 'Presidential Election' : 'Senate Election',
-                            xaxis: { title: `Percent ${data.race}`, tickvals: [0, 500, 1000, 1500, 2000] },
-                            yaxis: { title: 'Vote Share', tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1] },
+                            xaxis: { title: `Percent ${data.race}`, range: [0, 1] },
+                            yaxis: { title: 'Vote Share', range: [0, 1] },
                             hovermode: 'closest'
                         }}
                         style={{ width: '100%', height: '400px' }}
