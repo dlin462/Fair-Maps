@@ -46,7 +46,7 @@ const StateAssemblyBarChart = ({ state }) => {
             data: {
                 labels: ['White', 'Black', 'Asian', 'Hispanic'],
                 datasets: [{
-                    label: '',
+                    label: 'Ethnicity Count',
                     data: chartData,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -64,19 +64,54 @@ const StateAssemblyBarChart = ({ state }) => {
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false, // Important to ensure full height
                 scales: {
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Number'
+                            text: 'Number of Assembly Members',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Helvetica'
+                            },
+                            padding: 10
+                        },
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 0,
+                            minRotation: 0
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Ethnicity'
+                            text: 'Ethnicity',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Helvetica'
+                            },
+                            padding: 10
                         }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'State Assembly Representation by Ethnicity',
+                        font: {
+                            size: 24,
+                            weight: 'bold',
+                            family: 'Helvetica'
+                        },
+                        padding: 20,
+                        color: '#333'
                     }
                 }
             }
@@ -84,8 +119,7 @@ const StateAssemblyBarChart = ({ state }) => {
     };
 
     return (
-        <div style={{ width: '90%', margin: '0 auto', height: '500px' }}>
-            <h2 style={{ textAlign: 'center', fontSize: '40px' }}>State Assembly Bar Chart</h2>
+        <div style={{ marginTop: '70px', width: '100%', height: '700px' }}>
             <canvas id="barChart"></canvas>
         </div>
     );

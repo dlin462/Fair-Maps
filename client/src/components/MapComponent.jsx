@@ -34,14 +34,21 @@ function MapComponent() {
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
     const [stateAssemblyTableRowClicked, setStateAssemblyTableRowClicked] = useState(null);
 
+    const [anchorE1EcologicalInference,setAnchorE1EcologicalInference] = useState(null);
+    const [election, setElection] = useState(null);
+    const [anchorE1EcologicalInferenceEthnicity, setAnchorE1EcologicalInferenceEthnicity] = useState(null);
+
     const coordinates = {
         Nevada: [39.876019, -117.224121],
         Mississippi: [32.3547, -89.3985],
     };
 
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setStateAssemblyTableRowClicked(null);
+        setElection(null);
+        // setEthnicity(null);
     };
 
     const handleClickHeatMapDistricts = (event) => {
@@ -64,6 +71,14 @@ function MapComponent() {
         setAnchorElHeatmap(null);
     };
 
+    const handleCloseEcologicalInference = () => {
+        setAnchorE1EcologicalInference(null);
+    };
+
+    const handleCloseEcologicalInferenceEthnicity = () => {
+        setAnchorE1EcologicalInferenceEthnicity(null);
+    };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -83,14 +98,18 @@ function MapComponent() {
         setShowGingles(false);
         handleClose();
     }
+    const handleClickEcologicalInference = (event) => {
+        event.preventDefault();
+        setAnchorE1EcologicalInference(prev => prev ? null : event.currentTarget);
+    };
 
-    const handleClickEcologicalInference = () => {
-        setShowBarGraphStateAssembly(false);
-        setShowStateAssemblyTable(false);
-        setShowEcologicalInference(!showEcologicalInference);
-        handleClose();
-        setShowGingles(false);
-    }
+    const handleClickElectionEcologicalInference = (event, election) => {
+        event.preventDefault();
+        event.stopPropagation(); 
+        setElection(election);
+        setAnchorE1EcologicalInferenceEthnicity(event.currentTarget);
+        setFirstRender(true);
+    };
 
     const handleNavigate = (path) => {
         setShowStateAssemblyTable(false);
@@ -122,6 +141,7 @@ function MapComponent() {
         handleChartDisplay(false, false, false, false);
         setEthnicity(null);
         setShowGingles(false);
+        setShowEcologicalInference(false);
     }
 
     const handleClickGingles = (event) => {
@@ -140,6 +160,7 @@ function MapComponent() {
         setAnchorE1Gingles(false);
         setEthnicity(ethnicity);
         setShowGingles(true);
+        setShowEcologicalInference(false);
     }
 
     const handleEthnicityOptionClickDistricts = (ethnicity) => {
@@ -147,6 +168,7 @@ function MapComponent() {
         setEthnicity(ethnicity);
         setPrecinctHeatMap(false);
         setShowGingles(false);
+        setShowEcologicalInference(false);
     };
 
     const handleEthnicityOptionClickPrecincts = (ethnicity) => {
@@ -154,6 +176,20 @@ function MapComponent() {
         setEthnicity(ethnicity);
         setPrecinctHeatMap(true);
         setShowGingles(false);
+        setShowEcologicalInference(false);
+    };
+
+    const handleEthnicityOptionClickEcologicalInference = (ethnicity) => {
+        setAnchorE1EcologicalInferenceEthnicity(null); 
+        setAnchorE1EcologicalInference(null);
+        setShowBarGraphStateAssembly(false);
+        setShowStateAssemblyTable(false);
+        setAnchorElHeatmapPrecincts(false);
+        setEthnicity(ethnicity);
+        setPrecinctHeatMap(false);
+        setShowGingles(false);
+        setShowEcologicalInference(true);
+        handleClose();
     };
 
     const handleDistrictClick = (district) => {
@@ -335,8 +371,10 @@ function MapComponent() {
         };
         fetchData();
         return () => map.remove();
-    }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked, showEcologicalInference, showGingles
+    }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked, showGingles,
     ]);
+
+    const mapWidth = showEcologicalInference ? '33%' : '50%';
 
     return (
         <div>
@@ -345,7 +383,7 @@ function MapComponent() {
                 width: showBarGraphStateAssembly ? '50%' : 
                     showStateAssemblyTable ? '50%' : 
                     showGingles ? '50%' : 
-                    showEcologicalInference ? '50%' : '100%',
+                    showEcologicalInference ? '25%' : '100%',
                 float: 'left',
                 display: 'flex'
             }}>
@@ -353,10 +391,27 @@ function MapComponent() {
                     <div style={{ position: 'absolute', zIndex: 1000, top: '20px', left: '20px' }}>
                     </div>
                     <MapMenu
+                        // anchorE1Ecological={anchorE1Ecological} 
+                        // anchorE1EcologicalEthnicity={anchorE1EcologicalEthnicity}
+                        handleClickEcologicalInference={handleClickEcologicalInference}
+                        // handleElectionTypeSelect={handleElectionTypeSelect}
+                        // handleElectionSetEthnicity={handleElectionSetEthnicity}
+                        // handleEcologicalMenuClose={handleEcologicalMenuClose}
+                        // electionType={electionType}
+                        anchorE1EcologicalInference={anchorE1EcologicalInference}
+                        handleCloseEcologicalInference={handleCloseEcologicalInference}
+                        handleClickElectionEcologicalInference={handleClickElectionEcologicalInference}
+                        anchorE1EcologicalInferenceEthnicity={anchorE1EcologicalInferenceEthnicity}
+                        election={election}
+                        handleCloseEcologicalInferenceEthnicity={handleCloseEcologicalInferenceEthnicity}
+                        handleEthnicityOptionClickEcologicalInference={handleEthnicityOptionClickEcologicalInference}
+                        
+
+
                         anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts} anchorE1Gingles={anchorE1Gingles}
                         state={state} handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap} handleGoBack={handleGoBack} handleStateChange={handleStateChange} handleStateTable={handleStateTable} handleClickGingles={handleClickGingles} handleCloseGingle={handleCloseGingles} handleGinglesClickRace={handleGinglesClickRace}
-                        handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts} handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts} handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly} handleClickEcologicalInference={handleClickEcologicalInference}
-                    />
+                        handleClickHeatMapDistricts={handleClickHeatMapDistricts} handleClickHeatMapPrecincts={handleClickHeatMapPrecincts} handleEthnicityOptionClickDistricts={handleEthnicityOptionClickDistricts} handleEthnicityOptionClickPrecincts={handleEthnicityOptionClickPrecincts} handleClickBarGraphStateAssembly={handleClickBarGraphStateAssembly}
+                        />
 
                 </div>
             </div>
@@ -372,8 +427,8 @@ function MapComponent() {
                 </div>
             )}
             {showEcologicalInference && (
-                <div className="ecological-inference" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
-                    <EcologicalInference state={state} ethnicity={ethnicity}/>
+                <div className="ecological-inference" style={{ position: 'absolute', width: '75%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                    <EcologicalInference state={state} election={election} ethnicity={ethnicity}/>
                 </div>
             )}
             {showGingles && (
