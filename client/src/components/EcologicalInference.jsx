@@ -36,12 +36,26 @@ const EcologicalInference = ({ state, election, ethnicity }) => {
     const imagePath = `/choropleth_${state}_${ethnicity}_${data[0]?.candidate}.png`;
     const imagePath2 = `/choropleth_${state}_${ethnicity}_${data[1]?.candidate}.png`;
 
-    const confidInterval = extractConfid(0); // Assuming 0 is the index you want to use for confidence interval
+    const confidInterval0 = extractConfid(0);
+    const confidInterval1 = extractConfid(1);
 
-    const confidShape = {
+    const confidShape0 = {
         type: 'rect',
-        x0: confidInterval[0], // Lower limit of confidence interval
-        x1: confidInterval[1], // Upper limit of confidence interval
+        x0: confidInterval0[0],
+        x1: confidInterval0[1], 
+        y0: 0,
+        y1: 300,
+        fillcolor: 'grey',
+        opacity: 0.3,
+        line: {
+            width: 0
+        }
+    };
+
+    const confidShape1 = {
+        type: 'rect',
+        x0: confidInterval1[0], 
+        x1: confidInterval1[1], 
         y0: 0,
         y1: 300,
         fillcolor: 'grey',
@@ -131,7 +145,7 @@ const EcologicalInference = ({ state, election, ethnicity }) => {
                         bargap: 0.05,
                         plot_bgcolor: 'white',
                         paper_bgcolor: 'white',
-                        shapes: [confidShape]
+                        shapes: [confidShape0]
                     }}
                 />
             </div>
@@ -214,7 +228,7 @@ const EcologicalInference = ({ state, election, ethnicity }) => {
                         bargap: 0.05,
                         plot_bgcolor: 'white',
                         paper_bgcolor: 'white',
-                        shapes: [confidShape]
+                        shapes: [confidShape1]
                     }}
                 />
             </div>
