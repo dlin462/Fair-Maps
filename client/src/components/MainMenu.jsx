@@ -124,6 +124,55 @@ function MapMenu({
                         </MenuItem>
                     </Menu>
                 </MenuItem>
+
+
+                <MenuItem key="ecologicalInference" onClick={handleClickEcologicalInference}>
+                    Box and Whiskers
+                    <Menu
+                        anchorEl={anchorE1EcologicalInference}
+                        open={Boolean(anchorE1EcologicalInference)}
+                        onClose={handleCloseEcologicalInference}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    >
+                        <MenuItem onClick={(event) => handleClickElectionEcologicalInference(event, 'President')}>
+                            Presidential
+                            {election === 'President' && (
+                                <Menu
+                                    anchorEl={anchorE1EcologicalInferenceEthnicity}
+                                    open={Boolean(anchorE1EcologicalInferenceEthnicity)}
+                                    onClose={handleCloseEcologicalInferenceEthnicity}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                >
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('White')}>White</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Black')}>Black</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Asian')}>Asian</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Hispanic')}>Hispanic</MenuItem>
+                                </Menu>
+                            )}
+                        </MenuItem>
+                        <MenuItem onClick={(event) => handleClickElectionEcologicalInference(event, 'USS')}>
+                            United States Senate
+                            {election === 'USS' && anchorE1EcologicalInference && (
+                                <Menu
+                                    anchorEl={anchorE1EcologicalInferenceEthnicity}
+                                    open={Boolean(anchorE1EcologicalInferenceEthnicity)}
+                                    onClose={handleCloseEcologicalInferenceEthnicity}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                >
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('White')}>White</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Black')}>Black</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Asian')}>Asian</MenuItem>
+                                    <MenuItem onClick={() => handleEthnicityOptionClickEcologicalInference('Hispanic')}>Hispanic</MenuItem>
+                                </Menu>
+                            )}
+                        </MenuItem>
+                    </Menu>
+                </MenuItem>
+
+
                 <MenuItem key="homeScreen" onClick={goToHomeScreen}>
                     Go back to Select State
                 </MenuItem>

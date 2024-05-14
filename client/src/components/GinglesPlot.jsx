@@ -25,7 +25,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                     <Plot
                         data={[
                             {
-                                x: data.xFitData,
+                                x: data.xdata,
                                 y: data.ydataDem,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -40,7 +40,7 @@ const ScatterPlot = ({state, ethnicity}) => {
                                  }
                             },
                             {
-                                x: data.xFitData,
+                                x: data.xdata,
                                 y: data.ydataRep,
                                 opacity: 0.7,
                                 mode: 'markers',
@@ -72,9 +72,9 @@ const ScatterPlot = ({state, ethnicity}) => {
                             }
                         ]}
                         layout={{
-                            title: data.electionType === 'President' ? 'Presidential Election' : 'Senate Election',
-                            xaxis: { title: `Percent ${data.race}`, tickvals: [0, 500, 1000, 1500, 2000] },
-                            yaxis: { title: 'Vote Share', tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1] },
+                            title: `${data.race} - Gingles Data`,
+                            xaxis: { title: `Percent ${data.race}`, range: [0, 1] },
+                            yaxis: { title: 'Vote Share' },
                             hovermode: 'closest'
                         }}
                         style={{ width: '100%', height: '400px' }}
@@ -86,3 +86,5 @@ const ScatterPlot = ({state, ethnicity}) => {
 };
 
 export default ScatterPlot;
+
+
