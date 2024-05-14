@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../App.css';
 
 function StateAssemblyTable({ state, handleDistrictClick }) {
     const [stateAssemblyData, setStateAssemblyData] = useState([]);
-    
+    const [partyFilter, setPartyFilter] = useState('');
+    const [raceFilter, setRaceFilter] = useState('');
+
     useEffect(() => {
         axios.get(`http://localhost:8080/stateAssemblyTable/${state}`)
             .then(response => {
@@ -31,6 +34,13 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
         return lastNumber ? parseInt(lastNumber[0]) : null;
     };
 
+    const filteredData = stateAssemblyData.filter(stateInfo => {
+        return (
+            (partyFilter === '' || stateInfo.party.toLowerCase() === partyFilter.toLowerCase()) &&
+            (raceFilter === '' || stateInfo.ethnicity.toLowerCase() === raceFilter.toLowerCase())
+        );
+    });
+
     return (
         <div className="table">
             <div className='table-container' style={{ maxHeight: '875px', overflowY: 'auto' }}>
@@ -39,14 +49,24 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
                         <tr>
                             <th>District</th>
                             <th>Name</th>
-                            <th>Party</th>
-                            <th>Race/Ethnicity</th>
+                            <th>Party <select value={partyFilter} onChange={(e) => setPartyFilter(e.target.value)}>
+                                <option value="">All</option>
+                                <option value="Republican">Republican</option>
+                                <option value="Democratic">Democratic</option>
+                            </select></th>
+                            <th>Race/Ethnicity <select value={raceFilter} onChange={(e) => setRaceFilter(e.target.value)}>
+                                <option value="">All</option>
+                                <option value="White">White</option>
+                                <option value="Asian">Asian</option>
+                                <option value="Black">Black</option>
+                                <option value="Hispanic">Hispanic</option>
+                            </select></th>
                             <th>Vote Margin</th>
                             <th>Photo</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {stateAssemblyData.map(stateInfo => (
+                    {filteredData.map(stateInfo => (
                         <tr key={stateInfo.id.timestamp} onClick={() => handleRowClick(extractNumber(stateInfo.office))}>
                             <td>{extractNumber(stateInfo.office)}</td>
                             <td>{stateInfo.name}</td>
