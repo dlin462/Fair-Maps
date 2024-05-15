@@ -67,21 +67,21 @@ function OpportunityDistricts({ state }) {
                             borderWidth: 1
                         },
                         {
-                            label: 'First Threshold',
+                            label: '0.37 Threshold',
                             data: firstThresholdAvg,
                             backgroundColor: 'rgba(54, 162, 235, 0.8)',
                             borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 1
                         },
                         {
-                            label: 'Second Threshold',
+                            label: '0.5 Threshold',
                             data: secondThresholdAvg,
                             backgroundColor: 'rgba(255, 206, 86, 0.8)',
                             borderColor: 'rgba(255, 206, 86, 1)',
                             borderWidth: 1
                         },
                         {
-                            label: 'Third Threshold',
+                            label: '0.6 Threshold',
                             data: thirdThresholdAvg,
                             backgroundColor: 'rgba(75, 192, 192, 0.8)',
                             borderColor: 'rgba(75, 192, 192, 1)',
@@ -93,7 +93,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `Opportunity Districts by Race in ${state}`,
+                            text: `Opportunity Districts by Race in ${state} (5000 Ensembles)`,
                             font: {
                                 size: 18
                             }
@@ -312,6 +312,9 @@ function OpportunityDistricts({ state }) {
                             <th>Ideal Population</th>
                             <th>Population</th>
                             <th>Enacted</th>
+                            <th>0.37 Threshold</th>
+                            <th>0.5 Threshold</th>
+                            <th>0.6 Threshold</th>
                         </tr>
                     </thead>
                     <tbody>
