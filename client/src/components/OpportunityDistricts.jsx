@@ -149,7 +149,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `5000 Plans First Threshold ${state}`,
+                            text: `Threshold = 37`,
                             font: {
                                 size: 18
                             }
@@ -198,7 +198,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `5000 Plans Second Threshold ${state}`,
+                            text: `Threshold = 50`,
                             font: {
                                 size: 18
                             }
@@ -247,7 +247,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `5000 Plans Third Threshold ${state}`,
+                            text: `Threshold = 60`,
                             font: {
                                 size: 18
                             }
