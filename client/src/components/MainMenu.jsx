@@ -83,10 +83,6 @@ function MapMenu({
                     </Menu>
                 </MenuItem>
 
-                <MenuItem key="opportunityDistricts" onClick={() => handleOpportunityDistricts()}>
-                    Opportunity Districts
-                </MenuItem>
-
                 <MenuItem key="ecologicalInference" onClick={handleClickEcologicalInference}>
                     Ecological Inference
                     <Menu
@@ -149,6 +145,9 @@ function MapMenu({
                     </Menu>
                 </MenuItem>
 
+                <MenuItem key="opportunityDistricts" onClick={() => handleOpportunityDistricts()}>
+                    Opportunity Districts
+                </MenuItem>
 
                 <MenuItem key="homeScreen" onClick={goToHomeScreen}>
                     Go back to Select State

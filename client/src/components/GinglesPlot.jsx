@@ -20,6 +20,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
+            
             {ginglesData && ginglesData.map((data, index) => (
                 <div key={index} style={{ marginBottom: '40px' }}>
                     <Plot

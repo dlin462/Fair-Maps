@@ -100,17 +100,19 @@ function MapComponent() {
         setShowEcologicalInference(false);
         setShowGingles(false);
         setShowOpportunityDistricts(false);
+        setShowBox(false);
         handleClose();
     };
 
     const handleOpportunityDistricts = () => {
-        setShowOpportunityDistricts(!showOpportunityDistricts);
+        setShowOpportunityDistricts(true);
         setShowBarGraphStateAssembly(false);
         setShowEcologicalInference(false);
         setShowGingles(false);
         setEthnicity(null);
         handleClose();
         setShowStateAssemblyTable(false);
+        setShowBox(false);
     };
 
     const handleClickBarGraphStateAssembly = () => {
@@ -118,6 +120,7 @@ function MapComponent() {
         setShowStateAssemblyTable(false);
         setShowEcologicalInference(false);
         setShowOpportunityDistricts(false);
+        setShowBox(false);
         setEthnicity(null);
         setShowGingles(false);
         handleClose();
@@ -139,16 +142,20 @@ function MapComponent() {
         event.stopPropagation(); 
         setElection(election);
         setAnchorE1EcologicalInferenceEthnicity(event.currentTarget);
-        setFirstRender(true);
     };
 
     const handleNavigate = (path) => {
         setShowStateAssemblyTable(false);
         setShowBarGraphStateAssembly(false);
+        handleChartDisplay(false, false, false, false);
         handleClose();
         navigate(path);
         setShowMap(true);
+        setEthnicity(null);
         setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
+        setShowGingles(false);
+        setShowBox(false);
     };
 
     const handleStateChange = () => {
@@ -172,6 +179,8 @@ function MapComponent() {
         handleChartDisplay(false, false, false, false);
         setEthnicity(null);
         setShowGingles(false);
+        setShowBox(false);
+        setShowOpportunityDistricts(false);
         setShowEcologicalInference(false);
         setShowOpportunityDistricts(false);
     }
@@ -192,6 +201,7 @@ function MapComponent() {
         setAnchorE1Gingles(false);
         setEthnicity(ethnicity);
         setShowGingles(true);
+        setShowBox(false);
         setShowEcologicalInference(false);
         setShowOpportunityDistricts(false);
     }
@@ -199,6 +209,7 @@ function MapComponent() {
     const handleEthnicityOptionClickDistricts = (ethnicity) => {
         setAnchorElHeatmapDistricts(false);
         setEthnicity(ethnicity);
+        setShowBox(false);
         setPrecinctHeatMap(false);
         setShowGingles(false);
         setShowEcologicalInference(false);
@@ -209,6 +220,7 @@ function MapComponent() {
         setAnchorElHeatmapPrecincts(false);
         setEthnicity(ethnicity);
         setPrecinctHeatMap(true);
+        setShowBox(false);
         setShowGingles(false);
         setShowEcologicalInference(false);
     };
@@ -224,20 +236,21 @@ function MapComponent() {
         setPrecinctHeatMap(false);
         setShowGingles(false);
         setShowEcologicalInference(true);
-        setShowOpportunityDistricts(false);
+        setShowBox(false);
         handleClose();
     };
 
     const handleEthnicityOptionClickBox = (ethnicity) => {
-        // setAnchorE1EcologicalInferenceEthnicity(null); 
-        // setAnchorE1EcologicalInference(null);
-        // setShowBarGraphStateAssembly(false);
-        // setShowStateAssemblyTable(false);
-        // setAnchorElHeatmapPrecincts(false);
+        setAnchorE1EcologicalInferenceEthnicity(null); 
+        setAnchorE1EcologicalInference(null);
+        setShowBarGraphStateAssembly(false);
+        setShowStateAssemblyTable(false);
+        setAnchorElHeatmapPrecincts(false);
         setEthnicity(ethnicity);
-        // setPrecinctHeatMap(false);
-        // setShowGingles(false);
-        // setShowEcologicalInference(true);
+        setPrecinctHeatMap(false);
+        setShowGingles(false);
+        setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
         setShowBox(true);
         handleClose();
     };
@@ -489,12 +502,12 @@ function MapComponent() {
                 </div>
             )}
             {showGingles && (
-                <div className="gingles" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                <div className="gingles" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', backgroundColor: 'white', border: 'none' }}>
                     <ScatterPlot state={state} ethnicity={ethnicity}/>
                 </div>
             )}
             {showBox && (
-                <div className="box" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                <div className="box" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'black' }}>
                     <Box state={state} ethnicity={ethnicity}/>
                 </div>
             )}
