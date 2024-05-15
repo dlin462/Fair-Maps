@@ -15,6 +15,8 @@ import wellknown from 'wellknown';
 import StateAssemblyBarChart from './StateAssemblyBarChart';
 import EcologicalInference from './EcologicalInference';
 import ScatterPlot from './GinglesPlot';
+import Box from './BoxWhiskerPlot';
+import OpportunityDistricts from './OpportunityDistricts';
 
 function MapComponent() {
     const mapContainerRef = useRef(null);
@@ -34,9 +36,14 @@ function MapComponent() {
     const [precinctHeatmap, setPrecinctHeatMap] = useState(false);
     const [stateAssemblyTableRowClicked, setStateAssemblyTableRowClicked] = useState(null);
 
+    const [showOpportunityDistricts, setShowOpportunityDistricts] = useState(null);
+
     const [anchorE1EcologicalInference,setAnchorE1EcologicalInference] = useState(null);
     const [election, setElection] = useState(null);
     const [anchorE1EcologicalInferenceEthnicity, setAnchorE1EcologicalInferenceEthnicity] = useState(null);
+
+    const [anchorE1Box,setAnchorE1Box] = useState(null);
+    const [showBox, setShowBox] = useState(false);
 
     const coordinates = {
         Nevada: [39.876019, -117.224121],
@@ -75,6 +82,10 @@ function MapComponent() {
         setAnchorE1EcologicalInference(null);
     };
 
+    const handleCloseBox= () => {
+        setAnchorE1Box(null);
+    };
+
     const handleCloseEcologicalInferenceEthnicity = () => {
         setAnchorE1EcologicalInferenceEthnicity(null);
     };
@@ -88,13 +99,26 @@ function MapComponent() {
         setShowBarGraphStateAssembly(false);
         setShowEcologicalInference(false);
         setShowGingles(false);
+        setShowOpportunityDistricts(false);
         handleClose();
+    };
+
+    const handleOpportunityDistricts = () => {
+        setShowOpportunityDistricts(!showOpportunityDistricts);
+        setShowBarGraphStateAssembly(false);
+        setShowEcologicalInference(false);
+        setShowGingles(false);
+        setEthnicity(null);
+        handleClose();
+        setShowStateAssemblyTable(false);
     };
 
     const handleClickBarGraphStateAssembly = () => {
         setShowBarGraphStateAssembly(!showBarGraphStateAssembly);
         setShowStateAssemblyTable(false);
         setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
+        setEthnicity(null);
         setShowGingles(false);
         handleClose();
     }
@@ -102,6 +126,13 @@ function MapComponent() {
         event.preventDefault();
         setAnchorE1EcologicalInference(prev => prev ? null : event.currentTarget);
     };
+
+
+    const handleClickBox = (event) => {
+        event.preventDefault();
+        setAnchorE1Box(prev => prev ? null : event.currentTarget);
+    };
+
 
     const handleClickElectionEcologicalInference = (event, election) => {
         event.preventDefault();
@@ -142,6 +173,7 @@ function MapComponent() {
         setEthnicity(null);
         setShowGingles(false);
         setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
     }
 
     const handleClickGingles = (event) => {
@@ -161,6 +193,7 @@ function MapComponent() {
         setEthnicity(ethnicity);
         setShowGingles(true);
         setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
     }
 
     const handleEthnicityOptionClickDistricts = (ethnicity) => {
@@ -169,6 +202,7 @@ function MapComponent() {
         setPrecinctHeatMap(false);
         setShowGingles(false);
         setShowEcologicalInference(false);
+        setShowOpportunityDistricts(false);
     };
 
     const handleEthnicityOptionClickPrecincts = (ethnicity) => {
@@ -182,6 +216,7 @@ function MapComponent() {
     const handleEthnicityOptionClickEcologicalInference = (ethnicity) => {
         setAnchorE1EcologicalInferenceEthnicity(null); 
         setAnchorE1EcologicalInference(null);
+        setShowOpportunityDistricts(false);
         setShowBarGraphStateAssembly(false);
         setShowStateAssemblyTable(false);
         setAnchorElHeatmapPrecincts(false);
@@ -189,6 +224,21 @@ function MapComponent() {
         setPrecinctHeatMap(false);
         setShowGingles(false);
         setShowEcologicalInference(true);
+        setShowOpportunityDistricts(false);
+        handleClose();
+    };
+
+    const handleEthnicityOptionClickBox = (ethnicity) => {
+        // setAnchorE1EcologicalInferenceEthnicity(null); 
+        // setAnchorE1EcologicalInference(null);
+        // setShowBarGraphStateAssembly(false);
+        // setShowStateAssemblyTable(false);
+        // setAnchorElHeatmapPrecincts(false);
+        setEthnicity(ethnicity);
+        // setPrecinctHeatMap(false);
+        // setShowGingles(false);
+        // setShowEcologicalInference(true);
+        setShowBox(true);
         handleClose();
     };
 
@@ -374,8 +424,6 @@ function MapComponent() {
     }, [state, showMap, ethnicity, showStateAssemblyTable, showBarGraphStateAssembly, precinctHeatmap, stateAssemblyTableRowClicked, showGingles,
     ]);
 
-    const mapWidth = showEcologicalInference ? '33%' : '50%';
-
     return (
         <div>
             <Header state={state} ethnicity={ethnicity} handleClick={handleClick} />
@@ -383,6 +431,8 @@ function MapComponent() {
                 width: showBarGraphStateAssembly ? '50%' : 
                     showStateAssemblyTable ? '50%' : 
                     showGingles ? '50%' : 
+                    showOpportunityDistricts ? '50%' : 
+                    showBox ? '50%' :
                     showEcologicalInference ? '25%' : '100%',
                 float: 'left',
                 display: 'flex'
@@ -406,7 +456,9 @@ function MapComponent() {
                         handleCloseEcologicalInferenceEthnicity={handleCloseEcologicalInferenceEthnicity}
                         handleEthnicityOptionClickEcologicalInference={handleEthnicityOptionClickEcologicalInference}
                         
+                        handleClickBox={handleClickBox} handleCloseBox={handleCloseBox} anchorE1Box={anchorE1Box} handleEthnicityOptionClickBox={handleEthnicityOptionClickBox}
 
+                        handleOpportunityDistricts={handleOpportunityDistricts}
 
                         anchorEl={anchorEl} anchorE1HeatmapDistricts={anchorE1HeatmapDistricts} anchorE1HeatmapPrecincts={anchorE1HeatmapPrecincts} anchorE1Gingles={anchorE1Gingles}
                         state={state} handleClose={handleClose} handleCloseHeatMap={handleCloseHeatMap} handleGoBack={handleGoBack} handleStateChange={handleStateChange} handleStateTable={handleStateTable} handleClickGingles={handleClickGingles} handleCloseGingle={handleCloseGingles} handleGinglesClickRace={handleGinglesClickRace}
@@ -419,6 +471,11 @@ function MapComponent() {
                 <div className="state-assembly-table" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', }}>
                     <StateTable state={state}/>
                     <StateAssemblyTable state={state} handleDistrictClick={handleDistrictClick}/>
+                </div>
+            )}
+            {showOpportunityDistricts && (
+                <div className="OpportunityDistricts" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', }}>
+                    <OpportunityDistricts state={state}/>
                 </div>
             )}
             {showBarGraphStateAssembly && (
@@ -434,6 +491,11 @@ function MapComponent() {
             {showGingles && (
                 <div className="gingles" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
                     <ScatterPlot state={state} ethnicity={ethnicity}/>
+                </div>
+            )}
+            {showBox && (
+                <div className="box" style={{ position: 'absolute', width: '50%', height: '100%', top: '60px', right: '0px', border: '2px solid #000000', backgroundColor: 'white' }}>
+                    <Box state={state} ethnicity={ethnicity}/>
                 </div>
             )}
         </div>
