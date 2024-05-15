@@ -149,7 +149,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `Threshold = 37`,
+                            text: `Threshold = 0.37`,
                             font: {
                                 size: 18
                             }
@@ -198,7 +198,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `Threshold = 50`,
+                            text: `Threshold = 0.5`,
                             font: {
                                 size: 18
                             }
@@ -247,7 +247,7 @@ function OpportunityDistricts({ state }) {
                     plugins: {
                         title: {
                             display: true,
-                            text: `Threshold = 60`,
+                            text: `Threshold = 0.6`,
                             font: {
                                 size: 18
                             }
@@ -276,9 +276,9 @@ function OpportunityDistricts({ state }) {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '10px' }}>
                 <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Ethnic Group</div>
-                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>First Threshold</div>
-                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Second Threshold</div>
-                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Third Threshold</div>
+                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Threshold: 0.37</div>
+                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Threshold: 0.50</div>
+                <div style={{ width: '15%', textAlign: 'center', fontWeight: 'bold' }}>Threshold: 0.60</div>
             </div>
             {data.map((item, index) => (
                 <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', boxShadow: '1px 1px #ECECEC', borderRadius: '10px', marginBottom: '10px', padding: '10px', border: '0.5px solid #ECECEC' }}>
