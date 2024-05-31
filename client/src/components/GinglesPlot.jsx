@@ -20,6 +20,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
+            
             {ginglesData && ginglesData.map((data, index) => (
                 <div key={index} style={{ marginBottom: '40px' }}>
                     <Plot
@@ -30,7 +31,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
                                 opacity: 0.7,
                                 mode: 'markers',
                                 type: 'scatter',
-                                name: `Democratic`,
+                                name: `Democrat`,
                                 marker: {
                                     color: 'lightskyblue',
                                     line: {
@@ -59,7 +60,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
                                 y: data.fitLineDem,
                                 mode: 'lines',
                                 type: 'scatter',
-                                name: `${data.race} Democrat`,
+                                name: `Democrat`,
                                 line: { color: 'blue' }
                             },
                             {
@@ -67,7 +68,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
                                 y: data.fitLineRep,
                                 mode: 'lines',
                                 type: 'scatter',
-                                name: `${data.race} Republican`,
+                                name: `Republican`,
                                 line: { color: 'red' }
                             }
                         ]}
