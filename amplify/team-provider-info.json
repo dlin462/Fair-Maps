@@ -10,6 +10,14 @@
       "StackName": "amplify-fairmaps-main-91721",
       "StackId": "arn:aws:cloudformation:us-east-2:975050139323:stack/amplify-fairmaps-main-91721/046df850-301f-11ef-b1a7-020123f64ba7",
       "AmplifyAppId": "d3a6i35mqg7d0r"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3a6i35mqg7d0r",
+          "type": "cicd"
+        }
+      }
     }
   }
 }
