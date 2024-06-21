@@ -20,11 +20,11 @@ backend:
   phases:
     build:
       commands:
+        - echo "JAVA_HOME is set to $JAVA_HOME"
         - cd server
         - cd cse416
-        - ls /usr/lib/jvm  # List available JDK versions
-        - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")  # Adjust to find the correct Java home dynamically
-        - echo $JAVA_HOME  # Verify JAVA_HOME is set correctly
+        - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") 
+
         - ./mvnw clean install
   start:
     commands:
