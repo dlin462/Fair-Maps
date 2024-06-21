@@ -1,0 +1,15 @@
+{
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fairmaps-main-91721-authRole",
+      "UnauthRoleArn": "arn:aws:iam::975050139323:role/amplify-fairmaps-main-91721-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::975050139323:role/amplify-fairmaps-main-91721-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-fairmaps-main-91721-deployment",
+      "UnauthRoleName": "amplify-fairmaps-main-91721-unauthRole",
+      "StackName": "amplify-fairmaps-main-91721",
+      "StackId": "arn:aws:cloudformation:us-east-2:975050139323:stack/amplify-fairmaps-main-91721/046df850-301f-11ef-b1a7-020123f64ba7",
+      "AmplifyAppId": "d3a6i35mqg7d0r"
+    }
+  }
+}
