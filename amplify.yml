@@ -22,7 +22,9 @@ backend:
       commands:
         - cd server
         - cd cse416
-        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+        - ls /usr/lib/jvm  # List available JDK versions
+        - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")  # Adjust to find the correct Java home dynamically
+        - echo $JAVA_HOME  # Verify JAVA_HOME is set correctly
         - ./mvnw clean install
   start:
     commands:
