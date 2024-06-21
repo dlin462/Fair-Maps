@@ -23,8 +23,8 @@ backend:
         - echo "JAVA_HOME is set to $JAVA_HOME"
         - cd server
         - cd cse416
-        - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::") 
-
+        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+        - echo "JAVA_HOME is set to $JAVA_HOME"
         - ./mvnw clean install
   start:
     commands:
