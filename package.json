@@ -1,0 +1,19 @@
+{
+  "name": "fairmaps",
+  "version": "1.0.0",
+  "description": "Fair distribution of population district map",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlin462/Fair-Maps.git"
+  },
+  "author": "David Lin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dlin462/Fair-Maps/issues"
+  },
+  "homepage": "https://github.com/dlin462/Fair-Maps#readme"
+}
