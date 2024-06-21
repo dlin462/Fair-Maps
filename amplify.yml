@@ -20,10 +20,11 @@ backend:
   phases:
     build:
       commands:
-        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+        - export JAVA_HOME="C:\\Program Files\\Java\\jdk-22.0.1"
+        - export PATH="%JAVA_HOME%\\bin;%PATH%"
+        - echo "JAVA_HOME is set to $JAVA_HOME"
         - cd server
         - cd cse416
-        - echo "JAVA_HOME is set to $JAVA_HOME"
         - ./mvnw clean install
   start:
     commands:
