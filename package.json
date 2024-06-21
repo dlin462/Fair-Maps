@@ -4,7 +4,7 @@
   "description": "Fair distribution of population district map",
   "main": "index.js",
   "scripts": {
-    "dev": "cd client"
+    "dev": "cd client && npm run dev"
   },
   "repository": {
     "type": "git",
