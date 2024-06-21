@@ -22,6 +22,7 @@ backend:
       commands:
         - cd server
         - cd cse416
+        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
         - ./mvnw clean install
   start:
     commands:
