@@ -21,6 +21,7 @@ backend:
     build:
       commands:
         - cd server
+        - cd cse416
         - ./mvnw clean install
   start:
     commands:
