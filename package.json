@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "cd client && npm run dev"
   },
+  "devDependencies": {
+    "vite": "^2.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dlin462/Fair-Maps.git"
