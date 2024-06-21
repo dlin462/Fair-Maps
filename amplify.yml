@@ -20,10 +20,9 @@ backend:
   phases:
     build:
       commands:
-        - echo "JAVA_HOME is set to $JAVA_HOME"
+        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
         - cd server
         - cd cse416
-        - export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
         - echo "JAVA_HOME is set to $JAVA_HOME"
         - ./mvnw clean install
   start:
