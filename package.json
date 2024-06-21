@@ -4,10 +4,7 @@
   "description": "Fair distribution of population district map",
   "main": "index.js",
   "scripts": {
-    "dev": "cd client && npm run dev"
-  },
-  "devDependencies": {
-    "vite": "^2.0.0"
+    "dev": "cd client"
   },
   "repository": {
     "type": "git",
@@ -18,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/dlin462/Fair-Maps/issues"
   },
-  "homepage": "https://github.com/dlin462/Fair-Maps#readme"
+  "homepage": "https://github.com/dlin462/Fair-Maps#readme",
+  "devDependencies": {
+    "vite": "^5.3.1"
+  }
 }
