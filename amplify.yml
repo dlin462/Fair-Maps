@@ -4,7 +4,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd /
+        - cd $CODEBUILD_SRC_DIR
         - cd client
         - npm ci
     build:
