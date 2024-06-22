@@ -26,6 +26,8 @@ backend:
         - echo "Downloading JDK 22..."
         - wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.tar.gz -O jdk-22.tar.gz
         - tar -xzf jdk-22.tar.gz
+        - echo "Checking directory structure after extraction..."
+        - ls -l
         - export JAVA_HOME=$(pwd)/jdk-22
         - export PATH=$JAVA_HOME/bin:$PATH
         - echo "JAVA_HOME is set to $JAVA_HOME"
