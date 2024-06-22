@@ -30,6 +30,13 @@ backend:
         - export PATH=$JAVA_HOME/bin:$PATH
         - echo "JAVA_HOME is set to $JAVA_HOME"
         - echo "PATH is set to $PATH"
+        - echo "Checking JDK directory structure..."
+        - ls -l $JAVA_HOME
+        - echo "Checking bin directory..."
+        - ls -l $JAVA_HOME/bin
+        - echo "Checking permissions for java executable..."
+        - ls -l $JAVA_HOME/bin/java
+        - chmod +x $JAVA_HOME/bin/java
         - ./mvnw clean install
   start:
     commands:
