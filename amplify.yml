@@ -21,6 +21,7 @@ backend:
     build:
       commands:
         - echo "Setting up environment variables..."
+        - export MONGODB_URI="mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/CSE416-Redistricting"
         - cd server
         - cd cse416
         - echo "Downloading JDK 22..."
