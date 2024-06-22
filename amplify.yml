@@ -21,10 +21,15 @@ backend:
     build:
       commands:
         - echo "Setting up environment variables..."
-        - set JAVA_HOME=C:\Program Files\Java\jdk-22.0.1
-        - echo "JAVA_HOME is set to %JAVA_HOME%"
         - cd server
         - cd cse416
+        - echo "Downloading JDK 22..."
+        - wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.tar.gz -O jdk-22.tar.gz
+        - tar -xzf jdk-22.tar.gz
+        - export JAVA_HOME=$(pwd)/jdk-22
+        - export PATH=$JAVA_HOME/bin:$PATH
+        - echo "JAVA_HOME is set to $JAVA_HOME"
+        - echo "PATH is set to $PATH"
         - ./mvnw clean install
   start:
     commands:
