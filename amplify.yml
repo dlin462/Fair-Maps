@@ -4,7 +4,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd $CODEBUILD_SRC_DIR
+        - cd $CODEBUILD_SRC_DIR/Fair-Maps
         - ls -l
         - cd client
         - npm ci
