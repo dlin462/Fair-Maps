@@ -1,20 +1,4 @@
 version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - cd client
-        - npm ci
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: client/dist
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - client/node_modules/**/*
 
 backend:
   phases:
@@ -51,6 +35,23 @@ backend:
   cache:
     paths:
       - server/.m2/**/*
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd client
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: client/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - client/node_modules/**/*
 
 cache:
   paths:
