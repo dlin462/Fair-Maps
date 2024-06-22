@@ -5,6 +5,7 @@ frontend:
     preBuild:
       commands:
         - cd $CODEBUILD_SRC_DIR
+        - ls -l
         - cd client
         - npm ci
     build:
