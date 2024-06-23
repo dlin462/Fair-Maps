@@ -19,42 +19,42 @@ frontend:
     paths:
       - client/node_modules/**/*
 
-backend:
-  phases:
-    build:
-      commands:
-        - echo "Setting up environment variables..."
-        - export MONGODB_URI="mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/CSE416-Redistricting"
-        - cd server
-        - cd cse416
-        - echo "Downloading JDK 22..."
-        - wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.tar.gz -O jdk-22.tar.gz
-        - tar -xzf jdk-22.tar.gz
-        - echo "Checking directory structure after extraction..."
-        - ls -l
-        - export JAVA_HOME=$(pwd)/jdk-22.0.1
-        - export PATH=$JAVA_HOME/bin:$PATH
-        - echo "JAVA_HOME is set to $JAVA_HOME"
-        - echo "PATH is set to $PATH"
-        - echo "Checking JDK directory structure..."
-        - ls -l $JAVA_HOME
-        - echo "Checking bin directory..."
-        - ls -l $JAVA_HOME/bin
-        - echo "Checking permissions for java executable..."
-        - ls -l $JAVA_HOME/bin/java
-        - chmod +x $JAVA_HOME/bin/java
-        - ./mvnw clean install
-  start:
-    commands:
-      - ./mvnw spring-boot:run
-  artifacts:
-    baseDirectory: server/target
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - server/.m2/**/*
+# backend:
+#   phases:
+#     build:
+#       commands:
+#         - echo "Setting up environment variables..."
+#         - export MONGODB_URI="mongodb+srv://aaronlin2:sW3VK2ypQJnOqA02@cse416-redistricting.8uy1r4c.mongodb.net/CSE416-Redistricting"
+#         - cd server
+#         - cd cse416
+#         - echo "Downloading JDK 22..."
+#         - wget https://download.oracle.com/java/22/latest/jdk-22_linux-x64_bin.tar.gz -O jdk-22.tar.gz
+#         - tar -xzf jdk-22.tar.gz
+#         - echo "Checking directory structure after extraction..."
+#         - ls -l
+#         - export JAVA_HOME=$(pwd)/jdk-22.0.1
+#         - export PATH=$JAVA_HOME/bin:$PATH
+#         - echo "JAVA_HOME is set to $JAVA_HOME"
+#         - echo "PATH is set to $PATH"
+#         - echo "Checking JDK directory structure..."
+#         - ls -l $JAVA_HOME
+#         - echo "Checking bin directory..."
+#         - ls -l $JAVA_HOME/bin
+#         - echo "Checking permissions for java executable..."
+#         - ls -l $JAVA_HOME/bin/java
+#         - chmod +x $JAVA_HOME/bin/java
+#         - ./mvnw clean install
+#   start:
+#     commands:
+#       - ./mvnw spring-boot:run
+#   artifacts:
+#     baseDirectory: server/target
+#     files:
+#       - '**/*'
+#   cache:
+#     paths:
+#       - server/.m2/**/*
 
-cache:
-  paths:
-    - node_modules/**/*
+# cache:
+#   paths:
+#     - node_modules/**/*
