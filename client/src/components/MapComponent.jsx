@@ -267,7 +267,7 @@ function MapComponent() {
         }).addTo(map);
         const fetchData = async () => {
             try {
-                const districtResponse = await axios.get(`http://FairMap.us-east-2.elasticbeanstalk.com/districts/${state}`);
+                const districtResponse = await axios.get(`https://FairMap.us-east-2.elasticbeanstalk.com/districts/${state}`);
                 const districtsData = districtResponse.data;
                 const districtData = {
                     type: "FeatureCollection",
@@ -357,7 +357,7 @@ function MapComponent() {
                 }
 
                 if(ethnicity != null && precinctHeatmap &&!stateAssemblyTableRowClicked){
-                    const precinctResponse = await axios.get(`http://FairMap.us-east-2.elasticbeanstalk.com/precincts/${state}`);
+                    const precinctResponse = await axios.get(`https://FairMap.us-east-2.elasticbeanstalk.com/precincts/${state}`);
                     const precinctsData = precinctResponse.data;
                     const precinctData = {
                         type: "FeatureCollection",
