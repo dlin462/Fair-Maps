@@ -33,7 +33,7 @@ function MapComponent() {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/map/${state}`)
+        axios.get(`FairMap.us-east-2.elasticbeanstalk.com/map/${state}`)
             .then(response => {
                 console.log("Server returned: ", response.data);
             })

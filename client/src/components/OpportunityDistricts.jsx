@@ -18,7 +18,7 @@ function OpportunityDistricts({ state }) {
     const chartInstance4 = useRef(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/opportunityDistrict/${state}`)
+        axios.get(`FairMap.us-east-2.elasticbeanstalk.com/opportunityDistrict/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setData(response.data);

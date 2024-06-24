@@ -7,7 +7,7 @@ const StateAssemblyBarChart = ({ state }) => {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/stateAssemblyTable/${state}`)
+        axios.get(`FairMap.us-east-2.elasticbeanstalk.com/stateAssemblyTable/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setStateAssemblyData(response.data);

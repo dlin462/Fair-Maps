@@ -7,7 +7,7 @@ const EcologicalInference = ({ state, election, ethnicity }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/ecoInference/${state}/${ethnicity}/${election}`)
+        axios.get(`FairMap.us-east-2.elasticbeanstalk.com/ecoInference/${state}/${ethnicity}/${election}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setData(response.data);
