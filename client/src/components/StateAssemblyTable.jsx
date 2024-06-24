@@ -8,7 +8,7 @@ function StateAssemblyTable({ state, handleDistrictClick }) {
     const [raceFilter, setRaceFilter] = useState('');
 
     useEffect(() => {
-        axios.get(`https://FairMap.us-east-2.elasticbeanstalk.com/stateAssemblyTable/${state}`)
+        axios.get(`http://FairMap.us-east-2.elasticbeanstalk.com/stateAssemblyTable/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 const sortedData = response.data.sort((a, b) => {
