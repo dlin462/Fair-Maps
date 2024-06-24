@@ -6,7 +6,7 @@ import axios from 'axios';
 // // const { parse } = require('wkt');
 // const parse = require('wellknown');
 
-axios.get('http://localhost:8080/662ee9a00f0197d33c66dab3', )
+axios.get('http://FairMap.us-east-2.elasticbeanstalk.com/662ee9a00f0197d33c66dab3', )
       .then(response => {
         // Handle successful response
         console.log('Response:', wkt.parse(response.data));
@@ -15,13 +15,3 @@ axios.get('http://localhost:8080/662ee9a00f0197d33c66dab3', )
         // Handle error
         console.error('Error:', error);
 });
-
-        // axios.get('http://localhost:8080/662ee9a00f0197d33c66dab3', )
-        //     .then(response => {
-        //     // Handle successful response
-        //     console.log('Response:', parse(response.data));
-        //     })
-        //     .catch(error => {
-        //     // Handle error
-        //     console.error('Error:', error);
-        // });

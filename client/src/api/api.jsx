@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://FairMap.us-east-2.elasticbeanstalk.com';
 
 const axiosInstance = axios.create({
   baseURL: baseUrl

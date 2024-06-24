@@ -7,7 +7,7 @@ const ScatterPlot = ({ state, ethnicity }) => {
     const [ginglesData, setGinglesData] = useState(null);
 
     useEffect(() => {
-        axios.get(`FairMap.us-east-2.elasticbeanstalk.com/gingles/${state}/${ethnicity}`)
+        axios.get(`http://FairMap.us-east-2.elasticbeanstalk.com/gingles/${state}/${ethnicity}`)
             .then(response => {
                 setGinglesData(response.data);
             })
