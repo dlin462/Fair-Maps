@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://FairMap.us-east-2.elasticbeanstalk.com';
+const baseUrl = 'https://fair-maps.com';
 
 const axiosInstance = axios.create({
   baseURL: baseUrl
