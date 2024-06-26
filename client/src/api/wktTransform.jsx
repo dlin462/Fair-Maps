@@ -6,7 +6,7 @@ import axios from 'axios';
 // // const { parse } = require('wkt');
 // const parse = require('wellknown');
 
-axios.get('https://fair-maps.com/662ee9a00f0197d33c66dab3', )
+axios.get('http://fairmaps.us-east-2.elasticbeanstalk.com/662ee9a00f0197d33c66dab3', )
       .then(response => {
         // Handle successful response
         console.log('Response:', wkt.parse(response.data));

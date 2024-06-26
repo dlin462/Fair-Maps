@@ -5,7 +5,7 @@ function StateTable({ state }) {
     const [stateData, setStateData] = useState(null); // Initialize with null
 
     useEffect(() => {
-        axios.get(`https://fair-maps.com/state-measures/${state}`)
+        axios.get(`http://fairmaps.us-east-2.elasticbeanstalk.com/state-measures/${state}`)
             .then(response => {
                 console.log('Response from server:', response.data);
                 setStateData(response.data);
